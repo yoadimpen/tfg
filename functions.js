@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+/*import * as fs from 'fs';
 import * as path from 'path';
 //Given a path input, it should search for the summary JSON file in the allure-report
 function searchForReportsNODE(){
@@ -30,15 +30,16 @@ function searchForReportsNODE(){
     });
 
     return res;
-}
+}*/
 
-function generateView(reportsPath){
+function generateView(){
     //uses the allure-report path to find the summary JSON and calls the readJSON function
-    var arrayPaths = reportsPath.split(";");
-    arrayPaths.forEach(function(file){
-        var fullPath = file.concat("/widgets/summary.json");
-        readJSON(fullPath, folderPath);
-    });
+    var reportsPath = "file:///F:/-TFG/code/scrap-code/Allure-Multidashboard-master/allure-report";
+    //var arrayPaths = reportsPath.split(";");
+    //arrayPaths.forEach(function(file){
+    var fullPath = reportsPath.concat("/widgets/summaryCopy.json");
+    return readJSON(fullPath, reportsPath);
+    //});
 }
 
 //Given a path of the JSON file, it should read it
@@ -47,15 +48,46 @@ function readJSON (JSONFile, folderPath) {
     //if it's not found it should call showNotFound
 
     var request = new XMLHttpRequest();
-    request.open('GET', JSONFile, false);
-    request.send(null);
-    if(request.status == 200){
+    var data = "";
+    var jobject = "";
+
+    request.withCredentials = true;
+    request.open('GET', JSONFile);
+    //request.setRequestHeader("Content-Type", "application/json");
+    request.overrideMimeType("application/json");
+    /*request.onreadystatechange = function(){
+        if(request.readyState == 4 && request.status == 0) {
+            console.log("aqui");
+            console.log(request.responseText);
+        }
+    };*/
+    request.send();
+    /*if(request.status == 0){
         //should generate JSON Object
+        console.log(request.response);
         jobject = JSON.parse(request.responseText);
         generateWidget(jobject, folderPath);
     } else {
+        console.log("something went wrong");
         //should go to showNotFound
-    }
+    }*/
+
+    //request.addEventListener("readystatechange", function() {
+    request.onreadystatechange = function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+            data = request.responseText;
+            jobject = JSON.parse(data);
+            
+            console.log(jobject);
+            generateWidget(jobject, folderPath);
+        }
+         
+        //console.log(jobject);
+        //generateView(jobject, folderPath);
+        //console.log("coso");
+    };
+    //return generateWidget(jobject, folderPath);
 }
 
 //No parameters should be given here
@@ -66,6 +98,8 @@ function showNotFound(){
 //Given the JSON object, this should generate a new widget in the home html
 function generateWidget(jobject, folderPath){
     //should return 1 if everything went well and 0 if there was an error in order to display a message
+    console.log(jobject.reportName);
+    console.log(jobject.statistic);
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
 
@@ -75,6 +109,8 @@ function generateWidget(jobject, folderPath){
     var failed2, broken2, skipped2, passed2, unknown2;
 
     var total = statistic.total;
+
+    console.log(statistic.failed);
 
     if(parseInt(total) == 0){
         failed1 = 0;
@@ -202,7 +238,7 @@ function generateWidget(jobject, folderPath){
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
     svg.setAttribute("viewbox", "0 0 42 42");
-    svg.setAttribute("width", "donut");
+    svg.setAttribute("class", "donut");
     svg.appendChild(circleHole);
     svg.appendChild(circleRing);
     svg.appendChild(circle1);
@@ -210,6 +246,7 @@ function generateWidget(jobject, folderPath){
     svg.appendChild(circle3);
     svg.appendChild(circle4);
     svg.appendChild(circle5);
+    svg.appendChild(g);
 
     var divWidget = document.createElement("div");
     divWidget.setAttribute("class", "widget");
@@ -239,7 +276,7 @@ function generateWidget(jobject, folderPath){
     li.setAttribute("onclick", "location.href=" + pathToIndex + ";");
     li.appendChild(divSummary);
 
-    ul.appendChild(li);
+    return ul.appendChild(li);
 
 }
 
