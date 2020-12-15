@@ -132,11 +132,11 @@ function generateWidget(jobject, folderPath){
     passed2 = 100 - parseFloat(passed1);
     unknown2 = 100 - parseFloat(unknown1);
 
-    failed = String(failed1).concat(" ").concat(String(failed2));
-    broken = String(broken1).concat(" ").concat(String(broken2));
-    skipped = String(skipped1).concat(" ").concat(String(skipped2));
-    passed = String(passed1).concat(" ").concat(String(passed2));
-    unknown = String(unknown1).concat(" ").concat(String(unknown2));
+    failed = String(parseFloat(failed1)).concat(" ").concat(String(parseFloat(failed2)));
+    broken = String(parseFloat(broken1)).concat(" ").concat(String(parseFloat(broken2)));
+    skipped = String(parseFloat(skipped1)).concat(" ").concat(String(parseFloat(skipped2)));
+    passed = String(parseFloat(passed1)).concat(" ").concat(String(parseFloat(passed2)));
+    unknown = String(parseFloat(unknown1)).concat(" ").concat(String(parseFloat(unknown2)));
     
     dashFailed = String(25);
     dashBroken = String((parseFloat(failed2) + parseFloat(dashFailed)) % 100);
@@ -146,31 +146,37 @@ function generateWidget(jobject, folderPath){
 
     var ul = document.getElementById("widgets");
 
-    var text1 = document.createElement("text");
+    var text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    //var text1 = document.createElement("text");
     text1.setAttribute("x", "50%");
     text1.setAttribute("y", "50%");
     text1.setAttribute("class", "chart-number")
     text1.appendChild(document.createTextNode(total));
 
-    var text2 = document.createElement("text");
+    var text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    //var text2 = document.createElement("text");
     text2.setAttribute("x", "50%");
     text2.setAttribute("y", "50%");
     text2.setAttribute("class", "chart-label")
     text2.appendChild(document.createTextNode("tests"));
 
-    var g = document.createElement("g");
+    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    //var g = document.createElement("g");
     g.setAttribute("class", "chart-text");
     g.appendChild(text1);
     g.appendChild(text2);
 
-    var circleHole = document.createElement("circle");
+    var circleHole = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //var circleHole = document.createElement("circle");
     circleHole.setAttribute("class", "donut-hole");
     circleHole.setAttribute("cx", "21");
     circleHole.setAttribute("cy", "21");
     circleHole.setAttribute("r", "15.91549430918954");
     circleHole.setAttribute("fill", "#fff");
 
-    var circleRing = document.createElement("circle");
+
+    var circleRing = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //var circleRing = document.createElement("circle");
     circleRing.setAttribute("class", "donut-ring");
     circleRing.setAttribute("cx", "21");
     circleRing.setAttribute("cy", "21");
@@ -179,7 +185,8 @@ function generateWidget(jobject, folderPath){
     circleRing.setAttribute("stroke", "#d2d3d4");
     circleRing.setAttribute("stroke-width", "3");
 
-    var circle1 = document.createElement("circle");
+    var circle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //var circle1 = document.createElement("circle");
     circle1.setAttribute("class", "donut-segment");
     circle1.setAttribute("cx", "21");
     circle1.setAttribute("cy", "21");
@@ -190,7 +197,8 @@ function generateWidget(jobject, folderPath){
     circle1.setAttribute("stroke-dasharray", failed);
     circle1.setAttribute("stroke-dashoffset", dashFailed);
 
-    var circle2 = document.createElement("circle");
+    var circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //var circle2 = document.createElement("circle");
     circle2.setAttribute("class", "donut-segment");
     circle2.setAttribute("cx", "21");
     circle2.setAttribute("cy", "21");
@@ -201,7 +209,8 @@ function generateWidget(jobject, folderPath){
     circle2.setAttribute("stroke-dasharray", broken);
     circle2.setAttribute("stroke-dashoffset", dashBroken);
 
-    var circle3 = document.createElement("circle");
+    var circle3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //var circle3 = document.createElement("circle");
     circle3.setAttribute("class", "donut-segment");
     circle3.setAttribute("cx", "21");
     circle3.setAttribute("cy", "21");
@@ -212,7 +221,8 @@ function generateWidget(jobject, folderPath){
     circle3.setAttribute("stroke-dasharray", skipped);
     circle3.setAttribute("stroke-dashoffset", dashSkipped);
 
-    var circle4 = document.createElement("circle");
+    var circle4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //var circle4 = document.createElement("circle");
     circle4.setAttribute("class", "donut-segment");
     circle4.setAttribute("cx", "21");
     circle4.setAttribute("cy", "21");
@@ -223,7 +233,8 @@ function generateWidget(jobject, folderPath){
     circle4.setAttribute("stroke-dasharray", passed);
     circle4.setAttribute("stroke-dashoffset", dashPassed);
 
-    var circle5 = document.createElement("circle");
+    var circle5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //var circle5 = document.createElement("circle");
     circle5.setAttribute("class", "donut-segment");
     circle5.setAttribute("cx", "21");
     circle5.setAttribute("cy", "21");
@@ -234,10 +245,11 @@ function generateWidget(jobject, folderPath){
     circle5.setAttribute("stroke-dasharray", unknown);
     circle5.setAttribute("stroke-dashoffset", dashUnknown);
 
-    var svg = document.createElement("svg");
+    //var svg = document.createElement("svg");
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
-    svg.setAttribute("viewbox", "0 0 42 42");
+    svg.setAttribute("viewBox", "0 0 42 42");
     svg.setAttribute("class", "donut");
     svg.appendChild(circleHole);
     svg.appendChild(circleRing);
@@ -272,6 +284,7 @@ function generateWidget(jobject, folderPath){
 
     var li = document.createElement("li");
     li.setAttribute("class", "apiSummary");
+    li.setAttribute("onmouseover", "backgroundHover(this)");
     var pathToIndex = folderPath.concat("/index.html");
     li.setAttribute("onclick", "location.href=" + pathToIndex + ";");
     li.appendChild(divSummary);
