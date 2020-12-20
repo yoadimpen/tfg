@@ -20,7 +20,7 @@ body{
   z-index: 10;
 }
 
-.buttonToHome, .buttonGenerate{
+.buttonToHome{
 	padding: 5% 10% 5% 10%;
 	font-size: 19px;
 	background-color: #377bbc;
@@ -30,7 +30,7 @@ body{
 	color: white;
 }
 
-.buttonToHome, .buttonGenerate:hover{
+.buttonToHome{
 	padding: 5% 10% 5% 10%;
 	font-size: 19px;
 	background-color: white;
@@ -69,9 +69,8 @@ body{
 
 .widget_summary:hover{
 	margin: 0.5% 0.5% 0.5% 0.5%;
-	border: 1px solid white;
+	border: 2px solid #ADADAD;
 	border-radius: 20px;
-	background-color: #E7E7E7;
 }
 
 .multiviewHeader{
@@ -144,4 +143,69 @@ body{
   	padding-left: 5%;
   	padding-right: 5%;
   	margin-top: 25%;
+}
+
+#pageTitle{
+	display:inline-block;
+	color: #377bbc;
+}
+
+.searchButton{
+	float: right;
+	display: inline-block;
+	padding-right: 2.5%;
+}
+
+#myInput{
+	border: 1px solid #E7E7E7;
+	border-radius: 10px;
+	float: right;
+	padding-left: 5%;
+}
+
+.generateDiv{
+	max-height: 10%;
+	width: 100%;
+	margin-bottom: 4%;
+}
+
+.generateForm{
+	width: 30%;
+	float:right;
+}
+
+.buttonGenerate{
+	padding: 0.5% 1% 0.5% 1%;
+	font-size: 15px;
+	background-color: #377bbc;
+	border: none;
+	border-radius: 3px;
+	text-decoration: none;
+	color: white;
+	border: 2px solid #377bbc;
+	float: right;
+	margin-right: 9%;
+}
+
+.buttonGenerate:hover{
+	padding: 0.5% 1% 0.5% 1%;
+	font-size: 15px;
+	background-color: white;
+	border: none;
+	border-radius: 3px;
+	text-decoration: none;
+	color: #377bbc;
+	border: 2px solid #377bbc;
+	float:right;
+	margin-right: 9%;
+}
+
+#generateInput{
+	border: 1px solid #E7E7E7;
+	border-radius: 10px;
+	width: 55%;
+	padding-top:0.75%;
+	padding-bottom: 0.75%;
+	padding-left: 2%;
+	padding-right: 2%;
 }

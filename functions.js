@@ -34,9 +34,14 @@ function searchForReportsNODE(){
 
 function generateView(){
     //uses the allure-report path to find the summary JSON and calls the readJSON function
-    var reportsPath = "file:///F:/-TFG/code/scrap-code/Allure-Multidashboard-master/allure-report";
-    //var arrayPaths = reportsPath.split(";");
-    //arrayPaths.forEach(function(file){
+    //var reportsPath = "file:///F:/-TFG/code/scrap-code/Allure-Multidashboard-master/allure-report";
+        //var arrayPaths = reportsPath.split(";");
+        //arrayPaths.forEach(function(file){
+    
+    deleteWidgets();
+
+    var reportsPath = document.getElementById("generateInput").value;
+    console.log(reportsPath);
     var fullPath = reportsPath.concat("/widgets/summaryCopy.json");
     return readJSON(fullPath, reportsPath);
     //});
@@ -284,9 +289,8 @@ function generateWidget(jobject, folderPath){
 
     var li = document.createElement("li");
     li.setAttribute("class", "apiSummary");
-    li.setAttribute("onmouseover", "backgroundHover(this)");
     var pathToIndex = folderPath.concat("/index.html");
-    li.setAttribute("onclick", "location.href=" + pathToIndex + ";");
+    li.setAttribute("onclick", "location.href = " + "'" + pathToIndex + "';");
     li.appendChild(divSummary);
 
     return ul.appendChild(li);
@@ -295,5 +299,23 @@ function generateWidget(jobject, folderPath){
 
 //No parameters, this should delete all existing widgets on the page in order to generate a more updated ones
 function deleteWidgets(){
+    document.getElementById("widgets").innerHTML = "";
+}
 
+function showAPIs() {
+    var input, filter, ul, li, p, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("widgets");
+    li = ul.getElementsByTagName('li');
+    
+    for (i = 0; i < li.length; i++) {
+        p = li[i].querySelectorAll('#API_title, p')[0];
+        txtValue = p.textContent || p.innerText;
+        if(txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
 }

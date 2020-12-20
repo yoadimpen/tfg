@@ -7,24 +7,26 @@
         <link rel="stylesheet" href="styles.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="functions.js" type="text/javascript"></script>
-        <script>
-            function backgroundHover(this){
-                this.childNodes[0][1][0][0].setAttribute("fill", "#E7E7E7");
-            }
-        </script>
     </head>
     <body>
 
         <div class="multiviewHeader">
-            <h1>Multiview</h1>
+            <h1 id="pageTitle">Multiview</h1>
+            <div class="searchButton">
+                <input type="text" id="myInput" onkeyup="showAPIs()" placeholder="Search..">
+            </div>
         </div>
 
-        <div>
-            <button class="buttonGenerate" onclick="generateView()">Generate Widgets!</button>
+        <div class="generateDiv">
+            <form class="generateForm" action="#" onsubmit="return generateView()" target="hiddenFrame">
+                <input type="text" id="generateInput" placeholder="file:///X:/Paths/To/Allure/Report;"/>
+                <button class="buttonGenerate" type="submit">Generate Widgets!</button>
+            </form>
         </div>
         
         <ul id="widgets" class="auto-grid">
             <!--new widgets should go here-->
         </ul>
+        <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
     </body>
 </html>
