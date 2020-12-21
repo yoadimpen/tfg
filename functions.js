@@ -313,7 +313,7 @@ function deleteWidgets(){
     document.getElementById("widgets").innerHTML = "";
 }
 
-function showAPIs() {
+function searchAPIs() {
     var input, filter, ul, li, p, i, txtValue;
     input = document.getElementById('myInput');
     filter = input.value.toUpperCase();
