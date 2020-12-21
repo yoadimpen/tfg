@@ -41,6 +41,19 @@
                 <button class="buttonGenerate" type="submit">Generate Widgets!</button>
             </form>
         </div>
+
+        <div class="orderByDiv">
+            <form class="orderByForm" action="#" onsubmit="return showOrderedWidgets()" target="hiddenFrame">
+                <select id="orderBy" name="criteria">
+                    <option value="hiddenFailed">failed tests</option>
+                    <option value="hiddenBroken">broken tests</option>
+                    <option value="hiddenSkipped">skipped tests</option>
+                    <option value="hiddenPassed">passed tests</option>
+                    <option value="hiddenUnknown">unknown tests</option>
+                </select>
+                <button class="orderWidgets" type="submit">Order!</button>
+            </form>
+        </div>
         
         <ul id="widgets" class="auto-grid">
             <!--new widgets should go here-->

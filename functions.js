@@ -293,10 +293,41 @@ function generateWidget(jobject, folderPath){
     divDescription.appendChild(p1);
     divDescription.appendChild(p2);
 
+    var hiddenFailed = document.createElement("p");
+    hiddenFailed.setAttribute("id", "hiddenFailed");
+    hiddenFailed.setAttribute("hidden", "true");
+    hiddenFailed.appendChild(document.createTextNode(statistic.failed));
+
+    var hiddenBroken = document.createElement("p");
+    hiddenBroken.setAttribute("id", "hiddenBroken");
+    hiddenBroken.setAttribute("hidden", "true");
+    hiddenBroken.appendChild(document.createTextNode(statistic.broken));
+
+    var hiddenSkipped = document.createElement("p");
+    hiddenSkipped.setAttribute("id", "hiddenSkipped");
+    hiddenSkipped.setAttribute("hidden", "true");
+    hiddenSkipped.appendChild(document.createTextNode(statistic.skipped));
+
+    var hiddenPassed = document.createElement("p");
+    hiddenPassed.setAttribute("id", "hiddenPassed");
+    hiddenPassed.setAttribute("hidden", "true");
+    hiddenPassed.appendChild(document.createTextNode(statistic.passed));
+    
+    var hiddenUnknown = document.createElement("p");
+    hiddenUnknown.setAttribute("id", "hiddenUnknown");
+    hiddenUnknown.setAttribute("hidden", "true");
+    hiddenUnknown.appendChild(document.createTextNode(statistic.unknown));
+
     var divSummary = document.createElement("div");
     divSummary.setAttribute("class", "widget_summary");
     divSummary.appendChild(divDescription);
     divSummary.appendChild(divWidget);
+
+    divSummary.appendChild(hiddenFailed);
+    divSummary.appendChild(hiddenBroken);
+    divSummary.appendChild(hiddenSkipped);
+    divSummary.appendChild(hiddenPassed);
+    divSummary.appendChild(hiddenUnknown);
 
     var li = document.createElement("li");
     li.setAttribute("class", "apiSummary");
@@ -332,6 +363,8 @@ function searchAPIs() {
 }
 
 function loadTestData(){
+    deleteWidgets();
+
     var paths = ["./testData/summary1.json", "./testData/summary2.json",
                 "./testData/summary3.json", "./testData/summary4.json",
                 "./testData/summary5.json", "./testData/summary6.json",
@@ -344,4 +377,48 @@ function loadTestData(){
 
 function eraseTestData(){
     deleteWidgets();
+}
+
+function getCorrectCriteria(arrayOfP, criteria){
+    var res = 0;
+
+    arrayOfP.forEach(function(p){
+        if(p.getAttribute("id") == criteria){
+            res = p.innerText;
+        }
+    })
+}
+
+function showOrderedWidgets(){
+    var criteria = document.getElementById("orderBy").value;
+    console.log(criteria);
+    var divs = document.getElementsByClassName("apiSummary");
+
+    function customSorter(a,b){
+        console.log(a.innerText);
+        
+        pA = [childrenA[0][2], a.children[0][3], a.children[0][4],
+        a.children[0][5], a.children[0][6]];
+        pB = [b.children[0][2], b.children[0][3], b.children[0][4],
+        b.children[0][5], b.children[0][6]];
+
+        specificPA = getCorrectCriteria(pA, criteria);
+        specificPB = getCorrectCriteria(pB, criteria);
+        if(specificPA > specificPB){
+            return 1;
+        }
+        if(specificPA < specificPB){
+            return -1;
+        }
+        return 0;
+    }
+
+    [].slice.call(divs).sort(customSorter);
+
+    document.getElementById("widgets").innerHTML = "";
+    var ul = document.getElementById("widgets");
+    divs.forEach(function(li){
+        ul.appendChild(li);
+    })
+
 }
