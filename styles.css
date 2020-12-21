@@ -191,7 +191,6 @@ body{
 	padding: 0.5% 1% 0.5% 1%;
 	font-size: 15px;
 	background-color: white;
-	border: none;
 	border-radius: 3px;
 	text-decoration: none;
 	color: #377bbc;
@@ -208,4 +207,30 @@ body{
 	padding-bottom: 0.75%;
 	padding-left: 2%;
 	padding-right: 2%;
+}
+
+.loadTestWidgets{
+	width: 50%;
+	float: left;
+	padding-left: 3%;
+}
+
+.loadTestData, .eraseTestData{
+	padding: 0.3% 0.5% 0.3% 0.5%;
+	font-size: 15px;
+	background-color: #377bbc;
+	border-radius: 3px;
+	text-decoration: none;
+	color: white;
+	border: 2px solid #377bbc;
+}
+
+.loadTestData:hover, .eraseTestData:hover{
+	padding: 0.3% 0.5% 0.3% 0.5%;
+	font-size: 15px;
+	background-color: white;
+	border-radius: 3px;
+	text-decoration: none;
+	color: #377bbc;
+	border: 2px solid #377bbc;
 }

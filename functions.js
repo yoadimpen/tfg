@@ -330,3 +330,18 @@ function searchAPIs() {
         }
     }
 }
+
+function loadTestData(){
+    var paths = ["./testData/summary1.json", "./testData/summary2.json",
+                "./testData/summary3.json", "./testData/summary4.json",
+                "./testData/summary5.json", "./testData/summary6.json",
+                "./testData/summary7.json"];
+
+    paths.forEach(function(path){
+        readJSON(path, "#");
+    })
+}
+
+function eraseTestData(){
+    deleteWidgets();
+}
