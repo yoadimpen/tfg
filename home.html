@@ -7,6 +7,19 @@
         <link rel="stylesheet" href="styles.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="functions.js" type="text/javascript"></script>
+        <script>
+            window.onload = function() {
+                var inputForGeneration = localStorage.getItem("paths");
+                console.log(inputForGeneration);
+                //if(widgets !== null) {
+                //    document.getElementById("widgets").innerHTML = widgets;
+                //}
+            }
+            window.onbeforeunload = function() {
+                localStorage.setItem("paths", document.getElementById("generateInput").value);
+                console.log(localStorage.getItem("paths"));
+            }
+        </script>
     </head>
     <body>
 

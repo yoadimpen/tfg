@@ -41,10 +41,21 @@ function generateView(){
     deleteWidgets();
 
     var reportsPath = document.getElementById("generateInput").value;
-    console.log(reportsPath);
-    var fullPath = reportsPath.concat("/widgets/summaryCopy.json");
-    return readJSON(fullPath, reportsPath);
+    var pathsArray = reportsPath.split(";");
+    //console.log(pathsArray.length);
+    pathsArray.forEach(function(path){
+        path = path.trim();
+        //console.log(path);
+        var fullPath = path.concat("/widgets/summaryCopy.json");
+        readJSON(fullPath, path);
+        //console.log(document.getElementsByTagName("html")[0].outerHTML);
+    });
+        //console.log(reportsPath);
+        //var fullPath = reportsPath.concat("/widgets/summaryCopy.json");
+        //return readJSON(fullPath, reportsPath);
     //});
+    //document.getElementById("widgets").innerHTML += "Widgets have been generated correctly!";
+    
 }
 
 //Given a path of the JSON file, it should read it
