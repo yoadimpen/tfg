@@ -443,3 +443,94 @@ function showOrderedWidgets(){
     })
 
 }
+
+function doPagination(){
+    //get all widgets
+    //divide them into groups, these groups will be the pages
+    //establish 'display: none' to those who aren't on the current page
+    //---------------------------------------------------------------------
+    
+    var pages = makePages();
+
+    //add pages access to html
+    addPagesAccessToHtml(pages.length);
+
+}
+
+function makePages(){
+
+    var nElement = document.getElementById("perPage").value;
+
+    var n = parseInt(nElement);
+
+    console.log(n);
+
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+
+    var arrayOfPages = [];
+
+    var j = 0;
+
+    for (i = 0; i < divs.length; i=i+n) {
+        if(i+n < divs.length){
+            //console.log("pagina entera");
+            arrayOfPages[j] = divs.slice(i, i+n);
+        } else {
+            //console.log("pagina final");
+            arrayOfPages[j] = divs.slice(i, divs.length);
+        }
+        j = j + 1;
+    }
+
+    return arrayOfPages;
+}
+
+function addPagesAccessToHtml(nP){
+    var paginationDiv = document.getElementById("paginationDiv");
+    var pagesAccess;
+
+    //FALTA ARREGLAR LO DE LA REPETICIÓN DE BOTONES DE PÁGINAS
+    if(document.getElementById("pages") == null){
+        pagesAccess = document.createElement("div");
+        pagesAccess.setAttribute("id", "pages");
+    } else {
+        document.getElementById("pages").innerHTML = "";
+    }
+
+    for(i = 0; i < nP; i++){
+        var buttonAccessToPage = document.createElement("button");
+        buttonAccessToPage.setAttribute("id", "btn-access-page");
+        buttonAccessToPage.setAttribute("value", i);
+        buttonAccessToPage.setAttribute("onclick", "goToPage(" + i + ")");
+        buttonAccessToPage.appendChild(document.createTextNode(i+1));
+
+        pagesAccess.appendChild(buttonAccessToPage);
+    }
+
+    paginationDiv.appendChild(pagesAccess);
+
+}
+
+function hideAllDivs(arrayOfDivs){
+    arrayOfDivs.forEach(function(div){
+        div.style.display = "none";
+    })
+}
+
+function goToPage(i){
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+
+    //console.log(divs);
+
+    hideAllDivs(divs);
+
+    var pages = makePages();
+
+    var desiredPage = Array.prototype.slice.call(pages[i]);
+
+    //console.log(desiredPage);
+
+    desiredPage.forEach(function(divForDisplay){
+        divForDisplay.style.display = "";
+    })
+}

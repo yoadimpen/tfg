@@ -55,6 +55,18 @@
             </form>
         </div>
         <br/>
+
+        <div class="paginationDiv" id="paginationDiv">
+            <form class="paginationForm" action="#" onsubmit="return doPagination()" target="hiddenFrame">
+                <select id="perPage" name="number">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+                <button class="doPages" type="submit">Show!</button>
+            </form>
+        </div>
         
         <ul id="widgets" class="auto-grid">
             <!--new widgets should go here-->
