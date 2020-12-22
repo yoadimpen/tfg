@@ -383,41 +383,62 @@ function getCorrectCriteria(arrayOfP, criteria){
     var res = 0;
 
     arrayOfP.forEach(function(p){
-        if(p.getAttribute("id") == criteria){
-            res = p.innerText;
+        var p2 = document.createElement("p");
+        p2 = p;
+        //console.log(p2.getAttribute("id"));
+        if(p2.getAttribute("id") === criteria){
+            res = p2.innerText;
         }
     })
+
+    return parseInt(res);
 }
 
 function showOrderedWidgets(){
     var criteria = document.getElementById("orderBy").value;
-    console.log(criteria);
-    var divs = document.getElementsByClassName("apiSummary");
+    //console.log(criteria);
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+
+    //console.log(divs[0].innerText);
 
     function customSorter(a,b){
-        console.log(a.innerText);
+        var res = 0;
+        //console.log(a.innerText);
+        var childrenA = Array.prototype.slice.call(a.childNodes);
+        var childrenB = Array.prototype.slice.call(b.childNodes);
         
-        pA = [childrenA[0][2], a.children[0][3], a.children[0][4],
-        a.children[0][5], a.children[0][6]];
-        pB = [b.children[0][2], b.children[0][3], b.children[0][4],
-        b.children[0][5], b.children[0][6]];
+        pA = [  Array.prototype.slice.call(childrenA[0].childNodes)[2],
+                Array.prototype.slice.call(childrenA[0].childNodes)[3],
+                Array.prototype.slice.call(childrenA[0].childNodes)[4],
+                Array.prototype.slice.call(childrenA[0].childNodes)[5],
+                Array.prototype.slice.call(childrenA[0].childNodes)[6]];
+        pB = [  Array.prototype.slice.call(childrenB[0].childNodes)[2],
+                Array.prototype.slice.call(childrenB[0].childNodes)[3],
+                Array.prototype.slice.call(childrenB[0].childNodes)[4],
+                Array.prototype.slice.call(childrenB[0].childNodes)[5],
+                Array.prototype.slice.call(childrenB[0].childNodes)[6]];
 
-        specificPA = getCorrectCriteria(pA, criteria);
-        specificPB = getCorrectCriteria(pB, criteria);
+        //console.log(Array.prototype.slice.call(childrenA[0].childNodes)[2]);
+
+        specificPA = parseInt(getCorrectCriteria(pA, criteria));
+        specificPB = parseInt(getCorrectCriteria(pB, criteria));
         if(specificPA > specificPB){
-            return 1;
+            //console.log("el número " + specificPA + " es mayor que " + specificPB);
+            res = -1;
+        } else if (specificPA < specificPB){
+            //console.log("el número " + specificPA + " es menor que " + specificPB);
+            res = 1;
         }
-        if(specificPA < specificPB){
-            return -1;
-        }
-        return 0;
+        return parseInt(res);
     }
 
-    [].slice.call(divs).sort(customSorter);
+    var sortedDivs = Array.prototype.slice.call(divs).sort(customSorter);
+
+    //console.log(sortedDivs[0].innerText);
 
     document.getElementById("widgets").innerHTML = "";
     var ul = document.getElementById("widgets");
-    divs.forEach(function(li){
+    sortedDivs.forEach(function(li){
         ul.appendChild(li);
     })
 
