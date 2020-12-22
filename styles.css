@@ -234,3 +234,47 @@ body{
 	color: #377bbc;
 	border: 2px solid #377bbc;
 }
+
+.orderByDiv{
+	width: 100%;
+	float: left;
+	padding-left: 3%;
+	padding-bottom: 3%;
+}
+
+.orderWidgets {
+	padding: 0.1% 0.2% 0.1% 0.2%;
+	font-size: 15px;
+	background-color: #377bbc;
+	border-radius: 3px;
+	text-decoration: none;
+	color: white;
+	border: 2px solid #377bbc;
+}
+
+.orderWidgets:hover{
+	padding: 0.1% 0.2% 0.1% 0.2%;
+	font-size: 15px;
+	background-color: white;
+	border-radius: 3px;
+	text-decoration: none;
+	color: #377bbc;
+	border: 2px solid #377bbc;
+}
+
+#orderBy{
+	border: 1px solid #E7E7E7;
+	border-radius: 10px;
+	padding-top:0.3%;
+	padding-bottom: 0.3%;
+	padding-left: 0.5%;
+	padding-right: 0.5%;
+}
+
+.orderByDiv select {
+	width: 14.5%;
+    border: none;
+    background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right;
+    -webkit-appearance: none;
+	background-position-x: 95%;	
+}
