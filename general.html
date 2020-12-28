@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Allure Report</title>
+        <link rel="favicon" href="favicon.ico?v=2">
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="functions.js" type="text/javascript"></script>
+        <script>
+            /*window.onload = function() {
+                var inputForGeneration = localStorage.getItem("paths");
+                console.log(inputForGeneration);
+                //if(widgets !== null) {
+                //    document.getElementById("widgets").innerHTML = widgets;
+                //}
+            }
+            window.onbeforeunload = function() {
+                localStorage.setItem("paths", document.getElementById("generateInput").value);
+                console.log(localStorage.getItem("paths"));
+            }*/
+        </script>
+    </head>
+    <body>
+
+        <div class="multiviewHeader">
+            <h1 id="pageTitle">Multiview</h1>
+            <div class="searchButton">
+                <input type="text" id="myInput" onkeyup="searchAPIs()" placeholder="Search...">
+            </div>
+        </div>
+
+        <div class="switchPages">
+            <a id="btn-switch" href="#">General</a>
+            <a id="btn-switch" href="./home.html">Individual</a>
+        </div>
+
+        <h2 style="margin-left:3%;">This will be made in Sprint 2</h2>
+        
+    </body>
+</html>

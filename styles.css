@@ -332,3 +332,34 @@ body{
 #pages{
 	max-width:70%;
 }
+
+.switchPages{
+	width:100%;
+	padding-right:3%;
+	float: right;
+	margin-bottom:2%;
+}
+
+#btn-switch{
+	padding: 0.2% 0.5% 0.2% 0.5%;
+	font-size: 15px;
+	background-color: #377bbc;
+	border-radius: 3px;
+	text-decoration: none;
+	color: white;
+	border: 2px solid #377bbc;
+	float:right;
+	margin-left:1%;
+}
+
+#btn-switch:hover{
+	padding: 0.2% 0.5% 0.2% 0.5%;
+	font-size: 15px;
+	background-color: white;
+	border-radius: 3px;
+	text-decoration: none;
+	color: #377bbc;
+	border: 2px solid #377bbc;
+	float:right;
+	margin-left:1%;
+}
