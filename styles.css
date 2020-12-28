@@ -236,13 +236,18 @@ body{
 }
 
 .orderByDiv{
-	width: 100%;
+	width: 50%;
 	float: left;
 	padding-left: 3%;
 	padding-bottom: 3%;
+	display: inline;
 }
 
-.orderWidgets {
+.orderByForm{
+	width: 100%;
+}
+
+.orderWidgets, .doPages {
 	padding: 0.1% 0.2% 0.1% 0.2%;
 	font-size: 15px;
 	background-color: #377bbc;
@@ -252,7 +257,7 @@ body{
 	border: 2px solid #377bbc;
 }
 
-.orderWidgets:hover{
+.orderWidgets:hover, .doPages:hover{
 	padding: 0.1% 0.2% 0.1% 0.2%;
 	font-size: 15px;
 	background-color: white;
@@ -262,7 +267,7 @@ body{
 	border: 2px solid #377bbc;
 }
 
-#orderBy{
+#orderBy, #perPage{
 	border: 1px solid #E7E7E7;
 	border-radius: 10px;
 	padding-top:0.3%;
@@ -271,10 +276,59 @@ body{
 	padding-right: 0.5%;
 }
 
-.orderByDiv select {
-	width: 14.5%;
+.orderByDiv select{
+	width: 30%;
     border: none;
     background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right;
     -webkit-appearance: none;
 	background-position-x: 95%;	
+}
+
+.paginationDiv select {
+	width: 40%;
+    border: none;
+    background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right;
+    -webkit-appearance: none;
+	background-position-x: 95%;
+}
+
+.paginationDiv{
+	width: 50%;
+	float:right;
+	padding-bottom: 3%;
+	display:inline;
+}
+
+#btn-access-page{
+	min-width: 5%;
+	margin-left: 0.5%;
+	padding: 0.1% 0.2% 0.1% 0.2%;
+	font-size: 15px;
+	background-color: #377bbc;
+	border-radius: 3px;
+	text-decoration: none;
+	color: white;
+	border: 2px solid #377bbc;
+}
+
+#btn-access-page:hover{
+	min-width: 5%;
+	margin-left: 0.5%;
+	padding: 0.1% 0.2% 0.1% 0.2%;
+	font-size: 15px;
+	background-color: white;
+	border-radius: 3px;
+	text-decoration: none;
+	color: #377bbc;
+	border: 2px solid #377bbc;
+}
+
+.paginationForm{
+	float:right;
+	width:30%;
+	padding-left:5%;
+}
+
+#pages{
+	max-width:70%;
 }
