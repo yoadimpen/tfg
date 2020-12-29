@@ -312,6 +312,7 @@ function getCorrectCriteria(arrayOfP, criteria){
 
 function showOrderedWidgets(){
     var criteria = document.getElementById("orderBy").value;
+
     var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
 
     function customSorter(a,b){
@@ -340,8 +341,27 @@ function showOrderedWidgets(){
         return parseInt(res);
     }
 
-    var sortedDivs = Array.prototype.slice.call(divs).sort(customSorter);
+    function alphSorter(a,b){
+        var res = 0;
+        var childrenA = Array.prototype.slice.call(a.childNodes);
+        var childrenB = Array.prototype.slice.call(b.childNodes);
 
+        var titleA = Array.prototype.slice.call(Array.prototype.slice.call(childrenA[0].childNodes)[0].childNodes)[0].innerText;
+        var titleB = Array.prototype.slice.call(Array.prototype.slice.call(childrenB[0].childNodes)[0].childNodes)[0].innerText;
+    
+        if(titleA > titleB){
+            res = 1;
+        } else if(titleA < titleB){
+            res = -1;
+        }
+        return parseInt(res);
+    }
+
+    if(criteria == "A-Z"){
+        var sortedDivs = Array.prototype.slice.call(divs).sort(alphSorter);
+    } else {
+        var sortedDivs = Array.prototype.slice.call(divs).sort(customSorter);
+    }
     document.getElementById("widgets").innerHTML = "";
     var ul = document.getElementById("widgets");
     sortedDivs.forEach(function(li){
