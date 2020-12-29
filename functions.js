@@ -3,13 +3,16 @@ function generateView(){
     deleteWidgets();
 
     var reportsPath = document.getElementById("generateInput").value;
+    console.log(reportsPath);
     var pathsArray = reportsPath.split(";");
-    
+        
     pathsArray.forEach(function(path){
         path = path.trim();
         var fullPath = path.concat("/widgets/summaryCopy.json");
+        console.log(fullPath);
         readJSON(fullPath, path);
     });
+
 }
 
 function readJSON (JSONFile, folderPath) {
@@ -263,7 +266,7 @@ function deleteWidgets(){
 
 function searchAPIs() {
     var input, filter, ul, li, p, i, txtValue;
-    input = document.getElementById('myInput');
+    input = document.getElementById('searchInput');
     filter = input.value.toUpperCase();
     ul = document.getElementById("widgets");
     li = ul.getElementsByTagName('li');
@@ -294,6 +297,7 @@ function loadTestData(){
 
 function eraseTestData(){
     deleteWidgets();
+    document.getElementById("pagesAccess").innerHTML = "";
 }
 
 function getCorrectCriteria(arrayOfP, criteria){
@@ -311,7 +315,7 @@ function getCorrectCriteria(arrayOfP, criteria){
 }
 
 function showOrderedWidgets(){
-    var criteria = document.getElementById("orderBy").value;
+    var criteria = document.getElementById("orderByInput").value;
 
     var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
 
@@ -376,15 +380,15 @@ function doPagination(){
 
     addPagesAccessToHtml(pages.length);
 
+    goToPage(0);
+
 }
 
 function makePages(){
 
-    var nElement = document.getElementById("perPage").value;
+    var nElement = document.getElementById("pageInput").value;
 
     var n = parseInt(nElement);
-
-    //console.log(n);
 
     var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
 
@@ -395,8 +399,10 @@ function makePages(){
     for (i = 0; i < divs.length; i=i+n) {
         if(i+n < divs.length){
             arrayOfPages[j] = divs.slice(i, i+n);
+            console.log(arrayOfPages[j]);
         } else {
             arrayOfPages[j] = divs.slice(i, divs.length);
+            console.log(arrayOfPages[j]);
         }
         j = j + 1;
     }
@@ -405,20 +411,24 @@ function makePages(){
 }
 
 function addPagesAccessToHtml(nP){
-    var paginationDiv = document.getElementById("paginationDiv");
-    var pagesAccess;
+    //var paginationDiv = document.getElementById("paginationDiv");
+    var pagesAccess = document.getElementById("pagesAccess");
 
-    if(document.getElementById("pages") == null){
+    /*if(document.getElementById("pages") == null){
         pagesAccess = document.createElement("div");
         pagesAccess.setAttribute("id", "pages");
     } else {
         pagesAccess = document.getElementById("pages")
         document.getElementById("pages").innerHTML = "";
-    }
+    }*/
+
+    pagesAccess.innerHTML = "";
 
     for(i = 0; i < nP; i++){
         var buttonAccessToPage = document.createElement("button");
-        buttonAccessToPage.setAttribute("id", "btn-access-page");
+        //buttonAccessToPage.setAttribute("id", "btn-access-page");
+        buttonAccessToPage.setAttribute("class", "btn btn-secondary");
+        buttonAccessToPage.setAttribute("type", "button");
         buttonAccessToPage.setAttribute("value", i);
         buttonAccessToPage.setAttribute("onclick", "goToPage(" + i + ")");
         buttonAccessToPage.appendChild(document.createTextNode(i+1));
@@ -426,8 +436,7 @@ function addPagesAccessToHtml(nP){
         pagesAccess.appendChild(buttonAccessToPage);
     }
 
-    paginationDiv.appendChild(pagesAccess);
-    goToPage(0);
+    //paginationDiv.appendChild(pagesAccess);
 
 }
 

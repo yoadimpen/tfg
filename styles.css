@@ -47,7 +47,8 @@ body{
   grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
   grid-gap: 1rem;
   list-style-type:none;
-  padding-right: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .apiSummary{
@@ -121,19 +122,19 @@ body{
 }
 
 #API_title{
-	font-size: 19px;
+	font-size: 17px;
 	text-align: center;
 	text-anchor: middle;
   	-moz-transform: translateY(-0.25em);
   	-ms-transform: translateY(-0.25em);
   	-webkit-transform: translateY(-0.25em);
   	transform: translateY(-0.25em);
-  	margin-top: 40%;
+  	margin-top: 20%;
 }
 
 #API_description{
 	color: #8a8a8a;
-	font-size: 13px;
+	font-size: 12px;
 	text-anchor: middle;
 	text-align: left;
   	-moz-transform: translateY(-0.25em);
@@ -142,7 +143,7 @@ body{
   	transform: translateY(-0.25em);
   	padding-left: 5%;
   	padding-right: 5%;
-  	margin-top: 25%;
+  	margin-top: 20%;
 }
 
 #pageTitle{
