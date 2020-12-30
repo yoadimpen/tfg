@@ -8,6 +8,14 @@ body{
 	position: relative;
 }
 
+#link{
+	font-size: 1.4rem;
+}
+
+#link2{
+	font-size: 1.1rem;
+}
+
 #title-cont{
 	background-color: #f8f9fa;
 	padding-left: 0%;
