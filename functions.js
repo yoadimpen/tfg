@@ -3,15 +3,16 @@ function generateView(){
     deleteWidgets();
 
     var reportsPath = document.getElementById("generateInput").value;
-    console.log(reportsPath);
     var pathsArray = reportsPath.split(";");
-        
+
     pathsArray.forEach(function(path){
         path = path.trim();
         var fullPath = path.concat("/widgets/summaryCopy.json");
-        console.log(fullPath);
         readJSON(fullPath, path);
     });
+
+    //document.getElementById("pageInput").value = 10;
+    //doPagination();
 
 }
 
@@ -399,10 +400,10 @@ function makePages(){
     for (i = 0; i < divs.length; i=i+n) {
         if(i+n < divs.length){
             arrayOfPages[j] = divs.slice(i, i+n);
-            console.log(arrayOfPages[j]);
+            //console.log(arrayOfPages[j]);
         } else {
             arrayOfPages[j] = divs.slice(i, divs.length);
-            console.log(arrayOfPages[j]);
+            //console.log(arrayOfPages[j]);
         }
         j = j + 1;
     }
