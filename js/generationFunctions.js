@@ -9,6 +9,7 @@ function generateView(){
         path = path.trim();
         var fullPath = path.concat("/widgets/summaryCopy.json");
         readJSON(fullPath, path);
+        //readJSON(path, path);
     });
 
     //document.getElementById("pageInput").value = 10;
@@ -23,7 +24,10 @@ function readJSON (JSONFile, folderPath) {
     var jobject = "";
 
     request.withCredentials = true;
+    
     request.open('GET', JSONFile);
+    
+    //request.setRequestHeader("Access-Control-Allow-Origin", "http://drive.google.com/");
     
     request.overrideMimeType("application/json");
    
