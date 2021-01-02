@@ -12,6 +12,10 @@ Actualmente este proyecto está siendo desarrollando por la alumna Yoana Dimitro
 
 Puedes contactar con el equipo de Multiview via correo: multiviewtfg@gmail.com
 
+## Demo en desarrollo
+
+Puedes probar algunas de las funcionalidades de Multiview en https://tfg-multiview.herokuapp.com
+
 ## Instalación
 
 Apartado que se rellenará próximamente.
