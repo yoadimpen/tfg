@@ -1,4 +1,6 @@
-# ¡Bienvenidx a la extensión 'Multiview' para informes generados con Allure!
+# Multiview
+
+¡Bienvenidx a la extensión 'Multiview' para informes generados con Allure!
 
 ## ¿Qué es Multiview?
 
