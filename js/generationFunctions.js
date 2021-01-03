@@ -3,13 +3,22 @@ function generateView(){
     deleteWidgets();
 
     var reportsPath = document.getElementById("generateInput").value;
-    var pathsArray = reportsPath.split(";");
 
-    pathsArray.forEach(function(path){
-        path = path.trim();
-        var fullPath = path.concat("/widgets/summaryCopy.json");
-        readJSON(fullPath, path);
-    });
+    if(reportsPath.trim() == ''){
+        console.log("entra aqui");
+        showNotFound();
+    } else{
+        var div = document.getElementById("errorMessageDiv");
+        div.style.display = "none";
+
+        var pathsArray = reportsPath.split(";");
+
+        pathsArray.forEach(function(path){
+            path = path.trim();
+            var fullPath = path.concat("/widgets/summaryCopy.json");
+            readJSON(fullPath, path);
+        });
+    }
 
     //document.getElementById("pageInput").value = 10;
     //doPagination();
@@ -262,7 +271,7 @@ function deleteWidgets(){
     document.getElementById("widgets").innerHTML = "";
 }
 
-//No parameters should be given here
 function showNotFound(){
-    //should return a not found message, try again or something like that
+    var div = document.getElementById("errorMessageDiv");
+    div.style.display = "";
 }

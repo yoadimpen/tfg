@@ -151,4 +151,8 @@ body{
 	margin-top: 20%;
  }
 
+ #errorMessageInputEmpty{
+	color: rgb(252, 90, 90);
+ }
+
  
