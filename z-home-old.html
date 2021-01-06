@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Allure Report</title>
+        <link rel="favicon" href="favicon.ico?v=2">
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="functions.js" type="text/javascript"></script>
+        <script>
+            /*window.onload = function() {
+                var inputForGeneration = localStorage.getItem("paths");
+                console.log(inputForGeneration);
+                //if(widgets !== null) {
+                //    document.getElementById("widgets").innerHTML = widgets;
+                //}
+            }
+            window.onbeforeunload = function() {
+                localStorage.setItem("paths", document.getElementById("generateInput").value);
+                console.log(localStorage.getItem("paths"));
+            }*/
+        </script>
+    </head>
+    <body>
+
+        <div class="multiviewHeader">
+            <h1 id="pageTitle">Multiview</h1>
+            <div class="searchButton">
+                <input type="text" id="myInput" onkeyup="searchAPIs()" placeholder="Search...">
+            </div>
+        </div>
+
+        <div class="loadTestWidgets">
+            <button class="loadTestData" onclick="loadTestData()">Load Test Data!</button>
+            <button class="eraseTestData" onclick="eraseTestData()">Erase Test Data!</button>
+        </div>
+
+        <div class="generateDiv">
+            <form class="generateForm" action="#" onsubmit="return generateView()" target="hiddenFrame">
+                <input type="text" id="generateInput" placeholder="file:///X:/Paths/To/Allure/Report;"/>
+                <button class="buttonGenerate" type="submit">Generate Widgets!</button>
+            </form>
+        </div>
+
+        <div class="orderByDiv">
+            <form class="orderByForm" action="#" onsubmit="return showOrderedWidgets()" target="hiddenFrame">
+                <select id="orderBy" name="criteria">
+                    <option value="A-Z">A-Z</option>
+                    <option value="hiddenFailed">failed tests</option>
+                    <option value="hiddenBroken">broken tests</option>
+                    <option value="hiddenSkipped">skipped tests</option>
+                    <option value="hiddenPassed">passed tests</option>
+                    <option value="hiddenUnknown">unknown tests</option>
+                </select>
+                <button class="orderWidgets" type="submit">Order!</button>
+            </form>
+        </div>
+
+        <div class="paginationDiv" id="paginationDiv">
+            <form class="paginationForm" action="#" onsubmit="return doPagination()" target="hiddenFrame">
+                <select id="perPage" name="number">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+                <button class="doPages" type="submit">Show!</button>
+            </form>
+        </div>
+        <br/>
+        <br/>
+
+        <div class="switchPages">
+            <a id="btn-switch" href="./general.html">General</a>
+            <a id="btn-switch" href="#">Individual</a>
+        </div>
+        
+        <ul id="widgets" class="auto-grid">
+            <!--new widgets should go here-->
+        </ul>
+        <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+    </body>
+</html>

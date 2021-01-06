@@ -1,0 +1,13 @@
+{
+  "reportName" : "Google Drive",
+  "testRuns" : [ ],
+  "statistic" : {
+    "failed" : 8,
+    "broken" : 6,
+    "skipped" : 1,
+    "passed" : 8,
+    "unknown" : 9,
+    "total" : 32
+  },
+  "time" : { }
+}

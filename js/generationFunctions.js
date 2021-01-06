@@ -1,71 +1,60 @@
-import * as fs from 'fs';
-import * as path from 'path';
-//Given a path input, it should search for the summary JSON file in the allure-report
-function searchForReportsNODE(){
+function generateView(){
+    
+    deleteWidgets();
 
-    //this should be the input with the folder containing all the allure-report folders
-    var givenPath = "F:\- TFG\code\scrap-code\Allure-Multidashboard-master";
-    var res = "";
+    var reportsPath = document.getElementById("generateInput").value;
 
-    const path = require('path');
-    const fs = require('fs');
+    if(reportsPath.trim() == ''){
+        console.log("entra aqui");
+        showNotFound();
+    } else{
+        var div = document.getElementById("errorMessageDiv");
+        div.style.display = "none";
 
-    fs.readdir(givenPath, function(err, files){
-        if(err) {
-            return console.log('Unable to scan directory: ' + err);
-        }
+        var pathsArray = reportsPath.split(";");
 
-        filesNumber = files.length;
-        i = 1;
-
-        files.forEach(function(file){
-            if(file.includes("allure-report")){
-                res.concat(file);
-            }
-            if(i != filesNumber){
-                res.concat(";");
-            }
-            i = i + 1;
+        pathsArray.forEach(function(path){
+            path = path.trim();
+            var fullPath = path.concat("/widgets/summaryCopy.json");
+            readJSON(fullPath, path);
         });
-    });
-
-    return res;
-}
-
-function generateView(reportsPath){
-    //uses the allure-report path to find the summary JSON and calls the readJSON function
-    var arrayPaths = reportsPath.split(";");
-    arrayPaths.forEach(function(file){
-        var fullPath = file.concat("/widgets/summary.json");
-        readJSON(fullPath, folderPath);
-    });
-}
-
-//Given a path of the JSON file, it should read it
-function readJSON (JSONFile, folderPath) {
-    //should 'return' the json object
-    //if it's not found it should call showNotFound
-
-    var request = new XMLHttpRequest();
-    request.open('GET', JSONFile, false);
-    request.send(null);
-    if(request.status == 200){
-        //should generate JSON Object
-        jobject = JSON.parse(request.responseText);
-        generateWidget(jobject, folderPath);
-    } else {
-        //should go to showNotFound
     }
+
+    //document.getElementById("pageInput").value = 10;
+    //doPagination();
+
 }
 
-//No parameters should be given here
-function showNotFound(){
-    //should return a not found message, try again or something like that
+function readJSON (JSONFile, folderPath) {
+    
+    var request = new XMLHttpRequest();
+    var data = "";
+    var jobject = "";
+
+    request.withCredentials = true;
+    
+    request.open('GET', JSONFile);
+
+    request.overrideMimeType("application/json");
+   
+    request.send();
+    
+    request.onreadystatechange = function() {
+        if(this.readyState === 4) {
+            //console.log(this.responseText);
+            data = request.responseText;
+            jobject = JSON.parse(data);
+            
+            //console.log(jobject);
+            generateWidget(jobject, folderPath);
+        }
+    };
+
 }
 
-//Given the JSON object, this should generate a new widget in the home html
 function generateWidget(jobject, folderPath){
-    //should return 1 if everything went well and 0 if there was an error in order to display a message
+    //console.log(jobject.reportName);
+    //console.log(jobject.statistic);
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
 
@@ -75,6 +64,8 @@ function generateWidget(jobject, folderPath){
     var failed2, broken2, skipped2, passed2, unknown2;
 
     var total = statistic.total;
+
+    //console.log(statistic.failed);
 
     if(parseInt(total) == 0){
         failed1 = 0;
@@ -96,11 +87,11 @@ function generateWidget(jobject, folderPath){
     passed2 = 100 - parseFloat(passed1);
     unknown2 = 100 - parseFloat(unknown1);
 
-    failed = String(failed1).concat(" ").concat(String(failed2));
-    broken = String(broken1).concat(" ").concat(String(broken2));
-    skipped = String(skipped1).concat(" ").concat(String(skipped2));
-    passed = String(passed1).concat(" ").concat(String(passed2));
-    unknown = String(unknown1).concat(" ").concat(String(unknown2));
+    failed = String(parseFloat(failed1)).concat(" ").concat(String(parseFloat(failed2)));
+    broken = String(parseFloat(broken1)).concat(" ").concat(String(parseFloat(broken2)));
+    skipped = String(parseFloat(skipped1)).concat(" ").concat(String(parseFloat(skipped2)));
+    passed = String(parseFloat(passed1)).concat(" ").concat(String(parseFloat(passed2)));
+    unknown = String(parseFloat(unknown1)).concat(" ").concat(String(parseFloat(unknown2)));
     
     dashFailed = String(25);
     dashBroken = String((parseFloat(failed2) + parseFloat(dashFailed)) % 100);
@@ -110,31 +101,32 @@ function generateWidget(jobject, folderPath){
 
     var ul = document.getElementById("widgets");
 
-    var text1 = document.createElement("text");
+    var text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text1.setAttribute("x", "50%");
     text1.setAttribute("y", "50%");
     text1.setAttribute("class", "chart-number")
     text1.appendChild(document.createTextNode(total));
 
-    var text2 = document.createElement("text");
+    var text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text2.setAttribute("x", "50%");
     text2.setAttribute("y", "50%");
     text2.setAttribute("class", "chart-label")
     text2.appendChild(document.createTextNode("tests"));
 
-    var g = document.createElement("g");
+    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttribute("class", "chart-text");
     g.appendChild(text1);
     g.appendChild(text2);
 
-    var circleHole = document.createElement("circle");
+    var circleHole = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circleHole.setAttribute("class", "donut-hole");
     circleHole.setAttribute("cx", "21");
     circleHole.setAttribute("cy", "21");
     circleHole.setAttribute("r", "15.91549430918954");
     circleHole.setAttribute("fill", "#fff");
 
-    var circleRing = document.createElement("circle");
+
+    var circleRing = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circleRing.setAttribute("class", "donut-ring");
     circleRing.setAttribute("cx", "21");
     circleRing.setAttribute("cy", "21");
@@ -143,7 +135,7 @@ function generateWidget(jobject, folderPath){
     circleRing.setAttribute("stroke", "#d2d3d4");
     circleRing.setAttribute("stroke-width", "3");
 
-    var circle1 = document.createElement("circle");
+    var circle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle1.setAttribute("class", "donut-segment");
     circle1.setAttribute("cx", "21");
     circle1.setAttribute("cy", "21");
@@ -154,7 +146,7 @@ function generateWidget(jobject, folderPath){
     circle1.setAttribute("stroke-dasharray", failed);
     circle1.setAttribute("stroke-dashoffset", dashFailed);
 
-    var circle2 = document.createElement("circle");
+    var circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle2.setAttribute("class", "donut-segment");
     circle2.setAttribute("cx", "21");
     circle2.setAttribute("cy", "21");
@@ -165,7 +157,7 @@ function generateWidget(jobject, folderPath){
     circle2.setAttribute("stroke-dasharray", broken);
     circle2.setAttribute("stroke-dashoffset", dashBroken);
 
-    var circle3 = document.createElement("circle");
+    var circle3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle3.setAttribute("class", "donut-segment");
     circle3.setAttribute("cx", "21");
     circle3.setAttribute("cy", "21");
@@ -176,7 +168,7 @@ function generateWidget(jobject, folderPath){
     circle3.setAttribute("stroke-dasharray", skipped);
     circle3.setAttribute("stroke-dashoffset", dashSkipped);
 
-    var circle4 = document.createElement("circle");
+    var circle4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle4.setAttribute("class", "donut-segment");
     circle4.setAttribute("cx", "21");
     circle4.setAttribute("cy", "21");
@@ -187,7 +179,7 @@ function generateWidget(jobject, folderPath){
     circle4.setAttribute("stroke-dasharray", passed);
     circle4.setAttribute("stroke-dashoffset", dashPassed);
 
-    var circle5 = document.createElement("circle");
+    var circle5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle5.setAttribute("class", "donut-segment");
     circle5.setAttribute("cx", "21");
     circle5.setAttribute("cy", "21");
@@ -198,11 +190,11 @@ function generateWidget(jobject, folderPath){
     circle5.setAttribute("stroke-dasharray", unknown);
     circle5.setAttribute("stroke-dashoffset", dashUnknown);
 
-    var svg = document.createElement("svg");
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
-    svg.setAttribute("viewbox", "0 0 42 42");
-    svg.setAttribute("width", "donut");
+    svg.setAttribute("viewBox", "0 0 42 42");
+    svg.setAttribute("class", "donut");
     svg.appendChild(circleHole);
     svg.appendChild(circleRing);
     svg.appendChild(circle1);
@@ -210,6 +202,7 @@ function generateWidget(jobject, folderPath){
     svg.appendChild(circle3);
     svg.appendChild(circle4);
     svg.appendChild(circle5);
+    svg.appendChild(g);
 
     var divWidget = document.createElement("div");
     divWidget.setAttribute("class", "widget");
@@ -228,22 +221,57 @@ function generateWidget(jobject, folderPath){
     divDescription.appendChild(p1);
     divDescription.appendChild(p2);
 
+    var hiddenFailed = document.createElement("p");
+    hiddenFailed.setAttribute("id", "hiddenFailed");
+    hiddenFailed.setAttribute("hidden", "true");
+    hiddenFailed.appendChild(document.createTextNode(statistic.failed));
+
+    var hiddenBroken = document.createElement("p");
+    hiddenBroken.setAttribute("id", "hiddenBroken");
+    hiddenBroken.setAttribute("hidden", "true");
+    hiddenBroken.appendChild(document.createTextNode(statistic.broken));
+
+    var hiddenSkipped = document.createElement("p");
+    hiddenSkipped.setAttribute("id", "hiddenSkipped");
+    hiddenSkipped.setAttribute("hidden", "true");
+    hiddenSkipped.appendChild(document.createTextNode(statistic.skipped));
+
+    var hiddenPassed = document.createElement("p");
+    hiddenPassed.setAttribute("id", "hiddenPassed");
+    hiddenPassed.setAttribute("hidden", "true");
+    hiddenPassed.appendChild(document.createTextNode(statistic.passed));
+    
+    var hiddenUnknown = document.createElement("p");
+    hiddenUnknown.setAttribute("id", "hiddenUnknown");
+    hiddenUnknown.setAttribute("hidden", "true");
+    hiddenUnknown.appendChild(document.createTextNode(statistic.unknown));
+
     var divSummary = document.createElement("div");
     divSummary.setAttribute("class", "widget_summary");
     divSummary.appendChild(divDescription);
     divSummary.appendChild(divWidget);
 
+    divSummary.appendChild(hiddenFailed);
+    divSummary.appendChild(hiddenBroken);
+    divSummary.appendChild(hiddenSkipped);
+    divSummary.appendChild(hiddenPassed);
+    divSummary.appendChild(hiddenUnknown);
+
     var li = document.createElement("li");
     li.setAttribute("class", "apiSummary");
     var pathToIndex = folderPath.concat("/index.html");
-    li.setAttribute("onclick", "location.href=" + pathToIndex + ";");
+    li.setAttribute("onclick", "location.href = " + "'" + pathToIndex + "';");
     li.appendChild(divSummary);
 
-    ul.appendChild(li);
+    return ul.appendChild(li);
 
 }
 
-//No parameters, this should delete all existing widgets on the page in order to generate a more updated ones
 function deleteWidgets(){
+    document.getElementById("widgets").innerHTML = "";
+}
 
+function showNotFound(){
+    var div = document.getElementById("errorMessageDiv");
+    div.style.display = "";
 }
