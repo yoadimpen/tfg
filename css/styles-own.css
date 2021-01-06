@@ -155,4 +155,30 @@ body{
 	color: rgb(252, 90, 90);
  }
 
+ #generalInput{
+	width: 40%;
+ }
+
+ #spaceTab{
+	width: 44%;
+ }
+
+ #spaceTab:hover{
+	border-color: white;
+	border-bottom-color:#dee2e6;
+ }
+
+ #generalInput:hover{
+	border: 2px white;
+ }
+
+ #nav-summary-tab{
+	font-size: 1.1rem;
+	color: #495057;
+ }
+
+ #nav-details-tab{
+	font-size: 1.1rem;
+	color: #495057;
+ }
  
