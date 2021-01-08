@@ -227,7 +227,7 @@ function makeTypeDiv(array, totalReports){
     p.setAttribute("style", "width:60%");
     p.appendChild(title);
 
-    var help = document.createElement("i");
+    /*var help = document.createElement("i");
     help.setAttribute("class", "far fa-question-circle");
     help.setAttribute("style", "font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;");
 
@@ -277,14 +277,42 @@ function makeTypeDiv(array, totalReports){
     spanHelp.appendChild(br4);
     spanHelp.appendChild(i4);
     spanHelp.appendChild(br5);
-    spanHelp.appendChild(i5);
+    spanHelp.appendChild(i5);*/
 
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
 
-    titleRow.appendChild(p);
+    /*titleRow.appendChild(p);
     titleRow.appendChild(help);
-    titleRow.appendChild(spanHelp);
+    titleRow.appendChild(spanHelp);*/
+
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "col");
+
+    div1.appendChild(p);
+
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "col-2");
+    div2.setAttribute("style", "padding:auto;");
+
+    //div2.appendChild(document.createTextNode("<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true'></i><span class='tooltip-text'><b>Help</b><br><i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i></span>"));
+    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
+            "<span class='tooltip-text'>" +
+                "<b>Help</b>" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i> Failed tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i> Broken tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i> Skipped tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i> Passed tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i> Unknown tests" +
+            "</span>";
+
+    titleRow.appendChild(div1);
+    titleRow.appendChild(div2);
 
     var exp = document.createElement("p");
     exp.setAttribute("id", "status");

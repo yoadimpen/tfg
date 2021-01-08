@@ -201,12 +201,11 @@ body{
  }
 
  .tooltip-text {
-    width: 145px;
     position: absolute;
     display: none;
     background: ghostwhite;
     padding: 10px;
-    font-size: 12px;
+    font-size: 1rem;
     border-radius: 3px; 
     transition: opacity 1s ease-out;
 }
@@ -218,7 +217,7 @@ body{
 .far.fa-question-circle:hover + .tooltip-text {
     display: block;
     color: black;
-    animation: fadeIn 2s;
+    animation: fadeIn 1s;
 }
 @-webkit-keyframes fadeIn {
     from { opacity: 0; }
