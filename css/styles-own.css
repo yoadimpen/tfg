@@ -8,6 +8,8 @@ body{
 	position: relative;
 }
 
+/*Individual Page*/
+
 #link{
 	font-size: 1.4rem;
 }
@@ -181,4 +183,11 @@ body{
 	font-size: 1.1rem;
 	color: #495057;
  }
+
+ /*General Page*/
  
+ #sum-col{
+	border: 1px solid #dee2e6;
+	border-radius: 20px;
+	margin: 5px;
+ }
