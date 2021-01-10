@@ -325,6 +325,9 @@ function makeTypeDiv(array, totalReports){
     div.appendChild(svg);
     div.appendChild(exp);
 
+    var br = document.createElement("br");
+    div.appendChild(br);
+
     var blank = document.createElement("div");
     blank.setAttribute("id", "sum-col");
     blank.setAttribute("class", "col");
