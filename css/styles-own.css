@@ -190,6 +190,8 @@ body{
 	border: 1px solid #dee2e6;
 	border-radius: 10px;
 	margin: 5px;
+	min-height: 80%;
+	padding-bottom: 2%;
  }
 
  .donut-status{
@@ -238,4 +240,12 @@ body{
 
 .severity-bar{
 	fill: #6dd6cd;
+}
+
+.severity-tick-1{
+	-moz-transform: translate(1.1vw, 0vh);
+}
+
+.severity-tick-1-line{
+	-moz-transform: translate(2.9vw, 0vh);
 }
