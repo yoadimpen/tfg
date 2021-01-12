@@ -232,6 +232,8 @@ body{
     to { opacity: 1; }
 }
 
+/*Severity Chart*/
+
 .severity-chart{
 	display: block;
 	margin: auto;
@@ -242,10 +244,62 @@ body{
 	fill: #6dd6cd;
 }
 
-.severity-tick-1{
-	-moz-transform: translate(1.1vw, 0vh);
+.severity-axis-x{
+	-moz-transform: translate(7%, 83.5%);
 }
 
-.severity-tick-1-line{
-	-moz-transform: translate(2.9vw, 0vh);
+.severity-x-tick-1{
+	-moz-transform: translate(9%, 0%);
+}
+
+.severity-x-tick-1-line{
+	-moz-transform: translate(13.5%, 0%);
+}
+
+.severity-x-tick-2{
+	-moz-transform: translate(27%, 0%);
+}
+
+.severity-x-tick-2-line{
+	-moz-transform: translate(13.5%, 0%);
+}
+
+.severity-x-tick-3{
+	-moz-transform: translate(45%, 0%);
+}
+
+.severity-x-tick-3-line{
+	-moz-transform: translate(13.5%, 0%);
+}
+
+.severity-x-tick-4{
+	-moz-transform: translate(62.5%, 0%);
+}
+
+.severity-x-tick-4-line{
+	-moz-transform: translate(13.5%, 0%);
+}
+
+.severity-x-tick-5{
+	-moz-transform: translate(79.5%, 0%);
+}
+
+.severity-x-tick-5-line{
+	-moz-transform: translate(13.5%, 0%);
+}
+
+.severity-x-tick-text{
+	-moz-transform: translate(4.5%, 0%);
+}
+
+.severity-y-h-line{
+	-moz-transform: translate(0%, 0%);
+}
+
+.severity-y-v-line{
+	-moz-transform: translate(0%, 0%);
+}
+
+.severity-y-tick-0{
+	-moz-transform: translate(0%, 79.5%);
 }

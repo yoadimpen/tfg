@@ -79,87 +79,101 @@
                         <div id="sum-col" class="col">
                             Summary by test output.
                         </div>
-                        <div id="sum-col" class="col" style="padding-bottom: 4%;">
+                        <div id="sum-col" class="col" style="padding-bottom: 10%;">
                             <h2 style="margin: 10px; margin-bottom: 15px;">Severity</h2>
-                            <svg class="severity-chart" width="80%" height="75%">
-                                <g class="severity-plot" transform="translate(20,10)">
+                            <svg class="severity-chart" width="75%" height="95%">
+                                <g class="severity-plot" transform="translate(20,90)" style="padding-bottom: 10%;">
                                     <g transform="translate(0,0)">
-                                        <rect x="1.6%" y="80" height="60" width="3.55vw" class="severity-bar" rx="5" ry="5"></rect>
-                                        <rect x="1.6%" y="90" height="50" width="3.55vw" class="severity-bar"></rect>
+                                        <rect x="5.1%" y="60" height="60" width="16.2%" class="severity-bar" rx="5" ry="5"></rect>
+                                        <rect x="5.1%" y="70" height="50" width="16.2%" class="severity-bar"></rect>
+                                        <rect x="0" y="150" height="1%" width="90%" class="severity-bar" opacity="0"></rect>
                                     </g>
                                     <g transform="translate(0,0)">
-                                        <rect x="19.3%" y="40" height="100" width="3.55vw" class="severity-bar" rx="5" ry="5"></rect>
-                                        <rect x="19.3%" y="50" height="90" width="3.55vw" class="severity-bar"></rect>
+                                        <rect x="22.8%" y="20" height="100" width="16.2%" class="severity-bar" rx="5" ry="5"></rect>
+                                        <rect x="22.8%" y="30" height="90" width="16.2%" class="severity-bar"></rect>
                                     </g>
                                     <g transform="translate(0,0)">
-                                        <rect x="37.2%" y="20" height="120" width="3.55vw" class="severity-bar" rx="5" ry="5"></rect>
-                                        <rect x="37.2%" y="30" height="110" width="3.55vw" class="severity-bar"></rect>
+                                        <rect x="40.6%" y="0" height="120" width="16.2%" class="severity-bar" rx="5" ry="5"></rect>
+                                        <rect x="40.6%" y="10" height="110" width="16.2%" class="severity-bar"></rect>
                                     </g>
                                     <g transform="translate(0,0)">
-                                        <rect x="54.8%" y="80" height="60" width="3.55vw" class="severity-bar" rx="5" ry="5"></rect>
-                                        <rect x="54.8%" y="90" height="50" width="3.55vw" class="severity-bar"></rect>
+                                        <rect x="58.4%" y="60" height="60" width="16.2%" class="severity-bar" rx="5" ry="5"></rect>
+                                        <rect x="58.4%" y="70" height="50" width="16.2%" class="severity-bar"></rect>
                                     </g>
                                     <g transform="translate(0,0)">
-                                        <rect x="72.5%" y="60" height="80" width="3.55vw" class="severity-bar" rx="5" ry="5"></rect>
-                                        <rect x="72.5%" y="70" height="70" width="3.55vw" class="severity-bar"></rect>
+                                        <rect x="76.2%" y="40" height="80" width="16.2%" class="severity-bar" rx="5" ry="5"></rect>
+                                        <rect x="76.2%" y="50" height="70" width="16.2%" class="severity-bar"></rect>
                                     </g>
                                 </g>
-                                <g class="severity-axis-x" fill="none" font-size="12" text-anchor="middle" transform="translate(20,150)">
-                                    <path class="severity-domain" stroke="#000" d="M0.5,6V0.5H247.5V6"></path>
-                                    <g class="severity-tick-1" opacity="1">
-                                        <line class="severity-tick-1-line" stroke="#000" y2="6" transform="translate(37,0)"></line>
-                                        <text fill="#000" y="9" dy="0.71em" transform="translate(10,0)">blocker</text>
+                                <g class="severity-axis-x" fill="none" font-size="12" text-anchor="middle">
+                                    <path class="severity-domain" stroke="#000"></path>
+                                    <g class="severity-x-tick-1" opacity="1">
+                                        <line class="severity-x-tick-1-line" stroke="#000" y2="6"></line>
+                                        <text class="severity-x-tick-text" fill="#000" y="9" dy="0.71em">blocker</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(65,0)">
-                                        <line stroke="#000" y2="6" transform="translate(36,0)"></line>
-                                        <text fill="#000" y="9" dy="0.71em" transform="translate(10,0)">critical</text>
+                                    <g class="severity-x-tick-2" opacity="1">
+                                        <line class="severity-x-tick-2-line" stroke="#000" y2="6"></line>
+                                        <text class="severity-x-tick-text" fill="#000" y="9" dy="0.71em">critical</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(115,0)">
-                                        <line stroke="#000" y2="6" transform="translate(35,0)"></line>
-                                        <text fill="#000" y="9" dy="0.71em" transform="translate(10,0)">normal</text>
+                                    <g class="severity-x-tick-3" opacity="1">
+                                        <line class="severity-x-tick-3-line" stroke="#000" y2="6"></line>
+                                        <text class="severity-x-tick-text" fill="#000" y="9" dy="0.71em">normal</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(165,0)">
-                                        <line stroke="#000" y2="6" transform="translate(34,0)"></line>
-                                        <text fill="#000" y="9" dy="0.71em" transform="translate(10,0)">minor</text>
+                                    <g class="severity-x-tick-4" opacity="1">
+                                        <line class="severity-x-tick-4-line" stroke="#000" y2="6"></line>
+                                        <text class="severity-x-tick-text" fill="#000" y="9" dy="0.71em">minor</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(215,0)">
-                                        <!--<line stroke="#000" y2="6" transform="translate(33,0)"></line>-->
-                                        <text fill="#000" y="9" dy="0.71em" transform="translate(9,0)">trivial</text>
+                                    <g class="severity-x-tick-5" opacity="1">
+                                        <line class="severity-x-tick-5-line" stroke="#000" y2="6"></line>
+                                        <text class="severity-x-tick-text" fill="#000" y="9" dy="0.71em">trivial</text>
                                     </g>
                                 </g>
-                                <g class="severity-axis-y" fill="none" text-anchor="end" transform="translate(20,10)">
-                                    <path class="severity-domain" stroke="#000" d="M-6,140.5H0.5V0.5H-6"></path>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,140.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">0</text>
+                                <g class="severity-axis-y" fill="none" font-size="12" text-anchor="end" transform="translate(30,10)">
+                                    <path class="severity-domain" stroke="#000"></path>
+                                    <g class="severity-y-tick-0" opacity="1">
+                                        <line class="severity-y-v-line" stroke="#000" y1="3%" y2="-80%" dx="0.32em"></line>
+                                        <line class="severity-y-h-line" stroke="#000" x1="89%" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">0</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,120.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">1</text>
+                                    <g class="severity-y-tick-1" opacity="1" transform="translate(0,180.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">1</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,100.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">2</text>
+                                    <g class="severity-y-tick-2" opacity="1" transform="translate(0,160.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">2</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,80.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">3</text>
+                                    <g class="severity-y-tick-3" opacity="1" transform="translate(0,140.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">3</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,60.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">4</text>
+                                    <g class="severity-y-tick-4" opacity="1" transform="translate(0,120.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">4</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,40.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">5</text>
+                                    <g class="severity-y-tick-5" opacity="1" transform="translate(0,100.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">5</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,20.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">6</text>
+                                    <g class="severity-y-tick-6" opacity="1" transform="translate(0,80.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">6</text>
                                     </g>
-                                    <g class="severity-tick" opacity="1" transform="translate(0,0.5)">
-                                        <line stroke="#000" x2="-6"></line>
-                                        <text fill="#000" x="-9" dy="0.32em">7</text>
+                                    <g class="severity-y-tick-7" opacity="1" transform="translate(0,60.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">7</text>
+                                    </g>
+                                    <g class="severity-y-tick-8" opacity="1" transform="translate(0,40.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">8</text>
+                                    </g>
+                                    <g class="severity-y-tick-9" opacity="1" transform="translate(0,20.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">9</text>
+                                    </g>
+                                    <g class="severity-y-tick-10" opacity="1" transform="translate(0,0.5)">
+                                        <line stroke="#000" x2="-2%"></line>
+                                        <text fill="#000" x="-3.3%" dy="0.32em">10</text>
                                     </g>
                                 </g>
                             </svg>
