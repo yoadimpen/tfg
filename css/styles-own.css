@@ -244,8 +244,16 @@ body{
 	fill: #6dd6cd;
 }
 
+.severity-plot{
+	-moz-transform: translate(7.5%, 35.5%);
+}
+
 .severity-axis-x{
 	-moz-transform: translate(7%, 83.5%);
+}
+
+.severity-axis-y{
+	-moz-transform: translate(11%, 4%);
 }
 
 .severity-x-tick-1{
@@ -281,7 +289,7 @@ body{
 }
 
 .severity-x-tick-5{
-	-moz-transform: translate(79.5%, 0%);
+	-moz-transform: translate(79.3%, 0%);
 }
 
 .severity-x-tick-5-line{
@@ -302,4 +310,44 @@ body{
 
 .severity-y-tick-0{
 	-moz-transform: translate(0%, 79.5%);
+}
+
+.severity-y-tick-1{
+	-moz-transform: translate(0%, 72%);
+}
+
+.severity-y-tick-2{
+	-moz-transform: translate(0%, 64%);
+}
+
+.severity-y-tick-3{
+	-moz-transform: translate(0%, 56%);
+}
+
+.severity-y-tick-4{
+	-moz-transform: translate(0%, 48%);
+}
+
+.severity-y-tick-5{
+	-moz-transform: translate(0%, 40%);
+}
+
+.severity-y-tick-6{
+	-moz-transform: translate(0%, 32%);
+}
+
+.severity-y-tick-7{
+	-moz-transform: translate(0%, 24%);
+}
+
+.severity-y-tick-8{
+	-moz-transform: translate(0%, 16%);
+}
+
+.severity-y-tick-9{
+	-moz-transform: translate(0%, 8%);
+}
+
+.severity-y-tick-10{
+	-moz-transform: translate(0%, 0.2%);
 }
