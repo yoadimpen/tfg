@@ -1,4 +1,8 @@
 function generateSummary(){
+
+    var divs = document.getElementById("sum-row");
+    divs.innerHTML = "";
+
     //file:///F:/-TFG/code/allure-report; file:///F:/-TFG/code/allure-report-2
     var reportsPath = document.getElementById("generateSummaryInput").value;
 
@@ -7,33 +11,103 @@ function generateSummary(){
     if(reportsPath.trim() == ''){
         showEmptyMessage();
     } else {
-
+        generateSummaryDivs(reportsPath);
         //find the message div and empty it if it's full
 
         //generate test output type summary col
-        generateTypeSummary(reportsPath);
+        //generateTypeSummary(reportsPath);
         //generate categories/severity summary col
-        generateSeveritySummary(reportsPath);
+            //generateSeveritySummary(reportsPath);
         //generate a third graph summary col aight there m8
     }
 
+}
+
+function generateSummaryDivs(reportsPath){
+    var pathsArray = reportsPath.split(";");
+
+    //var failed, broken, skipped, passed, unknown;
+    var statusArray = [0,0,0,0,0];
+    var severityArray = [0,0,0,0,0];
+
+    pathsArray.forEach(function(path){
+        path = path.trim();
+        //var pathToSummary = path.concat("/widgets/summaryCopy.json");
+        readJSONs(path, statusArray, severityArray, pathsArray.length);
+    })
+}
+
+function readJSONs (path, statusArray, severityArray, nReports){
+    var request1 = new XMLHttpRequest();
+    var data1 = "";
+    var jobject1 = "";
+
+    request1.withCredentials = true;
+    
+    request1.open('GET', path.concat("/widgets/summaryCopy.json"));
+
+    request1.overrideMimeType("application/json");
+   
+    request1.send();
+    
+    request1.onreadystatechange = function() {
+        if(this.readyState === 4) {
+            
+            data1 = request1.responseText;
+            jobject1 = JSON.parse(data1);
+            
+            var res1 = getTypeResults(jobject1, statusArray);
+            //how should i save this???
+            console.log(res1);
+            //makeTypeDiv(res1, nReports);
+        }
+        makeTypeDiv(res1, nReports);
+    };
+
+    var request2 = new XMLHttpRequest();
+    var data2 = "";
+    var jobject2 = "";
+
+    request2.withCredentials = true;
+    
+    request2.open('GET', path.concat("/widgets/severity.json"));
+
+    request2.overrideMimeType("application/json");
+   
+    request2.send();
+
+    request2.onreadystatechange = function() {
+        if(this.readyState === 4) {
+            
+            data2 = request2.responseText;
+            jobject2 = JSON.parse(data2);
+            
+            var res2 = getSeverityLevelResults(jobject2, severityArray);
+            //how should i save this???
+            console.log(res2 + "enkfvhjebrv");
+            makeSeverityDiv(res2, nReports);
+        }
+        //makeSeverityDiv(res2, nReports);
+    };
 }
 
 function generateTypeSummary(paths){
     var pathsArray = paths.split(";");
 
     //var failed, broken, skipped, passed, unknown;
-    var resultsArray = [0,0,0,0,0];
+    var statusArray = [0,0,0,0,0];
+    var severityArray = [0,0,0,0,0];
 
     pathsArray.forEach(function(path){
         path = path.trim();
         var pathToSummary = path.concat("/widgets/summaryCopy.json");
-        readJSONSummary(pathToSummary, resultsArray, pathsArray.length);
+        readJSONSummary(path, pathToSummary, statusArray, severityArray, pathsArray.length);
     })
+    //console.log(res + "hekrjewhrf");
 
 }
 
-function readJSONSummary(pathToSummary, resultsArray, totalReports){
+function readJSONSummary(path, pathToSummary, statusArray, severityArray, totalReports){
     var request = new XMLHttpRequest();
     var data = "";
     var jobject = "";
@@ -52,11 +126,36 @@ function readJSONSummary(pathToSummary, resultsArray, totalReports){
             data = request.responseText;
             jobject = JSON.parse(data);
             
-            var res = getTypeResults(jobject, resultsArray);
+            res = getTypeResults(jobject, statusArray);
             //how should i save this???
             console.log(res);
         }
-        makeTypeDiv(res, totalReports);
+        //makeTypeDiv(res, totalReports);
+    };
+
+    var request2 = new XMLHttpRequest();
+    var data2 = "";
+    var jobject2 = "";
+
+    request2.withCredentials = true;
+    
+    request2.open('GET', path.concat("/widgets/severity.json"));
+
+    request2.overrideMimeType("application/json");
+   
+    request2.send();
+
+    request2.onreadystatechange = function() {
+        if(this.readyState === 4) {
+            
+            data2 = request2.responseText;
+            jobject2 = JSON.parse(data2);
+            
+            res2 = getSeverityLevelResults(jobject2, severityArray);
+            //how should i save this???
+            console.log(res2);
+        }
+        //makeTypeDiv(res, totalReports);
     };
 }
 
@@ -472,14 +571,15 @@ function makeSeverityDiv(array, nReports){
 
     var resultsDiv = document.getElementById("sum-row");
 
-    var statusDiv = Array.prototype.slice.call(document.getElementsByClassName("col"))[0];
+    //var statusDiv = Array.prototype.slice.call(document.getElementsByClassName("col"))[0];
 
-    var statusCopyDiv = document.createElement("div");
-    statusCopyDiv.innerHTML = statusDiv.innerHTML;
+    //var statusCopyDiv = document.createElement("div");
+    //statusCopyDiv.innerHTML = statusDiv.innerHTML;
 
-    resultsDiv.innerHTML = "";
+    //resultsDiv.innerHTML = "";
 
     var scale_y = getCoherentScale(array);
+    console.log(scale_y);
 
     var rect_plot_1_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect_plot_1_1.setAttribute("class", "severity-bar");
@@ -887,6 +987,17 @@ function makeSeverityDiv(array, nReports){
     g_y.setAttribute("fill", "none");
     g_y.setAttribute("font-size", "12");
     g_y.setAttribute("text-anchor", "end");
+    g_y.appendChild(g_y_0);
+    g_y.appendChild(g_y_1);
+    g_y.appendChild(g_y_2);
+    g_y.appendChild(g_y_3);
+    g_y.appendChild(g_y_4);
+    g_y.appendChild(g_y_5);
+    g_y.appendChild(g_y_6);
+    g_y.appendChild(g_y_7);
+    g_y.appendChild(g_y_8);
+    g_y.appendChild(g_y_9);
+    g_y.appendChild(g_y_10);
 
     var svg_severity = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg_severity.setAttribute("class", "severity-chart");
@@ -912,7 +1023,7 @@ function makeSeverityDiv(array, nReports){
     blank.setAttribute("class", "col");
     blank.appendChild(document.createTextNode("Blank div for development purpose :)"));
 
-    resultsDiv.appendChild(statusCopyDiv);
+    //resultsDiv.appendChild(statusCopyDiv);
     resultsDiv.appendChild(div_severity);
     resultsDiv.appendChild(blank);
 }
