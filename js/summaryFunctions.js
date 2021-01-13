@@ -6,7 +6,7 @@ function generateSummary(){
     //file:///F:/-TFG/code/allure-report; file:///F:/-TFG/code/allure-report-2
     var reportsPath = document.getElementById("generateSummaryInput").value;
 
-    console.log(reportsPath);
+    //console.log(reportsPath);
 
     if(reportsPath.trim() == ''){
         showEmptyMessage();
@@ -58,7 +58,7 @@ function readJSONs (path, statusArray, severityArray, nReports){
             
             var res1 = getTypeResults(jobject1, statusArray);
             //how should i save this???
-            console.log(res1);
+            //console.log(res1);
             //makeTypeDiv(res1, nReports);
         }
         makeTypeDiv(res1, nReports);
@@ -84,7 +84,7 @@ function readJSONs (path, statusArray, severityArray, nReports){
             
             var res2 = getSeverityLevelResults(jobject2, severityArray);
             //how should i save this???
-            console.log(res2 + "enkfvhjebrv");
+            //console.log(res2 + "enkfvhjebrv");
             makeSeverityDiv(res2, nReports);
         }
         //makeSeverityDiv(res2, nReports);
@@ -539,7 +539,7 @@ function getSeverityLevelResults(jobject, array){
 
 function getCoherentScale(arrayResults){
 
-    console.log(arrayResults);
+    //console.log(arrayResults);
     
     var highest_result = Math.max.apply(null, arrayResults);
     var highest;
@@ -564,20 +564,23 @@ function getCoherentScale(arrayResults){
 }
 
 function getPercentage(scaleArray, n){
-    //return ((n*-32)/scaleArray[10]);
-    return (-8*n + 48) % 72;
+    
+    var x1 = scaleArray[10];
+    var x2 = scaleArray[5];
+
+    var y1 = -32;
+    var y2 = 8;
+    
+    var m = (y2 - y1)/(x2 - x1);
+
+    var res = m*n + 48;
+
+    return res;
 }
 
 function makeSeverityDiv(array, nReports){
 
     var resultsDiv = document.getElementById("sum-row");
-
-    //var statusDiv = Array.prototype.slice.call(document.getElementsByClassName("col"))[0];
-
-    //var statusCopyDiv = document.createElement("div");
-    //statusCopyDiv.innerHTML = statusDiv.innerHTML;
-
-    //resultsDiv.innerHTML = "";
 
     var total = 0;
     for(var i in array) {
@@ -585,12 +588,10 @@ function makeSeverityDiv(array, nReports){
     }
 
     var scale_y = getCoherentScale(array);
-    console.log(scale_y);
 
     var rect_plot_1_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect_plot_1_1.setAttribute("class", "severity-bar");
     rect_plot_1_1.setAttribute("x", "5.1%");
-    console.log(getPercentage(scale_y, 4));
     var percentage_1_1 = getPercentage(scale_y, array[0]);
     rect_plot_1_1.setAttribute("y", String(percentage_1_1) + "%");
     rect_plot_1_1.setAttribute("height", String(48-percentage_1_1) + "%");
@@ -724,6 +725,7 @@ function makeSeverityDiv(array, nReports){
     text_x_1.setAttribute("fill", "#000");
     text_x_1.setAttribute("y", "3.3%");
     text_x_1.setAttribute("dy", "0.71em");
+    text_x_1.appendChild(document.createTextNode("blocker"));
 
     var g_x_1 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_1.setAttribute("class", "severity-x-tick-1");
@@ -740,6 +742,7 @@ function makeSeverityDiv(array, nReports){
     text_x_2.setAttribute("fill", "#000");
     text_x_2.setAttribute("y", "3.3%");
     text_x_2.setAttribute("dy", "0.71em");
+    text_x_2.appendChild(document.createTextNode("critical"));
 
     var g_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_2.setAttribute("class", "severity-x-tick-2");
@@ -756,6 +759,7 @@ function makeSeverityDiv(array, nReports){
     text_x_3.setAttribute("fill", "#000");
     text_x_3.setAttribute("y", "3.3%");
     text_x_3.setAttribute("dy", "0.71em");
+    text_x_3.appendChild(document.createTextNode("normal"));
 
     var g_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_3.setAttribute("class", "severity-x-tick-3");
@@ -772,6 +776,7 @@ function makeSeverityDiv(array, nReports){
     text_x_4.setAttribute("fill", "#000");
     text_x_4.setAttribute("y", "3.3%");
     text_x_4.setAttribute("dy", "0.71em");
+    text_x_4.appendChild(document.createTextNode("minor"));
 
     var g_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_4.setAttribute("class", "severity-x-tick-4");
@@ -788,6 +793,7 @@ function makeSeverityDiv(array, nReports){
     text_x_5.setAttribute("fill", "#000");
     text_x_5.setAttribute("y", "3.3%");
     text_x_5.setAttribute("dy", "0.71em");
+    text_x_5.appendChild(document.createTextNode("trivial"));
 
     var g_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_5.setAttribute("class", "severity-x-tick-5");
@@ -1019,7 +1025,7 @@ function makeSeverityDiv(array, nReports){
     title_severity.appendChild(document.createTextNode("Severity"));
     
     var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px");
+    description.setAttribute("style", "margin-left:10px; margin-top: 4px;");
     description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this summary."));
 
     var div_severity = document.createElement("div");

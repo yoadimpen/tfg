@@ -257,43 +257,43 @@ body{
 }
 
 .severity-x-tick-1{
-	-moz-transform: translate(9%, 0%);
+	-moz-transform: translate(19%, 0%);
 }
 
 .severity-x-tick-1-line{
-	-moz-transform: translate(13.5%, 0%);
+	-moz-transform: translate(3.5%, 0%);
 }
 
 .severity-x-tick-2{
-	-moz-transform: translate(27%, 0%);
+	-moz-transform: translate(37%, 0%);
 }
 
 .severity-x-tick-2-line{
-	-moz-transform: translate(13.5%, 0%);
+	-moz-transform: translate(3.5%, 0%);
 }
 
 .severity-x-tick-3{
-	-moz-transform: translate(45%, 0%);
+	-moz-transform: translate(55%, 0%);
 }
 
 .severity-x-tick-3-line{
-	-moz-transform: translate(13.5%, 0%);
+	-moz-transform: translate(3.5%, 0%);
 }
 
 .severity-x-tick-4{
-	-moz-transform: translate(62.5%, 0%);
+	-moz-transform: translate(72.5%, 0%);
 }
 
 .severity-x-tick-4-line{
-	-moz-transform: translate(13.5%, 0%);
+	-moz-transform: translate(3.5%, 0%);
 }
 
 .severity-x-tick-5{
-	-moz-transform: translate(79.3%, 0%);
+	-moz-transform: translate(89%, 0%);
 }
 
 .severity-x-tick-5-line{
-	-moz-transform: translate(13.5%, 0%);
+	-moz-transform: translate(3.5%, 0%);
 }
 
 .severity-x-tick-text{
