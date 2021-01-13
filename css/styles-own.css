@@ -297,7 +297,7 @@ body{
 }
 
 .severity-x-tick-text{
-	-moz-transform: translate(4.5%, 0%);
+	-moz-transform: translate(-4.5%, 0%);
 }
 
 .severity-y-h-line{

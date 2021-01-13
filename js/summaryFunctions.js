@@ -564,7 +564,8 @@ function getCoherentScale(arrayResults){
 }
 
 function getPercentage(scaleArray, n){
-    return ((n*16)/scaleArray[2]);
+    //return ((n*-32)/scaleArray[10]);
+    return (-8*n + 48) % 72;
 }
 
 function makeSeverityDiv(array, nReports){
@@ -578,12 +579,18 @@ function makeSeverityDiv(array, nReports){
 
     //resultsDiv.innerHTML = "";
 
+    var total = 0;
+    for(var i in array) {
+        total += array[i];
+    }
+
     var scale_y = getCoherentScale(array);
     console.log(scale_y);
 
     var rect_plot_1_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     rect_plot_1_1.setAttribute("class", "severity-bar");
     rect_plot_1_1.setAttribute("x", "5.1%");
+    console.log(getPercentage(scale_y, 4));
     var percentage_1_1 = getPercentage(scale_y, array[0]);
     rect_plot_1_1.setAttribute("y", String(percentage_1_1) + "%");
     rect_plot_1_1.setAttribute("height", String(48-percentage_1_1) + "%");
@@ -725,7 +732,7 @@ function makeSeverityDiv(array, nReports){
     g_x_1.appendChild(text_x_1);
 
     var line_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_1.setAttribute("class", "severity-x-tick-2-line");
+    line_x_2.setAttribute("class", "severity-x-tick-2-line");
     line_x_2.setAttribute("stroke", "#000");
     line_x_2.setAttribute("y2", "2%");
     var text_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -741,7 +748,7 @@ function makeSeverityDiv(array, nReports){
     g_x_2.appendChild(text_x_2);
 
     var line_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_1.setAttribute("class", "severity-x-tick-3-line");
+    line_x_3.setAttribute("class", "severity-x-tick-3-line");
     line_x_3.setAttribute("stroke", "#000");
     line_x_3.setAttribute("y2", "2%");
     var text_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -757,7 +764,7 @@ function makeSeverityDiv(array, nReports){
     g_x_3.appendChild(text_x_3);
 
     var line_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_1.setAttribute("class", "severity-x-tick-4-line");
+    line_x_4.setAttribute("class", "severity-x-tick-4-line");
     line_x_4.setAttribute("stroke", "#000");
     line_x_4.setAttribute("y2", "2%");
     var text_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -773,7 +780,7 @@ function makeSeverityDiv(array, nReports){
     g_x_4.appendChild(text_x_4);
 
     var line_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_1.setAttribute("class", "severity-x-tick-5-line");
+    line_x_5.setAttribute("class", "severity-x-tick-5-line");
     line_x_5.setAttribute("stroke", "#000");
     line_x_5.setAttribute("y2", "2%");
     var text_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -785,8 +792,8 @@ function makeSeverityDiv(array, nReports){
     var g_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_5.setAttribute("class", "severity-x-tick-5");
     g_x_5.setAttribute("opacity", "1");
-    g_x_5.appendChild(line_x_2);
-    g_x_5.appendChild(text_x_2);
+    g_x_5.appendChild(line_x_5);
+    g_x_5.appendChild(text_x_5);
 
     var path_x = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path_x.setAttribute("class", "severity-domain");
@@ -1011,12 +1018,17 @@ function makeSeverityDiv(array, nReports){
     title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
     title_severity.appendChild(document.createTextNode("Severity"));
     
+    var description = document.createElement("p");
+    description.setAttribute("style", "margin-left:10px");
+    description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this summary."));
+
     var div_severity = document.createElement("div");
     div_severity.setAttribute("id", "sum-col");
     div_severity.setAttribute("class", "col");
     div_severity.setAttribute("style", "padding-bottom: 10%;");
     div_severity.appendChild(title_severity);
     div_severity.appendChild(svg_severity);
+    div_severity.appendChild(description);
 
     var blank = document.createElement("div");
     blank.setAttribute("id", "sum-col");
