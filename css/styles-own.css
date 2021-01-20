@@ -351,3 +351,11 @@ body{
 .severity-y-tick-10{
 	-moz-transform: translate(0%, 0.2%);
 }
+
+/*Administration panel*/
+#btn-login{
+	float: right;
+	border: 1px solid #6c757d;
+	margin-top: 2%;
+	margin-right: 2%;
+}
