@@ -25,6 +25,24 @@ function generateView(){
 
 }
 
+function loadDataFromConfig(){
+
+    deleteWidgets();
+
+    var config = String(localStorage.getItem("config"));
+
+    if(config != null){
+        var config_json = JSON.parse(config);
+        var links = config_json.links;
+
+        links.forEach(function(link){
+            link = link.trim();
+            var fullPath = link.concat("/widgets/summaryCopy.json");
+            readJSON(fullPath, link);
+        })
+    }
+}
+
 function readJSON (JSONFile, folderPath) {
     
     var request = new XMLHttpRequest();

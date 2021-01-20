@@ -1,3 +1,23 @@
+function loadSummaryFromConfig(){
+
+    var divs = document.getElementById("sum-row");
+    divs.innerHTML = "";
+
+    var config = String(localStorage.getItem("config"));
+
+    if(config != null){
+        var config_json = JSON.parse(config);
+        var links = config_json.links;
+        var reportsPath = "";
+
+        links.forEach(function(link){
+            reportsPath = reportsPath.concat(link).concat(";");
+        })
+
+        generateSummaryDivs(reportsPath);
+    }
+}
+
 function generateSummary(){
 
     var divs = document.getElementById("sum-row");

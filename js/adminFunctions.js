@@ -1,3 +1,45 @@
+function showCurrentConfig(){
+    var config = String(localStorage.getItem("config"));
+
+    //console.log(config);
+
+    if(config != null){
+        var config_json = JSON.parse(config);
+        var type = config_json.type;
+        //console.log(type);
+
+        if(type == "directory"){
+            var typeElement = document.getElementById("inlineRadio1");
+            typeElement.setAttribute("checked", "true");
+        } else {
+            var typeElement = document.getElementById("inlineRadio2");
+            typeElement.setAttribute("checked", "true");
+        }
+
+        var inputs = document.getElementById("inputs");
+
+        //console.log(config_json.links);
+
+        var links = config_json.links;
+        for(i=0;i<links.length;i++){
+            var input = document.createElement("input");
+            input.setAttribute("id", "input".concat(i));
+            input.setAttribute("type", "text");
+            input.setAttribute("class", "form-control");
+            input.setAttribute("placeholder", "file:///X:/Path/To/Report");
+            input.setAttribute("onkeyup", "addSubstractNewInput(".concat(i).concat(")"));
+            input.setAttribute("value", links[i]);
+            input.setAttribute("aria-describedby", "basic-addon1");
+            input.setAttribute("style", "margin-bottom:1.5%;");
+
+            inputs.appendChild(input);
+        }
+    } else {
+        //show message that there is no configuration saved
+        showEmptyInput();
+    }
+}
+
 function showEmptyInput(){
     var div = document.getElementById("settings");
 
@@ -22,7 +64,7 @@ function showEmptyInput(){
 
 function addSubstractNewInput(n){
 
-    console.log(localStorage.getItem("config"));
+    //console.log(localStorage.getItem("config"));
 
     if(n<9){
         var currentId = "input".concat(n);
@@ -78,7 +120,7 @@ function saveSettings(){
         type = "specific_files";
     }
 
-    console.log(type);
+    //console.log(type);
 
     for(i=0;i<10;i++){
         var id = "input".concat(i);
@@ -90,19 +132,45 @@ function saveSettings(){
         }
     }
 
-    var json_links = "'links':['" + links[0];
+    var json_links = '\"links\": [\"' + links[0];
 
     for(j=1;j<10;j++){
         if(links[j].trim() != ""){
-            json_links = json_links.concat("','" + links[j]);
+            json_links = json_links.concat('\", \"' + links[j]);
         }
     }
 
-    json_links = json_links.concat("']" + "}");
+    json_links = json_links.concat('\"]' + ' }');
 
-    var json = "{" + "'type':" + "'" + type + "'," + json_links;
+    var json = '{ ' + '\"type\": ' + '\"' + type + '\", ' + json_links;
 
-    var config_json = JSON.stringify(json);
+    //var config_json = JSON.stringify(json);
 
-    localStorage.setItem("config", config_json);
+    //console.log(json);
+
+    localStorage.setItem("config", json);
+
+    var settingsDiv = document.getElementById("btns-settings");
+
+    var newBtnDiv = document.getElementById("successMsg");
+
+    if(typeof(newBtnDiv) != 'undefined' && newBtnDiv != null){
+        newBtnDiv.innerHTML = "";
+    } else {
+        newBtnDiv = document.createElement("div");
+        newBtnDiv.setAttribute("class", "col-4");
+        newBtnDiv.setAttribute("id", "successMsg");
+        newBtnDiv.setAttribute("style", "margin-top: 3%;");
+    }
+
+    var successButton = document.createElement("button");
+    successButton.setAttribute("class", "btn btn-success");
+    successButton.setAttribute("disabled", "true");
+    successButton.setAttribute("type", "button");
+    successButton.setAttribute("id", "button-addon2");
+    successButton.appendChild(document.createTextNode("Your configuration has been saved successfully!"));
+
+    newBtnDiv.appendChild(successButton);
+
+    settingsDiv.appendChild(newBtnDiv);
 }
