@@ -5,7 +5,7 @@ function generateView(){
     var reportsPath = document.getElementById("generateInput").value;
 
     if(reportsPath.trim() == ''){
-        console.log("entra aqui");
+        //console.log("entra aqui");
         showNotFound();
     } else{
         var div = document.getElementById("errorMessageDiv");
@@ -31,16 +31,69 @@ function loadDataFromConfig(){
 
     var config = String(localStorage.getItem("config"));
 
-    if(config != null){
+    if(config != "null"){
+        //console.log(config);
         var config_json = JSON.parse(config);
-        var links = config_json.links;
+        if(config_json.type == "directory"){
+            var directories = config_json.links;
+            directories.forEach(function(directory){
+                var request = new XMLHttpRequest();
+                var data = "";
 
-        links.forEach(function(link){
-            link = link.trim();
-            var fullPath = link.concat("/widgets/summaryCopy.json");
-            readJSON(fullPath, link);
-        })
+                request.withCredentials = true;
+                
+                request.open('GET', directory);
+
+                request.overrideMimeType("application/json");
+            
+                request.send();
+
+                request.onreadystatechange = function() {
+                    if(this.readyState === 4) {
+                        data = request.responseText;
+                        
+                        var realDataArray = getPathsFromHTTPRequest(data);
+
+                        console.log(realDataArray);
+
+                        for(i=0;i<realDataArray.length;i++){
+                            realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
+                        }
+
+                        console.log(realDataArray);
+
+                        realDataArray.forEach(function(realData){
+                            var fullPath = realData.concat("/widgets/summaryCopy.json");
+                            readJSON(fullPath, realData);
+                        })
+                    }
+                };
+            })
+        } else {
+            var links = config_json.links;
+
+            links.forEach(function(link){
+                link = link.trim();
+                var fullPath = link.concat("/widgets/summaryCopy.json");
+                readJSON(fullPath, link);
+            })
+        }
+    } else {
+        showNoConfigMessageOnIndividual();
     }
+}
+
+function getPathsFromHTTPRequest(response){
+    var res = [];
+
+    var firstSplit = response.split("201: ");
+
+    for(i=1;i<firstSplit.length;i++){
+        var secondSplit = firstSplit[i].split(" 4096");
+        res[i-1] = secondSplit[0];
+    }
+
+    return res;
 }
 
 function readJSON (JSONFile, folderPath) {
@@ -292,4 +345,24 @@ function deleteWidgets(){
 function showNotFound(){
     var div = document.getElementById("errorMessageDiv");
     div.style.display = "";
+}
+
+function showNoConfigMessageOnIndividual(){
+    div = document.getElementById("filters");
+
+    rowDiv = document.createElement("div");
+    rowDiv.setAttribute("class", "row justify-content-center");
+
+    btnDiv = document.createElement("div");
+    btnDiv.setAttribute("class", "col-5");
+
+    btn = document.createElement("button");
+    btn.setAttribute("type", "button");
+    btn.setAttribute("class", "btn btn-warning btn-lg disabled");
+    btn.setAttribute("disabled", "true");
+    btn.appendChild(document.createTextNode("There are no current configuration settings saved. Maybe head to the admin options :)"));
+
+    btnDiv.appendChild(btn);
+    rowDiv.appendChild(btnDiv);
+    div.appendChild(rowDiv);
 }

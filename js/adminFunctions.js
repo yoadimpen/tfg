@@ -174,3 +174,34 @@ function saveSettings(){
 
     settingsDiv.appendChild(newBtnDiv);
 }
+
+function deleteSettings(){
+    if(localStorage.getItem("config")!=null){
+        localStorage.removeItem("config");
+    }
+    showEmptyInput();
+
+    var settingsDiv = document.getElementById("btns-settings");
+
+    var newBtnDiv = document.getElementById("successMsg");
+
+    if(typeof(newBtnDiv) != 'undefined' && newBtnDiv != null){
+        newBtnDiv.innerHTML = "";
+    } else {
+        newBtnDiv = document.createElement("div");
+        newBtnDiv.setAttribute("class", "col-7");
+        newBtnDiv.setAttribute("id", "successMsg");
+        newBtnDiv.setAttribute("style", "margin-top: 3%;");
+    }
+
+    var successButton = document.createElement("button");
+    successButton.setAttribute("class", "btn btn-success");
+    successButton.setAttribute("disabled", "true");
+    successButton.setAttribute("type", "button");
+    successButton.setAttribute("id", "button-addon2");
+    successButton.appendChild(document.createTextNode("Your configuration has been deleted successfully! You're free to enter some new values."));
+
+    newBtnDiv.appendChild(successButton);
+
+    settingsDiv.appendChild(newBtnDiv);
+}

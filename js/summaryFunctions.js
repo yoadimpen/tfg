@@ -1,3 +1,5 @@
+var temp = [];
+
 function loadSummaryFromConfig(){
 
     var divs = document.getElementById("sum-row");
@@ -5,17 +7,118 @@ function loadSummaryFromConfig(){
 
     var config = String(localStorage.getItem("config"));
 
-    if(config != null){
+    if(config != "null"){
+        console.log(config);
+        temp = [];
+        //localStorage.removeItem("links_temp");
         var config_json = JSON.parse(config);
-        var links = config_json.links;
-        var reportsPath = "";
+        if(config_json.type == "directory"){
+            var allLinks = [];
+            var directories = config_json.links;
+            console.log(directories.length);
+            var i = 0;
+            directories.forEach(function(directory){
+                var request = new XMLHttpRequest();
+                var data = "";
 
-        links.forEach(function(link){
-            reportsPath = reportsPath.concat(link).concat(";");
-        })
+                request.withCredentials = true;
+                
+                request.open('GET', directory);
 
-        generateSummaryDivs(reportsPath);
+                request.overrideMimeType("application/json");
+            
+                request.send();
+
+                request.onreadystatechange = function() {
+                    if(this.readyState === 4) {
+                        data = request.responseText;
+                        
+                        var realDataArray = getPathsFromHTTPRequest(data);
+
+                        console.log(realDataArray);
+
+                        for(i=0;i<realDataArray.length;i++){
+                            realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
+                        }
+
+                        console.log(realDataArray);
+
+                        realDataArray.forEach(function(realData){
+                            //var fullPath = realData.concat("/widgets/summaryCopy.json");
+                            //readJSON(fullPath, realData);
+                            //realData.concat(";");
+                            allLinks.push(realData);
+                            //console.log(allLinks);
+                        })
+                        //actualizaTemp(allLinks, i);
+                    }
+                    actualizaTemp(allLinks, i);
+                };
+                //console.log(temp);
+                i++;
+            })
+
+            var temp_links = localStorage.getItem("links_temp").split(",");
+            console.log("los enlaces temporales son" + temp_links);
+            temp_links.forEach(function(temp_link){
+                allLinks.push(temp_link);
+            })
+
+            console.log("los enlaces son" + allLinks);
+
+            //console.log("esto es temp" + String(temp));
+            //console.log("esto es temp desde local storage " + String(localStorage.getItem("links_temp")));
+            var reportsPath = "";
+            allLinks.forEach(function(link){
+                reportsPath = reportsPath.concat(link).concat(";");
+            })
+
+            //generateSummaryDivs(reportsPath);
+        } else {
+            var links = config_json.links;
+            var reportsPath = "";
+
+            links.forEach(function(link){
+                reportsPath = reportsPath.concat(link).concat(";");
+            })
+
+            generateSummaryDivs(reportsPath);
+        }
+    } else {
+        showNoConfigMessageOnGeneral();
     }
+}
+
+function actualizaTemp(links, i){
+
+    links.forEach(function(link){
+        temp.push(link);
+        console.log(temp);
+    })
+    console.log(temp);
+
+    if(localStorage.getItem("links_temp") == null){
+        localStorage.setItem("links_temp", temp);
+    } else{
+        var links_temp = localStorage.getItem("links_temp").concat(",").concat(temp);
+        localStorage.removeItem("links_temp");
+        localStorage.setItem("links_temp", links_temp);
+    }
+
+    console.log(localStorage.getItem("links_temp"));
+}
+
+function getPathsFromHTTPRequest(response){
+    var res = [];
+
+    var firstSplit = response.split("201: ");
+
+    for(i=1;i<firstSplit.length;i++){
+        var secondSplit = firstSplit[i].split(" 4096");
+        res[i-1] = secondSplit[0];
+    }
+
+    return res;
 }
 
 function generateSummary(){
@@ -1064,4 +1167,26 @@ function makeSeverityDiv(array, nReports){
     //resultsDiv.appendChild(statusCopyDiv);
     resultsDiv.appendChild(div_severity);
     resultsDiv.appendChild(blank);
+}
+
+function showNoConfigMessageOnGeneral(){
+
+    div = document.getElementById("summary-info");
+
+    rowDiv = document.createElement("div");
+    rowDiv.setAttribute("class", "row justify-content-center");
+
+    btnDiv = document.createElement("div");
+    btnDiv.setAttribute("class", "col-5");
+
+    btn = document.createElement("button");
+    btn.setAttribute("type", "button");
+    btn.setAttribute("class", "btn btn-warning btn-lg disabled");
+    btn.setAttribute("disabled", "true");
+    btn.appendChild(document.createTextNode("There are no current configuration settings saved. Maybe head to the admin options :)"));
+
+    btnDiv.appendChild(btn);
+    rowDiv.appendChild(btnDiv);
+    div.appendChild(rowDiv);
+
 }
