@@ -1,6 +1,8 @@
-var temp = [];
+//var temp = [];
 
 function loadSummaryFromConfig(){
+
+    //localStorage.removeItem("links_temp");
 
     var divs = document.getElementById("sum-row");
     divs.innerHTML = "";
@@ -8,72 +10,120 @@ function loadSummaryFromConfig(){
     var config = String(localStorage.getItem("config"));
 
     if(config != "null"){
-        console.log(config);
-        temp = [];
-        //localStorage.removeItem("links_temp");
+        console.log("Esta es la configuración: " + config);
+        //temp = [];
+        //console.log("lo que hay ahora en links temp es " + localStorage.removeItem("links_temp"));
+
+        //se obtiene el objeto JSON de la configuracion
         var config_json = JSON.parse(config);
+
+        //si se han guardado directorios se hace lo siguiente
         if(config_json.type == "directory"){
-            var allLinks = [];
+
+            //se cogen todos los enlaces a los directorios guardados
             var directories = config_json.links;
-            console.log(directories.length);
-            var i = 0;
-            directories.forEach(function(directory){
-                var request = new XMLHttpRequest();
-                var data = "";
 
-                request.withCredentials = true;
-                
-                request.open('GET', directory);
-
-                request.overrideMimeType("application/json");
+            console.log("Hay un total de " + directories.length + " directorios.");
+            var j = 0;
+            //console.log("estamos en el directorio " + parseInt(j+1));
             
-                request.send();
+            //para cada uno de los directorios se hace lo siguiente
+            //directories.forEach(function(directory){
 
-                request.onreadystatechange = function() {
-                    if(this.readyState === 4) {
-                        data = request.responseText;
-                        
-                        var realDataArray = getPathsFromHTTPRequest(data);
+            var request = [];
 
-                        console.log(realDataArray);
+            console.log(request);
 
-                        for(i=0;i<realDataArray.length;i++){
-                            realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
+            for(k=0;k<directories.length;k++){
+                (function(k){
+                    //se hace una peticion HTTP para hallar la ruta completa de los informes
+                    console.log("estamos en el directorio " + parseInt(k+1));
+
+                    var allLinks = [];
+
+                    request[k] = new XMLHttpRequest();
+
+                    console.log(request[k]);
+
+                    var data = "";
+
+                    request[k].withCredentials = true;
+                    
+                    request[k].open('GET', directories[k]);
+
+                    request[k].overrideMimeType("application/json");
+                
+                    request[k].send();
+
+                    request[k].onreadystatechange = function() {
+
+                        if(this.readyState === 4) {
+                            data = request[k].responseText;
+                            
+                            //se obtiene el nombre de las carpetas en las cuales hay un informe de Allure
+                            var realDataArray = getPathsFromHTTPRequest(data);
+
+                            console.log("Los informes dentro del directorio " + directories[k] + " son: " + realDataArray);
+
+                            //se forma la ruta completa = directorio + nombre de la carpeta del informe
+                            for(i=0;i<realDataArray.length;i++){
+                                realDataArray[i] = directories[k].concat("/".concat(realDataArray[i]));
+                            }
+
+                            /*
+                                //console.log(realDataArray);
+
+                                //para cada una de las rutas completas se añade a una variable
+                                //en local storage de la cual generar el resumen
+                                realDataArray.forEach(function(realData){
+                                    //var fullPath = realData.concat("/widgets/summaryCopy.json");
+                                    //readJSON(fullPath, realData);
+                                    //realData.concat(";");
+                                    //allLinks.push(realData);
+                                    //console.log(allLinks);
+                                })
+                            */
+
+                            realDataArray.forEach(function(realData){
+                                allLinks.push(realData);
+                            })
+
+                            //se actualiza la variable con las rutas nuevas
+                            actualizaTemp(allLinks, k);
+
+                            //request.abort();
                         }
+                        ////actualizaTemp(allLinks, i);
+                    };
 
-                        console.log(realDataArray);
+                    //request[k].send();
+                    //console.log(temp);
+                    j++;
+                })(k);
+            }
 
-                        realDataArray.forEach(function(realData){
-                            //var fullPath = realData.concat("/widgets/summaryCopy.json");
-                            //readJSON(fullPath, realData);
-                            //realData.concat(";");
-                            allLinks.push(realData);
-                            //console.log(allLinks);
-                        })
-                        //actualizaTemp(allLinks, i);
-                    }
-                    actualizaTemp(allLinks, i);
-                };
-                //console.log(temp);
-                i++;
-            })
+            /*
+                var temp_links = localStorage.getItem("links_temp").split(",");
+                console.log("los enlaces temporales son" + temp_links);
+                temp_links.forEach(function(temp_link){
+                    allLinks.push(temp_link);
+                })
 
-            var temp_links = localStorage.getItem("links_temp").split(",");
-            console.log("los enlaces temporales son" + temp_links);
-            temp_links.forEach(function(temp_link){
-                allLinks.push(temp_link);
-            })
+                console.log("los enlaces son" + allLinks);
 
-            console.log("los enlaces son" + allLinks);
+                //console.log("esto es temp" + String(temp));
+                //console.log("esto es temp desde local storage " + String(localStorage.getItem("links_temp")));
+                var reportsPath = "";
+                allLinks.forEach(function(link){
+                    reportsPath = reportsPath.concat(link).concat(";");
+                })
+            */
 
-            //console.log("esto es temp" + String(temp));
-            //console.log("esto es temp desde local storage " + String(localStorage.getItem("links_temp")));
-            var reportsPath = "";
-            allLinks.forEach(function(link){
-                reportsPath = reportsPath.concat(link).concat(";");
-            })
+            var reportsPath = localStorage.getItem("links_temp");
 
-            //generateSummaryDivs(reportsPath);
+            console.log("Las rutas completas que se han guardado son: " + reportsPath);
+
+            generateSummaryDivs(reportsPath);
         } else {
             var links = config_json.links;
             var reportsPath = "";
@@ -89,23 +139,36 @@ function loadSummaryFromConfig(){
     }
 }
 
-function actualizaTemp(links, i){
+function actualizaTemp(links, cont){
 
+    /*
     links.forEach(function(link){
         temp.push(link);
         console.log(temp);
     })
     console.log(temp);
+    */
 
-    if(localStorage.getItem("links_temp") == null){
-        localStorage.setItem("links_temp", temp);
-    } else{
-        var links_temp = localStorage.getItem("links_temp").concat(",").concat(temp);
+    console.log("El contador está en " + cont);
+
+    if(cont == 0){
+        console.log("se comienza un nuevo resumen");
         localStorage.removeItem("links_temp");
-        localStorage.setItem("links_temp", links_temp);
     }
 
-    console.log(localStorage.getItem("links_temp"));
+    links.forEach(function(link){
+        
+        if(localStorage.getItem("links_temp") == null){
+            console.log("se añade la primera ruta en la variable dentro de local storage");
+            localStorage.setItem("links_temp", link);
+        } else{
+            console.log("se añade una nueva ruta en la variable dentro de local storage");
+            var links_temp = localStorage.getItem("links_temp").concat(";").concat(link);
+            localStorage.removeItem("links_temp");
+            localStorage.setItem("links_temp", links_temp);
+        }
+    })
+    //console.log(localStorage.getItem("links_temp"));
 }
 
 function getPathsFromHTTPRequest(response){

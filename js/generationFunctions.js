@@ -31,6 +31,8 @@ function loadDataFromConfig(){
 
     var config = String(localStorage.getItem("config"));
 
+    //localStorage.removeItem("links_temp");
+
     if(config != "null"){
         //console.log(config);
         var config_json = JSON.parse(config);
