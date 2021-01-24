@@ -56,13 +56,13 @@ function loadDataFromConfig(){
                         
                         var realDataArray = getPathsFromHTTPRequest(data);
 
-                        console.log(realDataArray);
+                        //console.log(realDataArray);
 
                         for(i=0;i<realDataArray.length;i++){
                             realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
                         }
 
-                        console.log(realDataArray);
+                        //console.log(realDataArray);
 
                         realDataArray.forEach(function(realData){
                             var fullPath = realData.concat("/widgets/summaryCopy.json");

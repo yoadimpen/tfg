@@ -132,10 +132,13 @@ function saveSettings(){
         }
     }
 
+    console.log(links);
+
     var json_links = '\"links\": [\"' + links[0];
 
     for(j=1;j<10;j++){
         if(links[j].trim() != ""){
+            //console.log(links[j]);
             json_links = json_links.concat('\", \"' + links[j]);
         }
     }
