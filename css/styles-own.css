@@ -232,6 +232,28 @@ body{
     to { opacity: 1; }
 }
 
+/*Category Chart*/
+
+#cat-it{
+	fill: #fee087;
+}
+
+#cat-ip{
+	fill: #feab4b;
+}
+
+#cat-ot{
+	fill: #fa5c2e;
+}
+
+#cat-td{
+	fill: #d31121;
+}
+
+#cat-pd{
+	fill: #800026;
+}
+
 /*Severity Chart*/
 
 .severity-chart{
