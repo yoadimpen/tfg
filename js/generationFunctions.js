@@ -125,11 +125,41 @@ function readJSON (JSONFile, folderPath) {
 
 }
 
+function toDateTime(secs){
+    var t = new Date(1970, 0, 1); // Epoch
+    t.setMilliseconds(secs);
+    return t;
+}
+
+function getDayName(n){
+    var days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    return days[n];
+}
+
+function getMonthName(m){
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return months[m];
+}
+
 function generateWidget(jobject, folderPath){
     //console.log(jobject.reportName);
     //console.log(jobject.statistic);
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
+    var time = jobject.time;
+
+    var launch = time.start;
+    var launchDate = toDateTime(launch);
+
+    var day = getDayName(launchDate.getUTCDay());
+    var date = launchDate.getUTCDate();
+    var month = getMonthName(launchDate.getUTCMonth());
+    var year = launchDate.getUTCFullYear();
+    var hours = launchDate.getUTCHours();
+    var minutes = launchDate.getUTCMinutes();
+    var seconds = launchDate.getUTCSeconds();
+
+    var date = String(day).concat(" ").concat(String(date)).concat(" ").concat(String(month)).concat(" ").concat(String(year)).concat("\n\r").concat(String(hours)).concat(":").concat(String(minutes)).concat(":").concat(String(seconds)).concat(" UTC"); //POR TERMINAR
 
     var dashFailed, dashBroken, dashSkipped, dashPassed, dashUnknown;
     var failed, broken, skipped, passed, unknown;
@@ -287,7 +317,7 @@ function generateWidget(jobject, folderPath){
 
     var p2 = document.createElement("p");
     p2.setAttribute("id", "API_description");
-    p2.appendChild(document.createTextNode("Brief description"));
+    p2.appendChild(document.createTextNode(date));
 
     var divDescription = document.createElement("div");
     divDescription.setAttribute("class", "description");

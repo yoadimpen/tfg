@@ -1,4 +1,5 @@
 function showCurrentConfig(){
+
     var config = String(localStorage.getItem("config"));
 
     //console.log(config);
