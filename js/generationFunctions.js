@@ -1,40 +1,10 @@
-function generateView(){
-    
-    deleteWidgets();
-
-    var reportsPath = document.getElementById("generateInput").value;
-
-    if(reportsPath.trim() == ''){
-        //console.log("entra aqui");
-        showNotFound();
-    } else{
-        var div = document.getElementById("errorMessageDiv");
-        div.style.display = "none";
-
-        var pathsArray = reportsPath.split(";");
-
-        pathsArray.forEach(function(path){
-            path = path.trim();
-            var fullPath = path.concat("/widgets/summaryCopy.json");
-            readJSON(fullPath, path);
-        });
-    }
-
-    //document.getElementById("pageInput").value = 10;
-    //doPagination();
-
-}
-
 function loadDataFromConfig(){
 
     deleteWidgets();
 
     var config = String(localStorage.getItem("config"));
 
-    //localStorage.removeItem("links_temp");
-
     if(config != "null"){
-        //console.log(config);
         var config_json = JSON.parse(config);
         if(config_json.type == "directory"){
             var directories = config_json.links;
@@ -56,13 +26,9 @@ function loadDataFromConfig(){
                         
                         var realDataArray = getPathsFromHTTPRequest(data);
 
-                        //console.log(realDataArray);
-
                         for(i=0;i<realDataArray.length;i++){
                             realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
                         }
-
-                        //console.log(realDataArray);
 
                         realDataArray.forEach(function(realData){
                             var fullPath = realData.concat("/widgets/summaryCopy.json");
@@ -114,11 +80,9 @@ function readJSON (JSONFile, folderPath) {
     
     request.onreadystatechange = function() {
         if(this.readyState === 4) {
-            //console.log(this.responseText);
             data = request.responseText;
             jobject = JSON.parse(data);
             
-            //console.log(jobject);
             generateWidget(jobject, folderPath);
         }
     };
@@ -141,9 +105,31 @@ function getMonthName(m){
     return months[m];
 }
 
+function getCircle(stroke, dasharray, dashoffset){
+    var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("class", "donut-segment");
+    circle.setAttribute("cx", "21");
+    circle.setAttribute("cy", "21");
+    circle.setAttribute("r", "15.91549430918954");
+    circle.setAttribute("fill", "transparent");
+    circle.setAttribute("stroke", stroke);
+    circle.setAttribute("stroke-width", "3");
+    circle.setAttribute("stroke-dasharray", dasharray);
+    circle.setAttribute("stroke-dashoffset", dashoffset);
+
+    return circle;
+}
+
+function getHiddenElement(id, text){
+    var hidden = document.createElement("p");
+    hidden.setAttribute("id", id);
+    hidden.setAttribute("hidden", "true");
+    hidden.appendChild(document.createTextNode(text));
+
+    return hidden;
+}
+
 function generateWidget(jobject, folderPath){
-    //console.log(jobject.reportName);
-    //console.log(jobject.statistic);
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
     var time = jobject.time;
@@ -167,8 +153,6 @@ function generateWidget(jobject, folderPath){
     var failed2, broken2, skipped2, passed2, unknown2;
 
     var total = statistic.total;
-
-    //console.log(statistic.failed);
 
     if(parseInt(total) == 0){
         failed1 = 0;
@@ -238,60 +222,11 @@ function generateWidget(jobject, folderPath){
     circleRing.setAttribute("stroke", "#d2d3d4");
     circleRing.setAttribute("stroke-width", "3");
 
-    var circle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle1.setAttribute("class", "donut-segment");
-    circle1.setAttribute("cx", "21");
-    circle1.setAttribute("cy", "21");
-    circle1.setAttribute("r", "15.91549430918954");
-    circle1.setAttribute("fill", "transparent");
-    circle1.setAttribute("stroke", "#fc4e03");
-    circle1.setAttribute("stroke-width", "3");
-    circle1.setAttribute("stroke-dasharray", failed);
-    circle1.setAttribute("stroke-dashoffset", dashFailed);
-
-    var circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle2.setAttribute("class", "donut-segment");
-    circle2.setAttribute("cx", "21");
-    circle2.setAttribute("cy", "21");
-    circle2.setAttribute("r", "15.91549430918954");
-    circle2.setAttribute("fill", "transparent");
-    circle2.setAttribute("stroke", "#fcdf03");
-    circle2.setAttribute("stroke-width", "3");
-    circle2.setAttribute("stroke-dasharray", broken);
-    circle2.setAttribute("stroke-dashoffset", dashBroken);
-
-    var circle3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle3.setAttribute("class", "donut-segment");
-    circle3.setAttribute("cx", "21");
-    circle3.setAttribute("cy", "21");
-    circle3.setAttribute("r", "15.91549430918954");
-    circle3.setAttribute("fill", "transparent");
-    circle3.setAttribute("stroke", "#a80068");
-    circle3.setAttribute("stroke-width", "3");
-    circle3.setAttribute("stroke-dasharray", skipped);
-    circle3.setAttribute("stroke-dashoffset", dashSkipped);
-
-    var circle4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle4.setAttribute("class", "donut-segment");
-    circle4.setAttribute("cx", "21");
-    circle4.setAttribute("cy", "21");
-    circle4.setAttribute("r", "15.91549430918954");
-    circle4.setAttribute("fill", "transparent");
-    circle4.setAttribute("stroke", "#a3db02");
-    circle4.setAttribute("stroke-width", "3");
-    circle4.setAttribute("stroke-dasharray", passed);
-    circle4.setAttribute("stroke-dashoffset", dashPassed);
-
-    var circle5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle5.setAttribute("class", "donut-segment");
-    circle5.setAttribute("cx", "21");
-    circle5.setAttribute("cy", "21");
-    circle5.setAttribute("r", "15.91549430918954");
-    circle5.setAttribute("fill", "transparent");
-    circle5.setAttribute("stroke", "#454545");
-    circle5.setAttribute("stroke-width", "3");
-    circle5.setAttribute("stroke-dasharray", unknown);
-    circle5.setAttribute("stroke-dashoffset", dashUnknown);
+    var circle1 = getCircle("#fc4e03", failed, dashFailed);
+    var circle2 = getCircle("#fcdf03", broken, dashBroken);
+    var circle3 = getCircle("#a80068", skipped, dashSkipped);
+    var circle4 = getCircle("#a3db02", passed, dashPassed);
+    var circle5 = getCircle("#454545", unknown, dashUnknown);
 
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "100%");
@@ -324,30 +259,11 @@ function generateWidget(jobject, folderPath){
     divDescription.appendChild(p1);
     divDescription.appendChild(p2);
 
-    var hiddenFailed = document.createElement("p");
-    hiddenFailed.setAttribute("id", "hiddenFailed");
-    hiddenFailed.setAttribute("hidden", "true");
-    hiddenFailed.appendChild(document.createTextNode(statistic.failed));
-
-    var hiddenBroken = document.createElement("p");
-    hiddenBroken.setAttribute("id", "hiddenBroken");
-    hiddenBroken.setAttribute("hidden", "true");
-    hiddenBroken.appendChild(document.createTextNode(statistic.broken));
-
-    var hiddenSkipped = document.createElement("p");
-    hiddenSkipped.setAttribute("id", "hiddenSkipped");
-    hiddenSkipped.setAttribute("hidden", "true");
-    hiddenSkipped.appendChild(document.createTextNode(statistic.skipped));
-
-    var hiddenPassed = document.createElement("p");
-    hiddenPassed.setAttribute("id", "hiddenPassed");
-    hiddenPassed.setAttribute("hidden", "true");
-    hiddenPassed.appendChild(document.createTextNode(statistic.passed));
-    
-    var hiddenUnknown = document.createElement("p");
-    hiddenUnknown.setAttribute("id", "hiddenUnknown");
-    hiddenUnknown.setAttribute("hidden", "true");
-    hiddenUnknown.appendChild(document.createTextNode(statistic.unknown));
+    var hiddenFailed = getHiddenElement("hiddenFailed", statistic.failed);
+    var hiddenBroken = getHiddenElement("hiddenBroken", statistic.broken);
+    var hiddenSkipped = getHiddenElement("hiddenSkipped", statistic.skipped);
+    var hiddenPassed = getHiddenElement("hiddenPassed", statistic.passed);
+    var hiddenUnknown = getHiddenElement("hiddenUnknown", statistic.unknown);
 
     var divSummary = document.createElement("div");
     divSummary.setAttribute("class", "widget_summary");
@@ -372,11 +288,6 @@ function generateWidget(jobject, folderPath){
 
 function deleteWidgets(){
     document.getElementById("widgets").innerHTML = "";
-}
-
-function showNotFound(){
-    var div = document.getElementById("errorMessageDiv");
-    div.style.display = "";
 }
 
 function showNoConfigMessageOnIndividual(){

@@ -2,12 +2,10 @@ function showCurrentConfig(){
 
     var config = String(localStorage.getItem("config"));
 
-    //console.log(config);
-
     if(config != null){
+
         var config_json = JSON.parse(config);
         var type = config_json.type;
-        //console.log(type);
 
         if(type == "directory"){
             var typeElement = document.getElementById("inlineRadio1");
@@ -18,8 +16,6 @@ function showCurrentConfig(){
         }
 
         var inputs = document.getElementById("inputs");
-
-        //console.log(config_json.links);
 
         var links = config_json.links;
         for(i=0;i<links.length;i++){
@@ -36,7 +32,6 @@ function showCurrentConfig(){
             inputs.appendChild(input);
         }
     } else {
-        //show message that there is no configuration saved
         showEmptyInput();
     }
 }
@@ -45,7 +40,6 @@ function showEmptyInput(){
     var div = document.getElementById("settings");
 
     var inputsDiv = document.getElementById("inputs");
-    //inputsDiv.setAttribute("class", "col-4");
     inputsDiv.innerHTML = "";
 
     var firstInput = document.createElement("input");
@@ -64,8 +58,6 @@ function showEmptyInput(){
 }
 
 function addSubstractNewInput(n){
-
-    //console.log(localStorage.getItem("config"));
 
     if(n<9){
         var currentId = "input".concat(n);
@@ -121,8 +113,6 @@ function saveSettings(){
         type = "specific_files";
     }
 
-    //console.log(type);
-
     for(i=0;i<10;i++){
         var id = "input".concat(i);
 
@@ -139,7 +129,6 @@ function saveSettings(){
 
     for(j=1;j<10;j++){
         if(links[j].trim() != ""){
-            //console.log(links[j]);
             json_links = json_links.concat('\", \"' + links[j]);
         }
     }
@@ -147,10 +136,6 @@ function saveSettings(){
     json_links = json_links.concat('\"]' + ' }');
 
     var json = '{ ' + '\"type\": ' + '\"' + type + '\", ' + json_links;
-
-    //var config_json = JSON.stringify(json);
-
-    //console.log(json);
 
     localStorage.setItem("config", json);
 
@@ -193,7 +178,7 @@ function deleteSettings(){
         newBtnDiv.innerHTML = "";
     } else {
         newBtnDiv = document.createElement("div");
-        newBtnDiv.setAttribute("class", "col-7");
+        newBtnDiv.setAttribute("class", "col-8");
         newBtnDiv.setAttribute("id", "successMsg");
         newBtnDiv.setAttribute("style", "margin-top: 3%;");
     }

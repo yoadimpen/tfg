@@ -6,18 +6,13 @@ function loadSummaryFromConfig(){
     var config = String(localStorage.getItem("config"));
 
     if(config != "null"){
-
         //se obtiene el objeto JSON de la configuracion
         var config_json = JSON.parse(config);
 
-        //console.log(config_json);
-
         //si se han guardado directorios se hace lo siguiente
         if(config_json.type == "directory"){
-
             //se cogen todos los enlaces a los directorios guardados
             var directories = config_json.links;
-            
             var request = [];
 
             //para cada uno de los directorios se hace lo siguiente
@@ -25,24 +20,18 @@ function loadSummaryFromConfig(){
                 (function(k){
                     //se hace una peticion HTTP para hallar la ruta completa de los informes
                     var allLinks = [];
-
-                    request[k] = new XMLHttpRequest();
-
                     var data = "";
 
+                    request[k] = new XMLHttpRequest();
                     request[k].withCredentials = true;
-                    
                     request[k].open('GET', directories[k]);
-
                     request[k].overrideMimeType("application/json");
-                
                     request[k].send();
-
                     request[k].onreadystatechange = function() {
 
                         if(this.readyState === 4) {
                             data = request[k].responseText;
-                            
+
                             //se obtiene el nombre de las carpetas en las cuales hay un informe de Allure
                             var realDataArray = getPathsFromHTTPRequest(data);
 
@@ -63,18 +52,15 @@ function loadSummaryFromConfig(){
             }
 
             var reportsPath = localStorage.getItem("links_temp");
-
             generateSummaryDivs(reportsPath);
         } else {
             var links = config_json.links;
             var reportsPath = "";
-
             reportsPath = links[0];
 
             for(z=1;z<links.length;z++){
                 reportsPath = reportsPath.concat(";").concat(links[z]);
             }
-
             generateSummaryDivs(reportsPath);
         }
     } else {
@@ -83,13 +69,11 @@ function loadSummaryFromConfig(){
 }
 
 function actualizaTemp(links, cont){
-
     if(cont == 0){
         localStorage.removeItem("links_temp");
     }
 
     links.forEach(function(link){
-        
         if(localStorage.getItem("links_temp") == null){
             localStorage.setItem("links_temp", link);
         } else{
@@ -102,49 +86,33 @@ function actualizaTemp(links, cont){
 
 function getPathsFromHTTPRequest(response){
     var res = [];
-
     var firstSplit = response.split("201: ");
 
     for(i=1;i<firstSplit.length;i++){
         var secondSplit = firstSplit[i].split(" 4096");
         res[i-1] = secondSplit[0];
     }
-
     return res;
 }
 
 function generateSummary(){
-
     var divs = document.getElementById("sum-row");
     divs.innerHTML = "";
 
     //file:///F:/-TFG/code/allure-report; file:///F:/-TFG/code/allure-report-2
     var reportsPath = document.getElementById("generateSummaryInput").value;
 
-    //console.log(reportsPath);
-
     if(reportsPath.trim() == ''){
         showEmptyMessage();
     } else {
         generateSummaryDivs(reportsPath);
-        //find the message div and empty it if it's full
-
-        //generate test output type summary col
-        //generateTypeSummary(reportsPath);
-        //generate categories/severity summary col
-            //generateSeveritySummary(reportsPath);
-        //generate a third graph summary col aight there m8
     }
 
 }
 
 function generateSummaryDivs(reportsPath){
-    //console.log(reportsPath);
     var pathsArray = reportsPath.split(";");
 
-    //console.log(pathsArray);
-
-    //var failed, broken, skipped, passed, unknown;
     var statusArray = [0,0,0,0,0];
     var severityArray = [0,0,0,0,0];
     var categoryArray = [0,0,0,0,0];
@@ -152,158 +120,62 @@ function generateSummaryDivs(reportsPath){
 
     pathsArray.forEach(function(path){
         path = path.trim();
-        //var pathToSummary = path.concat("/widgets/summaryCopy.json");
         readJSONs(path, statusArray, severityArray, categoryArray, categoryNameArray, pathsArray.length);
     })
 }
 
 function readJSONs (path, statusArray, severityArray, categoryArray, categoryNameArray, nReports){
-    var request1 = new XMLHttpRequest();
     var data1 = "";
     var jobject1 = "";
 
+    var request1 = new XMLHttpRequest();
     request1.withCredentials = true;
-    
     request1.open('GET', path.concat("/widgets/summaryCopy.json"));
-
     request1.overrideMimeType("application/json");
-   
     request1.send();
-    
     request1.onreadystatechange = function() {
         if(this.readyState === 4) {
-            
             data1 = request1.responseText;
-            //console.log(data1);
             jobject1 = JSON.parse(data1);
-            
             var res1 = getTypeResults(jobject1, statusArray);
-            //how should i save this???
-            //console.log(res1);
-            //makeTypeDiv(res1, nReports);
         }
         makeTypeDiv(res1, nReports);
     };
 
-    var request2 = new XMLHttpRequest();
     var data2 = "";
     var jobject2 = "";
-
-    request2.withCredentials = true;
     
+    var request2 = new XMLHttpRequest();
+    request2.withCredentials = true;
     request2.open('GET', path.concat("/widgets/severity.json"));
-
     request2.overrideMimeType("application/json");
-   
     request2.send();
-
     request2.onreadystatechange = function() {
         if(this.readyState === 4) {
-            
             data2 = request2.responseText;
             jobject2 = JSON.parse(data2);
-            
             var res2 = getSeverityLevelResults(jobject2, severityArray);
-            //how should i save this???
-            //console.log(res2 + "enkfvhjebrv");
             makeSeverityDiv(res2, nReports);
         }
-        //makeSeverityDiv(res2, nReports);
     };
 
-    var request3 = new XMLHttpRequest();
     var data3 = "";
     var jobject3 = "";
 
+    var request3 = new XMLHttpRequest();
     request3.withCredentials = true;
-    
     request3.open('GET', path.concat("/widgets/categories.json"));
-
     request3.overrideMimeType("application/json");
-   
     request3.send();
-
     request3.onreadystatechange = function() {
         if(this.readyState === 4) {
-            
             data3 = request3.responseText;
             jobject3 = JSON.parse(data3);
-            
             var res3 = getCategoryResults(jobject3, categoryArray, categoryNameArray);
-            //how should i save this???
-            //console.log(res2 + "enkfvhjebrv");
             makeCategoryDiv(res3, nReports);
         }
     };
 
-}
-
-function generateTypeSummary(paths){
-    var pathsArray = paths.split(";");
-
-    //var failed, broken, skipped, passed, unknown;
-    var statusArray = [0,0,0,0,0];
-    var severityArray = [0,0,0,0,0];
-
-    pathsArray.forEach(function(path){
-        path = path.trim();
-        var pathToSummary = path.concat("/widgets/summaryCopy.json");
-        readJSONSummary(path, pathToSummary, statusArray, severityArray, pathsArray.length);
-    })
-    //console.log(res + "hekrjewhrf");
-
-}
-
-function readJSONSummary(path, pathToSummary, statusArray, severityArray, totalReports){
-    var request = new XMLHttpRequest();
-    var data = "";
-    var jobject = "";
-
-    request.withCredentials = true;
-    
-    request.open('GET', pathToSummary);
-
-    request.overrideMimeType("application/json");
-   
-    request.send();
-    
-    request.onreadystatechange = function() {
-        if(this.readyState === 4) {
-            
-            data = request.responseText;
-            jobject = JSON.parse(data);
-            
-            res = getTypeResults(jobject, statusArray);
-            //how should i save this???
-            console.log(res);
-        }
-        //makeTypeDiv(res, totalReports);
-    };
-
-    var request2 = new XMLHttpRequest();
-    var data2 = "";
-    var jobject2 = "";
-
-    request2.withCredentials = true;
-    
-    request2.open('GET', path.concat("/widgets/severity.json"));
-
-    request2.overrideMimeType("application/json");
-   
-    request2.send();
-
-    request2.onreadystatechange = function() {
-        if(this.readyState === 4) {
-            
-            data2 = request2.responseText;
-            jobject2 = JSON.parse(data2);
-            
-            res2 = getSeverityLevelResults(jobject2, severityArray);
-            //how should i save this???
-            console.log(res2);
-        }
-        //makeTypeDiv(res, totalReports);
-    };
 }
 
 function getTypeResults(json, resultsArray){
@@ -314,6 +186,21 @@ function getTypeResults(json, resultsArray){
     resultsArray[3] = resultsArray[3] + statistic.passed;
     resultsArray[4] = resultsArray[4] + statistic.unknown;
     return resultsArray;
+}
+
+function getCircle(stroke, dasharray, dashoffset){
+    var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("class", "donut-segment");
+    circle.setAttribute("cx", "21");
+    circle.setAttribute("cy", "21");
+    circle.setAttribute("r", "15.91549430918954");
+    circle.setAttribute("fill", "transparent");
+    circle.setAttribute("stroke", stroke);
+    circle.setAttribute("stroke-width", "3");
+    circle.setAttribute("stroke-dasharray", dasharray);
+    circle.setAttribute("stroke-dashoffset", dashoffset);
+
+    return circle;
 }
 
 function makeTypeDiv(array, totalReports){
@@ -396,60 +283,11 @@ function makeTypeDiv(array, totalReports){
     circleRing.setAttribute("stroke", "#d2d3d4");
     circleRing.setAttribute("stroke-width", "3");
 
-    var circle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle1.setAttribute("class", "donut-segment");
-    circle1.setAttribute("cx", "21");
-    circle1.setAttribute("cy", "21");
-    circle1.setAttribute("r", "15.91549430918954");
-    circle1.setAttribute("fill", "transparent");
-    circle1.setAttribute("stroke", "#fc4e03");
-    circle1.setAttribute("stroke-width", "3");
-    circle1.setAttribute("stroke-dasharray", failed);
-    circle1.setAttribute("stroke-dashoffset", dashFailed);
-
-    var circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle2.setAttribute("class", "donut-segment");
-    circle2.setAttribute("cx", "21");
-    circle2.setAttribute("cy", "21");
-    circle2.setAttribute("r", "15.91549430918954");
-    circle2.setAttribute("fill", "transparent");
-    circle2.setAttribute("stroke", "#fcdf03");
-    circle2.setAttribute("stroke-width", "3");
-    circle2.setAttribute("stroke-dasharray", broken);
-    circle2.setAttribute("stroke-dashoffset", dashBroken);
-
-    var circle3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle3.setAttribute("class", "donut-segment");
-    circle3.setAttribute("cx", "21");
-    circle3.setAttribute("cy", "21");
-    circle3.setAttribute("r", "15.91549430918954");
-    circle3.setAttribute("fill", "transparent");
-    circle3.setAttribute("stroke", "#a80068");
-    circle3.setAttribute("stroke-width", "3");
-    circle3.setAttribute("stroke-dasharray", skipped);
-    circle3.setAttribute("stroke-dashoffset", dashSkipped);
-
-    var circle4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle4.setAttribute("class", "donut-segment");
-    circle4.setAttribute("cx", "21");
-    circle4.setAttribute("cy", "21");
-    circle4.setAttribute("r", "15.91549430918954");
-    circle4.setAttribute("fill", "transparent");
-    circle4.setAttribute("stroke", "#a3db02");
-    circle4.setAttribute("stroke-width", "3");
-    circle4.setAttribute("stroke-dasharray", passed);
-    circle4.setAttribute("stroke-dashoffset", dashPassed);
-
-    var circle5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle5.setAttribute("class", "donut-segment");
-    circle5.setAttribute("cx", "21");
-    circle5.setAttribute("cy", "21");
-    circle5.setAttribute("r", "15.91549430918954");
-    circle5.setAttribute("fill", "transparent");
-    circle5.setAttribute("stroke", "#454545");
-    circle5.setAttribute("stroke-width", "3");
-    circle5.setAttribute("stroke-dasharray", unknown);
-    circle5.setAttribute("stroke-dashoffset", dashUnknown);
+    var circle1 = getCircle("#fc4e03", failed, dashFailed);
+    var circle2 = getCircle("#fcdf03", broken, dashBroken);
+    var circle3 = getCircle("#a80068", skipped, dashSkipped);
+    var circle4 = getCircle("#a3db02", passed, dashPassed);
+    var circle5 = getCircle("#454545", unknown, dashUnknown);
 
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "100%");
@@ -465,91 +303,13 @@ function makeTypeDiv(array, totalReports){
     svg.appendChild(circle5);
     svg.appendChild(g);
 
-    /*
-    var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    var title_severity = document.createElement("h2");
-    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
-    title_severity.appendChild(document.createTextNode("Categories"));
-
-    var div1 = document.createElement("div");
-    div1.setAttribute("class", "col");
-
-    div1.appendChild(title_severity);
-    */
-
     var title = document.createElement("h2");
 
     title.appendChild(document.createTextNode("Status"));
     title.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
-    /*var title_severity = document.createElement("h2");
-    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
-    title_severity.appendChild(document.createTextNode("Categories")); */
-
-    /*var p = document.createElement("p");
-    p.setAttribute("id", "status");
-    p.setAttribute("style", "width:60%");
-    p.appendChild(title);*/
-
-    /*var help = document.createElement("i");
-    help.setAttribute("class", "far fa-question-circle");
-    help.setAttribute("style", "font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;");
-
-    var spanHelp = document.createElement("span");
-    spanHelp.setAttribute("class", "tooltip-text");
-    
-    var bHelp = document.createElement("b");
-    bHelp.appendChild(document.createTextNode("Help"));
-
-    var br1 = document.createElement("br");
-
-    var i1 = document.createElement("i");
-    i1.setAttribute("class", "fas fa-circle");
-    i1.setAttribute("style", "color:#fc4e03;");
-
-    var br2 = document.createElement("br");
-
-    var i2 = document.createElement("i");
-    i2.setAttribute("class", "fas fa-circle");
-    i2.setAttribute("style", "color:#fcdf03;");
-
-    var br3 = document.createElement("br");
-
-    var i3 = document.createElement("i");
-    i3.setAttribute("class", "fas fa-circle");
-    i3.setAttribute("style", "color:#a80068;");
-    
-    var br4 = document.createElement("br");
-
-    var i4 = document.createElement("i");
-    i4.setAttribute("class", "fas fa-circle");
-    i4.setAttribute("style", "color:#a3db02;");
-
-    var br5 = document.createElement("br");
-
-    var i5 = document.createElement("i");
-    i5.setAttribute("class", "fas fa-circle");
-    i5.setAttribute("style", "color:#454545;");
-
-    spanHelp.appendChild(bHelp);
-    spanHelp.appendChild(br1);
-    spanHelp.appendChild(i1);
-    spanHelp.appendChild(br2);
-    spanHelp.appendChild(i2);
-    spanHelp.appendChild(br3);
-    spanHelp.appendChild(i3);
-    spanHelp.appendChild(br4);
-    spanHelp.appendChild(i4);
-    spanHelp.appendChild(br5);
-    spanHelp.appendChild(i5);*/
 
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
-
-    /*titleRow.appendChild(p);
-    titleRow.appendChild(help);
-    titleRow.appendChild(spanHelp);*/
 
     var div1 = document.createElement("div");
     div1.setAttribute("class", "col");
@@ -560,7 +320,6 @@ function makeTypeDiv(array, totalReports){
     div2.setAttribute("class", "col-2");
     div2.setAttribute("style", "padding:auto;");
 
-    //div2.appendChild(document.createTextNode("<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true'></i><span class='tooltip-text'><b>Help</b><br><i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i></span>"));
     div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
             "<span class='tooltip-text'>" +
                 "<b>Help</b>" +
@@ -592,94 +351,17 @@ function makeTypeDiv(array, totalReports){
 
     var br = document.createElement("br");
     div.appendChild(br);
-/*
-    var blank = document.createElement("div");
-    blank.setAttribute("id", "sum-col");
-    blank.setAttribute("class", "col");
-    blank.appendChild(document.createTextNode("Blank div for development purpose :)"));
 
-    var blank2 = document.createElement("div");
-    blank2.setAttribute("id", "sum-col");
-    blank2.setAttribute("class", "col");
-    blank2.appendChild(document.createTextNode("Blank div for development purpose :)"));
-*/
     resultsDiv.appendChild(div);
-/*    
-    resultsDiv.appendChild(blank);
-    resultsDiv.appendChild(blank2);
-*/
-}
-
-function makeTwoBlankDivs(){
-    var div = document.getElementById("sum-row");
-
-    var blank = document.createElement("div");
-    blank.setAttribute("id", "sum-col");
-    blank.setAttribute("class", "col");
-    blank.appendChild(document.createTextNode("Blank div for development purpose :)"));
-
-    div.appendChild(blank);
-    div.appendChild(blank);
-}
-
-function showEmptyMessage(){
-    //find the message div and fill it
-}
-
-function generateSeveritySummary(paths){
-    var pathsArray = paths.split(";");
-
-    //var blocker, critical, normal, minor, trivial;
-    var resultsArray = [0,0,0,0,0];
-
-    pathsArray.forEach(function(path){
-        path = path.trim();
-        var pathToSeverity = path.concat("/widgets/severity.json");
-        readJSONSeverity(pathToSeverity, resultsArray, pathsArray.length);
-    })
-}
-
-function readJSONSeverity(pathToSeverity, resultsArray, totalReports){
-    var request = new XMLHttpRequest();
-    var data = "";
-    var jobject = "";
-
-    request.withCredentials = true;
-    
-    request.open('GET', pathToSeverity);
-
-    request.overrideMimeType("application/json");
-   
-    request.send();
-    
-    request.onreadystatechange = function() {
-        if(this.readyState === 4) {
-            
-            data = request.responseText;
-            jobject = JSON.parse(data);
-            console.log(jobject);
-
-            //console.log(resultsArray);
-            
-            var res = getSeverityLevelResults(jobject, resultsArray);
-            //how should i save this???
-            console.log(res);
-        }
-        makeSeverityDiv(res, totalReports);
-    };
 }
 
 function getSeverityLevelResults(jobject, array){
     var n = jobject.length;
-    //console.log(n);
 
     for(i=0;i<n;i++){
         var j = jobject[i];
-        //console.log(j);
         var json = JSON.parse(JSON.stringify(j));
-        //console.log(json);
         var severityLevel = json.severity;
-        //console.log(severityLevel);
 
         switch(severityLevel){
             case "blocker":
@@ -704,8 +386,6 @@ function getSeverityLevelResults(jobject, array){
 }
 
 function getCoherentScale(arrayResults){
-
-    //console.log(arrayResults);
     
     var highest_result = Math.max.apply(null, arrayResults);
     var highest;
@@ -1202,14 +882,7 @@ function makeSeverityDiv(array){
     div_severity.appendChild(svg_severity);
     div_severity.appendChild(description);
 
-    var blank = document.createElement("div");
-    blank.setAttribute("id", "sum-col");
-    blank.setAttribute("class", "col");
-    blank.appendChild(document.createTextNode("Blank div for development purpose :)"));
-
-    //resultsDiv.appendChild(statusCopyDiv);
     resultsDiv.appendChild(div_severity);
-    //resultsDiv.appendChild(blank);
 }
 
 function showNoConfigMessageOnGeneral(){
@@ -1235,7 +908,6 @@ function showNoConfigMessageOnGeneral(){
 }
 
 function getCategoryResults(json, valuesArray, nameArray){
-    //FALTA
     var items = json.items;
     var totalItems = json.total;
 
@@ -1247,9 +919,6 @@ function getCategoryResults(json, valuesArray, nameArray){
         nameArray[i] = name;
     }
 
-    console.log(valuesArray);
-    console.log(nameArray);
-
     var res = [];
 
     valuesArray.forEach(function(value){
@@ -1257,17 +926,6 @@ function getCategoryResults(json, valuesArray, nameArray){
     })
 
     nameArray.forEach(function(name){
-
-        /*
-        var name_org = name.split(" ");
-        var name_final = "";
-
-        name_org.forEach(function(no){
-            name_final = name_final.concat(no).concat("\n\r");
-        })
-
-        console.log(name_final);
-        */
 
         res.push(name);
     })
@@ -1430,86 +1088,51 @@ function makeCategoryDiv(resultsArray, nReports){
     line_x_1.setAttribute("class", "severity-x-tick-1-line");
     line_x_1.setAttribute("stroke", "#000");
     line_x_1.setAttribute("y2", "2%");
-    var text_x_1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_x_1.setAttribute("class", "severity-x-tick-text");
-    text_x_1.setAttribute("fill", "#000");
-    text_x_1.setAttribute("y", "3.3%");
-    text_x_1.setAttribute("dy", "0.71em");
-    text_x_1.appendChild(document.createTextNode(resultsArray[5]));
 
     var g_x_1 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_1.setAttribute("class", "severity-x-tick-1");
     g_x_1.setAttribute("opacity", "1");
     g_x_1.appendChild(line_x_1);
-    //g_x_1.appendChild(text_x_1);
 
     var line_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line_x_2.setAttribute("class", "severity-x-tick-2-line");
     line_x_2.setAttribute("stroke", "#000");
     line_x_2.setAttribute("y2", "2%");
-    var text_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_x_2.setAttribute("class", "severity-x-tick-text");
-    text_x_2.setAttribute("fill", "#000");
-    text_x_2.setAttribute("y", "3.3%");
-    text_x_2.setAttribute("dy", "0.71em");
-    text_x_2.appendChild(document.createTextNode(resultsArray[6]));
 
     var g_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_2.setAttribute("class", "severity-x-tick-2");
     g_x_2.setAttribute("opacity", "1");
     g_x_2.appendChild(line_x_2);
-    //g_x_2.appendChild(text_x_2);
 
     var line_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line_x_3.setAttribute("class", "severity-x-tick-3-line");
     line_x_3.setAttribute("stroke", "#000");
     line_x_3.setAttribute("y2", "2%");
-    var text_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_x_3.setAttribute("class", "severity-x-tick-text");
-    text_x_3.setAttribute("fill", "#000");
-    text_x_3.setAttribute("y", "3.3%");
-    text_x_3.setAttribute("dy", "0.71em");
-    text_x_3.appendChild(document.createTextNode(resultsArray[7]));
 
     var g_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_3.setAttribute("class", "severity-x-tick-3");
     g_x_3.setAttribute("opacity", "1");
     g_x_3.appendChild(line_x_3);
-    //g_x_3.appendChild(text_x_3);
 
     var line_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line_x_4.setAttribute("class", "severity-x-tick-4-line");
     line_x_4.setAttribute("stroke", "#000");
     line_x_4.setAttribute("y2", "2%");
-    var text_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_x_4.setAttribute("class", "severity-x-tick-text");
-    text_x_4.setAttribute("fill", "#000");
-    text_x_4.setAttribute("y", "3.3%");
-    text_x_4.setAttribute("dy", "0.71em");
-    text_x_4.appendChild(document.createTextNode(resultsArray[8]));
 
     var g_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_4.setAttribute("class", "severity-x-tick-4");
     g_x_4.setAttribute("opacity", "1");
     g_x_4.appendChild(line_x_4);
-    //g_x_4.appendChild(text_x_4);
 
     var line_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line_x_5.setAttribute("class", "severity-x-tick-5-line");
     line_x_5.setAttribute("stroke", "#000");
     line_x_5.setAttribute("y2", "2%");
-    var text_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_x_5.setAttribute("class", "severity-x-tick-text");
-    text_x_5.setAttribute("fill", "#000");
-    text_x_5.setAttribute("y", "3.3%");
-    text_x_5.setAttribute("dy", "0.71em");
-    text_x_5.appendChild(document.createTextNode(resultsArray[9]));
 
     var g_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g_x_5.setAttribute("class", "severity-x-tick-5");
     g_x_5.setAttribute("opacity", "1");
     g_x_5.appendChild(line_x_5);
-    //g_x_5.appendChild(text_x_5);
 
     var path_x = document.createElementNS("http://www.w3.org/2000/svg", "path");
     path_x.setAttribute("class", "severity-domain");
@@ -1730,39 +1353,6 @@ function makeCategoryDiv(resultsArray, nReports){
     svg_severity.appendChild(g_x);
     svg_severity.appendChild(g_y);
 
-    /* 
-        var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    var div1 = document.createElement("div");
-    div1.setAttribute("class", "col");
-
-    div1.appendChild(p);
-
-    var div2 = document.createElement("div");
-    div2.setAttribute("class", "col-2");
-    div2.setAttribute("style", "padding:auto;");
-
-    //div2.appendChild(document.createTextNode("<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true'></i><span class='tooltip-text'><b>Help</b><br><i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i></span>"));
-    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
-            "<span class='tooltip-text'>" +
-                "<b>Help</b>" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i> Failed tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i> Broken tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i> Skipped tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i> Passed tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i> Unknown tests" +
-            "</span>";
-
-    titleRow.appendChild(div1);
-    titleRow.appendChild(div2);
-    */
-
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
 
@@ -1805,7 +1395,6 @@ function makeCategoryDiv(resultsArray, nReports){
     div_severity.setAttribute("id", "sum-col");
     div_severity.setAttribute("class", "col");
     div_severity.setAttribute("style", "padding-bottom: 10%;");
-    //div_severity.appendChild(title_severity);
     div_severity.appendChild(titleRow);
     div_severity.appendChild(svg_severity);
     div_severity.appendChild(description);
@@ -1815,7 +1404,5 @@ function makeCategoryDiv(resultsArray, nReports){
     blank.setAttribute("class", "col");
     blank.appendChild(document.createTextNode("Blank div for development purpose :)"));
 
-    //resultsDiv.appendChild(statusCopyDiv);
     resultsDiv.appendChild(div_severity);
-    //resultsDiv.appendChild(blank);
 }
