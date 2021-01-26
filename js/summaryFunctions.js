@@ -465,13 +465,32 @@ function makeTypeDiv(array, totalReports){
     svg.appendChild(circle5);
     svg.appendChild(g);
 
-    var title = document.createElement("h2");
-    title.appendChild(document.createTextNode("Status"));
+    /*
+    var titleRow = document.createElement("div");
+    titleRow.setAttribute("class", "row");
 
-    var p = document.createElement("p");
+    var title_severity = document.createElement("h2");
+    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
+    title_severity.appendChild(document.createTextNode("Categories"));
+
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "col");
+
+    div1.appendChild(title_severity);
+    */
+
+    var title = document.createElement("h2");
+
+    title.appendChild(document.createTextNode("Status"));
+    title.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
+    /*var title_severity = document.createElement("h2");
+    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
+    title_severity.appendChild(document.createTextNode("Categories")); */
+
+    /*var p = document.createElement("p");
     p.setAttribute("id", "status");
     p.setAttribute("style", "width:60%");
-    p.appendChild(title);
+    p.appendChild(title);*/
 
     /*var help = document.createElement("i");
     help.setAttribute("class", "far fa-question-circle");
@@ -535,7 +554,7 @@ function makeTypeDiv(array, totalReports){
     var div1 = document.createElement("div");
     div1.setAttribute("class", "col");
 
-    div1.appendChild(p);
+    div1.appendChild(title);
 
     var div2 = document.createElement("div");
     div2.setAttribute("class", "col-2");
@@ -1172,7 +1191,7 @@ function makeSeverityDiv(array){
     title_severity.appendChild(document.createTextNode("Severities"));
     
     var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px; margin-top: 4px;");
+    description.setAttribute("style", "margin-left:10px; margin-top: 2px;");
     description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this summary."));
 
     var div_severity = document.createElement("div");
@@ -1327,7 +1346,7 @@ function makeCategoryDiv(resultsArray, nReports){
     g_plot_2.appendChild(rect_plot_2_2);
 
     var rect_plot_3_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_3_1.setAttribute("id", "cat-ip");
+    rect_plot_3_1.setAttribute("id", "cat-ot");
     rect_plot_3_1.setAttribute("class", "severity-bar");
     rect_plot_3_1.setAttribute("x", "40.6%");
     var percentage_3_1 = getPercentage(scale_y, array[2]);
@@ -1337,7 +1356,7 @@ function makeCategoryDiv(resultsArray, nReports){
     rect_plot_3_1.setAttribute("rx", "5");
     rect_plot_3_1.setAttribute("ry", "5");
     var rect_plot_3_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_3_2.setAttribute("id", "cat-ip");
+    rect_plot_3_2.setAttribute("id", "cat-ot");
     rect_plot_3_2.setAttribute("class", "severity-bar");
     rect_plot_3_2.setAttribute("x", "40.6%");
     var percentage_3_2 = getPercentage(scale_y, array[2]) + 4;
@@ -1351,7 +1370,7 @@ function makeCategoryDiv(resultsArray, nReports){
     g_plot_3.appendChild(rect_plot_3_2);
 
     var rect_plot_4_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_4_1.setAttribute("id", "cat-ot");
+    rect_plot_4_1.setAttribute("id", "cat-ip");
     rect_plot_4_1.setAttribute("class", "severity-bar");
     rect_plot_4_1.setAttribute("x", "58.4%");
     var percentage_4_1 = getPercentage(scale_y, array[3]);
@@ -1361,7 +1380,7 @@ function makeCategoryDiv(resultsArray, nReports){
     rect_plot_4_1.setAttribute("rx", "5");
     rect_plot_4_1.setAttribute("ry", "5");
     var rect_plot_4_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_4_2.setAttribute("id", "cat-ot");
+    rect_plot_4_2.setAttribute("id", "cat-ip");
     rect_plot_4_2.setAttribute("class", "severity-bar");
     rect_plot_4_2.setAttribute("x", "58.4%");
     var percentage_4_2 = getPercentage(scale_y, array[3]) + 4;
@@ -1711,21 +1730,85 @@ function makeCategoryDiv(resultsArray, nReports){
     svg_severity.appendChild(g_x);
     svg_severity.appendChild(g_y);
 
+    /* 
+        var titleRow = document.createElement("div");
+    titleRow.setAttribute("class", "row");
+
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "col");
+
+    div1.appendChild(p);
+
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "col-2");
+    div2.setAttribute("style", "padding:auto;");
+
+    //div2.appendChild(document.createTextNode("<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true'></i><span class='tooltip-text'><b>Help</b><br><i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i><br><i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i></span>"));
+    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
+            "<span class='tooltip-text'>" +
+                "<b>Help</b>" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i> Failed tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i> Broken tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i> Skipped tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i> Passed tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i> Unknown tests" +
+            "</span>";
+
+    titleRow.appendChild(div1);
+    titleRow.appendChild(div2);
+    */
+
+    var titleRow = document.createElement("div");
+    titleRow.setAttribute("class", "row");
+
     var title_severity = document.createElement("h2");
     title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
     title_severity.appendChild(document.createTextNode("Categories"));
+
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "col");
+
+    div1.appendChild(title_severity);
+
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "col-2");
+    div2.setAttribute("style", "padding:auto;");
+
+    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
+            "<span class='tooltip-text'>" +
+                "<b>Help</b>" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Ignored tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#d31121;' aria-hidden='true'></i> Infrastructure problems" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fa5c2e;' aria-hidden='true'></i> Outdated tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#feab4b;' aria-hidden='true'></i> Test defects" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Product defects" +
+            "</span>";
+
+    titleRow.appendChild(div1);
+    titleRow.appendChild(div2);
     
     var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px; margin-top: 4px;");
-    description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this summary."));
+    description.setAttribute("style", "margin-left:10px; margin-top: 2px;");
+    description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this part of the summary."));
 
     var div_severity = document.createElement("div");
     div_severity.setAttribute("id", "sum-col");
     div_severity.setAttribute("class", "col");
     div_severity.setAttribute("style", "padding-bottom: 10%;");
-    div_severity.appendChild(title_severity);
+    //div_severity.appendChild(title_severity);
+    div_severity.appendChild(titleRow);
     div_severity.appendChild(svg_severity);
-    //div_severity.appendChild(description);
+    div_severity.appendChild(description);
 
     var blank = document.createElement("div");
     blank.setAttribute("id", "sum-col");
