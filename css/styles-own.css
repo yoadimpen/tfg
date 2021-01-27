@@ -256,148 +256,147 @@ body{
 
 /*Severity Chart*/
 
-.severity-chart{
+.graph-chart{
 	display: block;
 	margin: auto;
 	padding-top:5%;
 }
 
-.severity-bar{
+.graph-bar{
 	fill: #6dd6cd;
 }
 
-.severity-plot{
+.graph-plot{
 	-moz-transform: translate(7.5%, 35.5%);
 	transform: translate(7.5%, 35.5%);
 }
 
-.severity-axis-x{
+.graph-axis-x{
 	-moz-transform: translate(7%, 83.5%);
 	transform: translate(7%, 83.5%);
 }
 
-.severity-axis-y{
+.graph-axis-y{
 	-moz-transform: translate(11%, 4%);
 	transform: translate(11%, 4%);
 }
 
-.severity-x-tick-1{
+.graph-x-tick-1{
 	-moz-transform: translate(19%, 0%);
 	transform: translate(19%, 0%);
 }
 
-.severity-x-tick-1-line{
+.graph-x-tick-1-line{
 	-moz-transform: translate(3.5%, 0%);
 	transform: translate(3.5%, 0%);
 }
 
-.severity-x-tick-2{
+.graph-x-tick-2{
 	-moz-transform: translate(37%, 0%);
 	transform: translate(37%, 0%);
 }
 
-.severity-x-tick-2-line{
+.graph-x-tick-2-line{
 	-moz-transform: translate(3.5%, 0%);
 	transform: translate(3.5%, 0%);
 }
 
-.severity-x-tick-3{
+.graph-x-tick-3{
 	-moz-transform: translate(55%, 0%);
 	transform: translate(55%, 0%);
 }
 
-.severity-x-tick-3-line{
+.graph-x-tick-3-line{
 	-moz-transform: translate(3.5%, 0%);
 	transform: translate(3.5%, 0%);
 }
 
-.severity-x-tick-4{
+.graph-x-tick-4{
 	-moz-transform: translate(72.5%, 0%);
 	transform: translate(72.5%, 0%);
 }
 
-.severity-x-tick-4-line{
+.graph-x-tick-4-line{
 	-moz-transform: translate(3.5%, 0%);
 	transform: translate(3.5%, 0%);
 }
 
-.severity-x-tick-5{
+.graph-x-tick-5{
 	-moz-transform: translate(89%, 0%);
 	transform: translate(89%, 0%);
 }
 
-
-.severity-x-tick-5-line{
+.graph-x-tick-5-line{
 	-moz-transform: translate(3.5%, 0%);
 	transform: translate(3.5%, 0%);
 }
 
-.severity-x-tick-text{
+.graph-x-tick-text{
 	-moz-transform: translate(-4.5%, 0%);
 	transform: translate(-4.5%, 0%);
 }
 
-.severity-y-h-line{
+.graph-y-h-line{
 	-moz-transform: translate(0%, 0%);
 	transform: translate(0%, 0%);
 }
 
-.severity-y-v-line{
+.graph-y-v-line{
 	-moz-transform: translate(0%, 0%);
 	transform: translate(0%, 0%);
 }
 
-.severity-y-tick-0{
+.graph-y-tick-0{
 	-moz-transform: translate(0%, 79.5%);
 	transform: translate(0%, 79.5%);
 }
 
-.severity-y-tick-1{
+.graph-y-tick-1{
 	-moz-transform: translate(0%, 72%);
 	transform: translate(0%, 72%);
 }
 
-.severity-y-tick-2{
+.graph-y-tick-2{
 	-moz-transform: translate(0%, 64%);
 	transform: translate(0%, 64%);
 }
 
-.severity-y-tick-3{
+.graph-y-tick-3{
 	-moz-transform: translate(0%, 56%);
 	transform: translate(0%, 56%);
 }
 
-.severity-y-tick-4{
+.graph-y-tick-4{
 	-moz-transform: translate(0%, 48%);
 	transform: translate(0%, 48%);
 }
 
-.severity-y-tick-5{
+.graph-y-tick-5{
 	-moz-transform: translate(0%, 40%);
 	transform: translate(0%, 40%);
 }
 
-.severity-y-tick-6{
+.graph-y-tick-6{
 	-moz-transform: translate(0%, 32%);
 	transform: translate(0%, 32%);
 }
 
-.severity-y-tick-7{
+.graph-y-tick-7{
 	-moz-transform: translate(0%, 24%);
 	transform: translate(0%, 24%);
 }
 
-.severity-y-tick-8{
+.graph-y-tick-8{
 	-moz-transform: translate(0%, 16%);
 	transform: translate(0%, 16%);
 }
 
-.severity-y-tick-9{
+.graph-y-tick-9{
 	-moz-transform: translate(0%, 8%);
 	transform: translate(0%, 8%);
 }
 
-.severity-y-tick-10{
+.graph-y-tick-10{
 	-moz-transform: translate(0%, 0.2%);
 	transform: translate(0%, 0.2%);
 }

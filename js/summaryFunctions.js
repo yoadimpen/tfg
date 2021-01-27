@@ -444,7 +444,7 @@ function makeSeverityDiv(array){
     updateRectPlot(rect_plot_1_2, percentage_1_2, false);
 
     var rect_plot_1_0 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_1_0.setAttribute("class", "severity-bar");
+    rect_plot_1_0.setAttribute("class", "graph-bar");
     rect_plot_1_0.setAttribute("x", "5.1%");
     rect_plot_1_0.setAttribute("y", "47%");
     rect_plot_1_0.setAttribute("height", "1%");
@@ -495,7 +495,7 @@ function makeSeverityDiv(array){
     var g_plot_5 = getGplot(rect_plot_5_1, rect_plot_5_2);
 
     var g_plot = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_plot.setAttribute("class", "severity-plot");
+    g_plot.setAttribute("class", "graph-plot");
     g_plot.setAttribute("style", "padding-bottom: 10%;");
     g_plot.appendChild(g_plot_1);
     g_plot.appendChild(g_plot_2);
@@ -506,34 +506,34 @@ function makeSeverityDiv(array){
     var line_x_1 = getLineX(1);
     var text_x_1 = getTextX("blocker");
 
-    var g_x_1 = getGX(1, line_x_1, text_x_1);
+    var g_x_1 = getGX(1, line_x_1, text_x_1, true);
 
     var line_x_2 = getLineX(2);
     var text_x_2 = getTextX("critical");
 
-    var g_x_2 = getGX(2, line_x_2, text_x_2);
+    var g_x_2 = getGX(2, line_x_2, text_x_2, true);
 
     var line_x_3 = getLineX(3);
     var text_x_3 = getTextX("normal");
 
-    var g_x_3 = getGX(3, line_x_3, text_x_3);
+    var g_x_3 = getGX(3, line_x_3, text_x_3, true);
 
     var line_x_4 = getLineX(4);
     var text_x_4 = getTextX("minor");
 
-    var g_x_4 = getGX(4, line_x_4, text_x_4);
+    var g_x_4 = getGX(4, line_x_4, text_x_4, true);
 
     var line_x_5 = getLineX(5);
     var text_x_5 = getTextX("trivial");
 
-    var g_x_5 = getGX(5, line_x_5, text_x_5);
+    var g_x_5 = getGX(5, line_x_5, text_x_5, true);
 
     var path_x = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path_x.setAttribute("class", "severity-domain");
+    path_x.setAttribute("class", "graph-domain");
     path_x.setAttribute("stroke", "#000");
 
     var g_x = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x.setAttribute("class", "severity-axis-x");
+    g_x.setAttribute("class", "graph-axis-x");
     g_x.setAttribute("fill", "none");
     g_x.setAttribute("font-size", "12");
     g_x.setAttribute("text-anchor", "middle");
@@ -545,185 +545,81 @@ function makeSeverityDiv(array){
     g_x.appendChild(g_x_5);
 
     var line_y_0_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_0_1.setAttribute("class", "severity-y-v-line");
+    line_y_0_1.setAttribute("class", "graph-y-v-line");
     line_y_0_1.setAttribute("stroke", "#000");
     line_y_0_1.setAttribute("y1", "2%");
     line_y_0_1.setAttribute("y2", "-79.5%");
     line_y_0_1.setAttribute("dx", "0.32em");
     var line_y_0_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_0_2.setAttribute("class", "severity-y-h-line");
+    line_y_0_2.setAttribute("class", "graph-y-h-line");
     line_y_0_2.setAttribute("stroke", "#000");
     line_y_0_2.setAttribute("x1", "89%");
     line_y_0_2.setAttribute("x2", "-2%");
-    var text_y_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_0.setAttribute("fill", "#000");
-    text_y_0.setAttribute("x", "-3.3%");
-    text_y_0.setAttribute("dy", "0.32em");
-    text_y_0.appendChild(document.createTextNode(scale_y[0]));
+    var text_y_0 = getTextY(scale_y[0]);
 
     var g_y_0 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_0.setAttribute("class", "severity-y-tick-0");
+    g_y_0.setAttribute("class", "graph-y-tick-0");
     g_y_0.setAttribute("opacity", "1");
     g_y_0.appendChild(line_y_0_1);
     g_y_0.appendChild(line_y_0_2);
     g_y_0.appendChild(text_y_0);
 
-    var line_y_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_1.setAttribute("stroke", "#000");
-    line_y_1.setAttribute("x2", "-2%");
-    var text_y_1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_1.setAttribute("fill", "#000");
-    text_y_1.setAttribute("x", "-3.3%");
-    text_y_1.setAttribute("dy", "0.32em");
-    text_y_1.appendChild(document.createTextNode(scale_y[1]));
+    var line_y_1 = getLineY();
+    var text_y_1 = getTextY(scale_y[1]);
 
-    var g_y_1 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_1.setAttribute("class", "severity-y-tick-1");
-    g_y_1.setAttribute("opacity", "1");
-    g_y_1.appendChild(line_y_1);
-    g_y_1.appendChild(text_y_1);
+    var g_y_1 = getGY(1, line_y_1, text_y_1);
 
-    var line_y_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_2.setAttribute("stroke", "#000");
-    line_y_2.setAttribute("x2", "-2%");
-    var text_y_2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_2.setAttribute("fill", "#000");
-    text_y_2.setAttribute("x", "-3.3%");
-    text_y_2.setAttribute("dy", "0.32em");
-    text_y_2.appendChild(document.createTextNode(scale_y[2]));
+    var line_y_2 = getLineY();
+    var text_y_2 = getTextY(scale_y[2]);
 
-    var g_y_2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_2.setAttribute("class", "severity-y-tick-2");
-    g_y_2.setAttribute("opacity", "1");
-    g_y_2.appendChild(line_y_2);
-    g_y_2.appendChild(text_y_2);
+    var g_y_2 = getGY(2, line_y_2, text_y_2);
 
-    var line_y_3 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_3.setAttribute("stroke", "#000");
-    line_y_3.setAttribute("x2", "-2%");
-    var text_y_3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_3.setAttribute("fill", "#000");
-    text_y_3.setAttribute("x", "-3.3%");
-    text_y_3.setAttribute("dy", "0.32em");
-    text_y_3.appendChild(document.createTextNode(scale_y[3]));
+    var line_y_3 = getLineY();
+    var text_y_3 = getTextY(scale_y[3]);
 
-    var g_y_3 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_3.setAttribute("class", "severity-y-tick-3");
-    g_y_3.setAttribute("opacity", "1");
-    g_y_3.appendChild(line_y_3);
-    g_y_3.appendChild(text_y_3);
+    var g_y_3 = getGY(3, line_y_3, text_y_3);
 
-    var line_y_4 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_4.setAttribute("stroke", "#000");
-    line_y_4.setAttribute("x2", "-2%");
-    var text_y_4 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_4.setAttribute("fill", "#000");
-    text_y_4.setAttribute("x", "-3.3%");
-    text_y_4.setAttribute("dy", "0.32em");
-    text_y_4.appendChild(document.createTextNode(scale_y[4]));
+    var line_y_4 = getLineY();
+    var text_y_4 = getTextY(scale_y[4]);
 
-    var g_y_4 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_4.setAttribute("class", "severity-y-tick-4");
-    g_y_4.setAttribute("opacity", "1");
-    g_y_4.appendChild(line_y_4);
-    g_y_4.appendChild(text_y_4);
+    var g_y_4 = getGY(4, line_y_4, text_y_4);
 
-    var line_y_5 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_5.setAttribute("stroke", "#000");
-    line_y_5.setAttribute("x2", "-2%");
-    var text_y_5 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_5.setAttribute("fill", "#000");
-    text_y_5.setAttribute("x", "-3.3%");
-    text_y_5.setAttribute("dy", "0.32em");
-    text_y_5.appendChild(document.createTextNode(scale_y[5]));
+    var line_y_5 = getLineY();
+    var text_y_5 = getTextY(scale_y[5]);
 
-    var g_y_5 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_5.setAttribute("class", "severity-y-tick-5");
-    g_y_5.setAttribute("opacity", "1");
-    g_y_5.appendChild(line_y_5);
-    g_y_5.appendChild(text_y_5);
+    var g_y_5 = getGY(5, line_y_5, text_y_5);
 
-    var line_y_6 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_6.setAttribute("stroke", "#000");
-    line_y_6.setAttribute("x2", "-2%");
-    var text_y_6 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_6.setAttribute("fill", "#000");
-    text_y_6.setAttribute("x", "-3.3%");
-    text_y_6.setAttribute("dy", "0.32em");
-    text_y_6.appendChild(document.createTextNode(scale_y[6]));
+    var line_y_6 = getLineY();
+    var text_y_6 = getTextY(scale_y[6]);
 
-    var g_y_6 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_6.setAttribute("class", "severity-y-tick-6");
-    g_y_6.setAttribute("opacity", "1");
-    g_y_6.appendChild(line_y_6);
-    g_y_6.appendChild(text_y_6);
+    var g_y_6 = getGY(6, line_y_6, text_y_6);
 
-    var line_y_7 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_7.setAttribute("stroke", "#000");
-    line_y_7.setAttribute("x2", "-2%");
-    var text_y_7 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_7.setAttribute("fill", "#000");
-    text_y_7.setAttribute("x", "-3.3%");
-    text_y_7.setAttribute("dy", "0.32em");
-    text_y_7.appendChild(document.createTextNode(scale_y[7]));
+    var line_y_7 = getLineY();
+    var text_y_7 = getTextY(scale_y[7]);
 
-    var g_y_7 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_7.setAttribute("class", "severity-y-tick-7");
-    g_y_7.setAttribute("opacity", "1");
-    g_y_7.appendChild(line_y_7);
-    g_y_7.appendChild(text_y_7);
+    var g_y_7 = getGY(7, line_y_7, text_y_7);
 
-    var line_y_8 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_8.setAttribute("stroke", "#000");
-    line_y_8.setAttribute("x2", "-2%");
-    var text_y_8 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_8.setAttribute("fill", "#000");
-    text_y_8.setAttribute("x", "-3.3%");
-    text_y_8.setAttribute("dy", "0.32em");
-    text_y_8.appendChild(document.createTextNode(scale_y[8]));
+    var line_y_8 = getLineY();
+    var text_y_8 = getTextY(scale_y[8]);
 
-    var g_y_8 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_8.setAttribute("class", "severity-y-tick-8");
-    g_y_8.setAttribute("opacity", "1");
-    g_y_8.appendChild(line_y_8);
-    g_y_8.appendChild(text_y_8);
+    var g_y_8 = getGY(8, line_y_8, text_y_8);
 
-    var line_y_9 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_9.setAttribute("stroke", "#000");
-    line_y_9.setAttribute("x2", "-2%");
-    var text_y_9 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_9.setAttribute("fill", "#000");
-    text_y_9.setAttribute("x", "-3.3%");
-    text_y_9.setAttribute("dy", "0.32em");
-    text_y_9.appendChild(document.createTextNode(scale_y[9]));
+    var line_y_9 = getLineY();
+    var text_y_9 = getTextY(scale_y[9]);
 
-    var g_y_9 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_9.setAttribute("class", "severity-y-tick-9");
-    g_y_9.setAttribute("opacity", "1");
-    g_y_9.appendChild(line_y_9);
-    g_y_9.appendChild(text_y_9);
+    var g_y_9 = getGY(9, line_y_9, text_y_9);
 
-    var line_y_10 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_10.setAttribute("stroke", "#000");
-    line_y_10.setAttribute("x2", "-2%");
-    var text_y_10 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_10.setAttribute("fill", "#000");
-    text_y_10.setAttribute("x", "-3.3%");
-    text_y_10.setAttribute("dy", "0.32em");
-    text_y_10.appendChild(document.createTextNode(scale_y[10]));
+    var line_y_10 = getLineY();
+    var text_y_10 = getTextY(scale_y[10]);
 
-    var g_y_10 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_10.setAttribute("class", "severity-y-tick-10");
-    g_y_10.setAttribute("opacity", "1");
-    g_y_10.appendChild(line_y_10);
-    g_y_10.appendChild(text_y_10);
+    var g_y_10 = getGY(10, line_y_10, text_y_10);
 
     var path_y = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path_y.setAttribute("class", "severity-domain");
+    path_y.setAttribute("class", "graph-domain");
     path_y.setAttribute("stroke", "#000");
 
     var g_y = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y.setAttribute("class", "severity-axis-y");
+    g_y.setAttribute("class", "graph-axis-y");
     g_y.setAttribute("fill", "none");
     g_y.setAttribute("font-size", "12");
     g_y.setAttribute("text-anchor", "end");
@@ -740,7 +636,7 @@ function makeSeverityDiv(array){
     g_y.appendChild(g_y_10);
 
     var svg_severity = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg_severity.setAttribute("class", "severity-chart");
+    svg_severity.setAttribute("class", "graph-chart");
     svg_severity.setAttribute("width", "75%");
     svg_severity.setAttribute("height", "95%");
     svg_severity.appendChild(g_plot);
@@ -807,157 +703,94 @@ function getCategoryResults(json, valuesArray, nameArray){
     })
 
     nameArray.forEach(function(name){
-
         res.push(name);
     })
-
     return res;
-
 }
 
 function makeCategoryDiv(resultsArray, nReports){
 
     var resultsDiv = document.getElementById("sum-row");
-
     var array = resultsArray.slice(0,5);
-
     var total = 0;
+
     for(var i in array) {
         total += array[i];
     }
 
     var scale_y = getCoherentScale(array);
 
-    var rect_plot_1_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_1_1.setAttribute("id", "cat-pd");
-    rect_plot_1_1.setAttribute("class", "severity-bar");
-    rect_plot_1_1.setAttribute("x", "5.1%");
+    var rect_plot_1_1 = getRectPlot(1);
     var percentage_1_1 = getPercentage(scale_y, array[0]);
-    rect_plot_1_1.setAttribute("y", String(percentage_1_1) + "%");
-    rect_plot_1_1.setAttribute("height", String(48-percentage_1_1) + "%");
-    rect_plot_1_1.setAttribute("width", "16.2%");
-    rect_plot_1_1.setAttribute("rx", "5");
-    rect_plot_1_1.setAttribute("ry", "5");
-    var rect_plot_1_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_1_2.setAttribute("id", "cat-pd");
-    rect_plot_1_2.setAttribute("class", "severity-bar");
-    rect_plot_1_2.setAttribute("x", "5.1%");
+    updateRectPlot(rect_plot_1_1, percentage_1_1, true);
+    rect_plot_1_1.setAttribute("id", "cat-pd");
+
+    var rect_plot_1_2 = getRectPlot(1);
     var percentage_1_2 = getPercentage(scale_y, array[0]) + 4;
-    rect_plot_1_2.setAttribute("y", String(percentage_1_2) + "%");
-    rect_plot_1_2.setAttribute("height", String(48-percentage_1_2) + "%");
-    rect_plot_1_2.setAttribute("width", "16.2%");
+    updateRectPlot(rect_plot_1_2, percentage_1_2, false);
+    rect_plot_1_2.setAttribute("id", "cat-pd");
+
     var rect_plot_1_0 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_1_0.setAttribute("class", "severity-bar");
+    rect_plot_1_0.setAttribute("class", "graph-bar");
     rect_plot_1_0.setAttribute("x", "5.1%");
     rect_plot_1_0.setAttribute("y", "47%");
     rect_plot_1_0.setAttribute("height", "1%");
     rect_plot_1_0.setAttribute("width", "90%");
     rect_plot_1_0.setAttribute("opacity", "0");
 
-    var g_plot_1 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_plot_1.setAttribute("transform", "translate(0,0)");
-    g_plot_1.appendChild(rect_plot_1_1);
-    g_plot_1.appendChild(rect_plot_1_2);
+    var g_plot_1 = getGplot(rect_plot_1_1, rect_plot_1_2);
     g_plot_1.appendChild(rect_plot_1_0);
 
-    var rect_plot_2_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_2_1.setAttribute("id", "cat-td");
-    rect_plot_2_1.setAttribute("class", "severity-bar");
-    rect_plot_2_1.setAttribute("x", "22.8%");
+    var rect_plot_2_1 = getRectPlot(2);
     var percentage_2_1 = getPercentage(scale_y, array[1]);
-    rect_plot_2_1.setAttribute("y", String(percentage_2_1) + "%");
-    rect_plot_2_1.setAttribute("height", String(48-percentage_2_1) + "%");
-    rect_plot_2_1.setAttribute("width", "16.2%");
-    rect_plot_2_1.setAttribute("rx", "5");
-    rect_plot_2_1.setAttribute("ry", "5");
-    var rect_plot_2_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_2_2.setAttribute("id", "cat-td");
-    rect_plot_2_2.setAttribute("class", "severity-bar");
-    rect_plot_2_2.setAttribute("x", "22.8%");
+    updateRectPlot(rect_plot_2_1, percentage_2_1, true);
+    rect_plot_2_1.setAttribute("id", "cat-td");
+
+    var rect_plot_2_2 = getRectPlot(2);
     var percentage_2_2 = getPercentage(scale_y, array[1]) + 4;
-    rect_plot_2_2.setAttribute("y", String(percentage_2_2) + "%");
-    rect_plot_2_2.setAttribute("height", String(48-percentage_2_2) + "%");
-    rect_plot_2_2.setAttribute("width", "16.2%");
+    updateRectPlot(rect_plot_2_2, percentage_2_2, false);
+    rect_plot_2_2.setAttribute("id", "cat-td");
 
-    var g_plot_2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_plot_2.setAttribute("transform", "translate(0,0)");
-    g_plot_2.appendChild(rect_plot_2_1);
-    g_plot_2.appendChild(rect_plot_2_2);
+    var g_plot_2 = getGplot(rect_plot_2_1, rect_plot_2_2);
 
-    var rect_plot_3_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_3_1.setAttribute("id", "cat-ot");
-    rect_plot_3_1.setAttribute("class", "severity-bar");
-    rect_plot_3_1.setAttribute("x", "40.6%");
+    var rect_plot_3_1 = getRectPlot(3);
     var percentage_3_1 = getPercentage(scale_y, array[2]);
-    rect_plot_3_1.setAttribute("y", String(percentage_3_1) + "%");
-    rect_plot_3_1.setAttribute("height", String(48-percentage_3_1) + "%");
-    rect_plot_3_1.setAttribute("width", "16.2%");
-    rect_plot_3_1.setAttribute("rx", "5");
-    rect_plot_3_1.setAttribute("ry", "5");
-    var rect_plot_3_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_3_2.setAttribute("id", "cat-ot");
-    rect_plot_3_2.setAttribute("class", "severity-bar");
-    rect_plot_3_2.setAttribute("x", "40.6%");
+    updateRectPlot(rect_plot_3_1, percentage_3_1, true);
+    rect_plot_3_1.setAttribute("id", "cat-ot");
+
+    var rect_plot_3_2 = getRectPlot(3);
     var percentage_3_2 = getPercentage(scale_y, array[2]) + 4;
-    rect_plot_3_2.setAttribute("y", String(percentage_3_2) + "%");
-    rect_plot_3_2.setAttribute("height", String(48-percentage_3_2) + "%");
-    rect_plot_3_2.setAttribute("width", "16.2%");
+    updateRectPlot(rect_plot_3_2, percentage_3_2, false);
+    rect_plot_3_2.setAttribute("id", "cat-ot");
 
-    var g_plot_3 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_plot_3.setAttribute("transform", "translate(0,0)");
-    g_plot_3.appendChild(rect_plot_3_1);
-    g_plot_3.appendChild(rect_plot_3_2);
+    var g_plot_3 = getGplot(rect_plot_3_1, rect_plot_3_2);
 
-    var rect_plot_4_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_4_1.setAttribute("id", "cat-ip");
-    rect_plot_4_1.setAttribute("class", "severity-bar");
-    rect_plot_4_1.setAttribute("x", "58.4%");
+    var rect_plot_4_1 = getRectPlot(4);
     var percentage_4_1 = getPercentage(scale_y, array[3]);
-    rect_plot_4_1.setAttribute("y", String(percentage_4_1) + "%");
-    rect_plot_4_1.setAttribute("height", String(48-percentage_4_1) + "%");
-    rect_plot_4_1.setAttribute("width", "16.2%");
-    rect_plot_4_1.setAttribute("rx", "5");
-    rect_plot_4_1.setAttribute("ry", "5");
-    var rect_plot_4_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_4_2.setAttribute("id", "cat-ip");
-    rect_plot_4_2.setAttribute("class", "severity-bar");
-    rect_plot_4_2.setAttribute("x", "58.4%");
+    updateRectPlot(rect_plot_4_1, percentage_4_1, true);
+    rect_plot_4_1.setAttribute("id", "cat-ip");
+    
+    var rect_plot_4_2 = getRectPlot(4);
     var percentage_4_2 = getPercentage(scale_y, array[3]) + 4;
-    rect_plot_4_2.setAttribute("y", String(percentage_4_2) + "%");
-    rect_plot_4_2.setAttribute("height", String(48-percentage_4_2) + "%");
-    rect_plot_4_2.setAttribute("width", "16.2%");
+    updateRectPlot(rect_plot_4_2, percentage_4_2, false);
+    rect_plot_4_2.setAttribute("id", "cat-ip");
 
-    var g_plot_4 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_plot_4.setAttribute("transform", "translate(0,0)");
-    g_plot_4.appendChild(rect_plot_4_1);
-    g_plot_4.appendChild(rect_plot_4_2);
+    var g_plot_4 = getGplot(rect_plot_4_1, rect_plot_4_2);
 
-    var rect_plot_5_1 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_5_1.setAttribute("id", "cat-it");
-    rect_plot_5_1.setAttribute("class", "severity-bar");
-    rect_plot_5_1.setAttribute("x", "76.2%");
+    var rect_plot_5_1 = getRectPlot(5);
     var percentage_5_1 = getPercentage(scale_y, array[4]);
-    rect_plot_5_1.setAttribute("y", String(percentage_5_1) + "%");
-    rect_plot_5_1.setAttribute("height", String(48-percentage_5_1) + "%");
-    rect_plot_5_1.setAttribute("width", "16.2%");
-    rect_plot_5_1.setAttribute("rx", "5");
-    rect_plot_5_1.setAttribute("ry", "5");
-    var rect_plot_5_2 = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot_5_2.setAttribute("id", "cat-it");
-    rect_plot_5_2.setAttribute("class", "severity-bar");
-    rect_plot_5_2.setAttribute("x", "76.2%");
-    var percentage_5_2 = getPercentage(scale_y, array[4]) + 4;
-    rect_plot_5_2.setAttribute("y", String(percentage_5_2) + "%");
-    rect_plot_5_2.setAttribute("height", String(48-percentage_5_2) + "%");
-    rect_plot_5_2.setAttribute("width", "16.2%");
+    updateRectPlot(rect_plot_5_1, percentage_5_1, true);
+    rect_plot_5_1.setAttribute("id", "cat-it");
 
-    var g_plot_5 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_plot_5.setAttribute("transform", "translate(0,0)");
-    g_plot_5.appendChild(rect_plot_5_1);
-    g_plot_5.appendChild(rect_plot_5_2);
+    var rect_plot_5_2 = getRectPlot(5);
+    var percentage_5_2 = getPercentage(scale_y, array[4]) + 4;
+    updateRectPlot(rect_plot_5_2, percentage_5_2, false);
+    rect_plot_5_2.setAttribute("id", "cat-it");
+
+    var g_plot_5 = getGplot(rect_plot_5_1, rect_plot_5_2);
 
     var g_plot = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_plot.setAttribute("class", "severity-plot");
+    g_plot.setAttribute("class", "graph-plot");
     g_plot.setAttribute("style", "padding-bottom: 10%;");
     g_plot.appendChild(g_plot_1);
     g_plot.appendChild(g_plot_2);
@@ -965,62 +798,27 @@ function makeCategoryDiv(resultsArray, nReports){
     g_plot.appendChild(g_plot_4);
     g_plot.appendChild(g_plot_5);
 
-    var line_x_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_1.setAttribute("class", "severity-x-tick-1-line");
-    line_x_1.setAttribute("stroke", "#000");
-    line_x_1.setAttribute("y2", "2%");
+    var line_x_1 = getLineX(1);
+    var g_x_1 = getGX(1, line_x_1, null, false);
 
-    var g_x_1 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x_1.setAttribute("class", "severity-x-tick-1");
-    g_x_1.setAttribute("opacity", "1");
-    g_x_1.appendChild(line_x_1);
+    var line_x_2 = getLineX(2);
+    var g_x_2 = getGX(2, line_x_2, null, false);
 
-    var line_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_2.setAttribute("class", "severity-x-tick-2-line");
-    line_x_2.setAttribute("stroke", "#000");
-    line_x_2.setAttribute("y2", "2%");
+    var line_x_3 = getLineX(3);
+    var g_x_3 = getGX(3, line_x_3, null, false);
 
-    var g_x_2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x_2.setAttribute("class", "severity-x-tick-2");
-    g_x_2.setAttribute("opacity", "1");
-    g_x_2.appendChild(line_x_2);
+    var line_x_4 = getLineX(4);
+    var g_x_4 = getGX(4, line_x_4, null, false);
 
-    var line_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_3.setAttribute("class", "severity-x-tick-3-line");
-    line_x_3.setAttribute("stroke", "#000");
-    line_x_3.setAttribute("y2", "2%");
-
-    var g_x_3 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x_3.setAttribute("class", "severity-x-tick-3");
-    g_x_3.setAttribute("opacity", "1");
-    g_x_3.appendChild(line_x_3);
-
-    var line_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_4.setAttribute("class", "severity-x-tick-4-line");
-    line_x_4.setAttribute("stroke", "#000");
-    line_x_4.setAttribute("y2", "2%");
-
-    var g_x_4 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x_4.setAttribute("class", "severity-x-tick-4");
-    g_x_4.setAttribute("opacity", "1");
-    g_x_4.appendChild(line_x_4);
-
-    var line_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x_5.setAttribute("class", "severity-x-tick-5-line");
-    line_x_5.setAttribute("stroke", "#000");
-    line_x_5.setAttribute("y2", "2%");
-
-    var g_x_5 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x_5.setAttribute("class", "severity-x-tick-5");
-    g_x_5.setAttribute("opacity", "1");
-    g_x_5.appendChild(line_x_5);
+    var line_x_5 = getLineX(5);
+    var g_x_5 = getGX(5, line_x_5, null, false);
 
     var path_x = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path_x.setAttribute("class", "severity-domain");
+    path_x.setAttribute("class", "graph-domain");
     path_x.setAttribute("stroke", "#000");
 
     var g_x = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x.setAttribute("class", "severity-axis-x");
+    g_x.setAttribute("class", "graph-axis-x");
     g_x.setAttribute("fill", "none");
     g_x.setAttribute("font-size", "12");
     g_x.setAttribute("text-anchor", "middle");
@@ -1032,185 +830,81 @@ function makeCategoryDiv(resultsArray, nReports){
     g_x.appendChild(g_x_5);
 
     var line_y_0_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_0_1.setAttribute("class", "severity-y-v-line");
+    line_y_0_1.setAttribute("class", "graph-y-v-line");
     line_y_0_1.setAttribute("stroke", "#000");
     line_y_0_1.setAttribute("y1", "2%");
     line_y_0_1.setAttribute("y2", "-79.5%");
     line_y_0_1.setAttribute("dx", "0.32em");
     var line_y_0_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_0_2.setAttribute("class", "severity-y-h-line");
+    line_y_0_2.setAttribute("class", "graph-y-h-line");
     line_y_0_2.setAttribute("stroke", "#000");
     line_y_0_2.setAttribute("x1", "89%");
     line_y_0_2.setAttribute("x2", "-2%");
-    var text_y_0 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_0.setAttribute("fill", "#000");
-    text_y_0.setAttribute("x", "-3.3%");
-    text_y_0.setAttribute("dy", "0.32em");
-    text_y_0.appendChild(document.createTextNode(scale_y[0]));
+    var text_y_0 = getTextY(scale_y[0]);
 
     var g_y_0 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_0.setAttribute("class", "severity-y-tick-0");
+    g_y_0.setAttribute("class", "graph-y-tick-0");
     g_y_0.setAttribute("opacity", "1");
     g_y_0.appendChild(line_y_0_1);
     g_y_0.appendChild(line_y_0_2);
     g_y_0.appendChild(text_y_0);
 
-    var line_y_1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_1.setAttribute("stroke", "#000");
-    line_y_1.setAttribute("x2", "-2%");
-    var text_y_1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_1.setAttribute("fill", "#000");
-    text_y_1.setAttribute("x", "-3.3%");
-    text_y_1.setAttribute("dy", "0.32em");
-    text_y_1.appendChild(document.createTextNode(scale_y[1]));
+    var line_y_1 = getLineY();
+    var text_y_1 = getTextY(scale_y[1]);
 
-    var g_y_1 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_1.setAttribute("class", "severity-y-tick-1");
-    g_y_1.setAttribute("opacity", "1");
-    g_y_1.appendChild(line_y_1);
-    g_y_1.appendChild(text_y_1);
+    var g_y_1 = getGY(1, line_y_1, text_y_1);
 
-    var line_y_2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_2.setAttribute("stroke", "#000");
-    line_y_2.setAttribute("x2", "-2%");
-    var text_y_2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_2.setAttribute("fill", "#000");
-    text_y_2.setAttribute("x", "-3.3%");
-    text_y_2.setAttribute("dy", "0.32em");
-    text_y_2.appendChild(document.createTextNode(scale_y[2]));
+    var line_y_2 = getLineY();
+    var text_y_2 = getTextY(scale_y[2]);
 
-    var g_y_2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_2.setAttribute("class", "severity-y-tick-2");
-    g_y_2.setAttribute("opacity", "1");
-    g_y_2.appendChild(line_y_2);
-    g_y_2.appendChild(text_y_2);
+    var g_y_2 = getGY(2, line_y_2, text_y_2);
 
-    var line_y_3 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_3.setAttribute("stroke", "#000");
-    line_y_3.setAttribute("x2", "-2%");
-    var text_y_3 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_3.setAttribute("fill", "#000");
-    text_y_3.setAttribute("x", "-3.3%");
-    text_y_3.setAttribute("dy", "0.32em");
-    text_y_3.appendChild(document.createTextNode(scale_y[3]));
+    var line_y_3 = getLineY();
+    var text_y_3 = getTextY(scale_y[3]);
 
-    var g_y_3 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_3.setAttribute("class", "severity-y-tick-3");
-    g_y_3.setAttribute("opacity", "1");
-    g_y_3.appendChild(line_y_3);
-    g_y_3.appendChild(text_y_3);
+    var g_y_3 = getGY(3, line_y_3, text_y_3);
 
-    var line_y_4 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_4.setAttribute("stroke", "#000");
-    line_y_4.setAttribute("x2", "-2%");
-    var text_y_4 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_4.setAttribute("fill", "#000");
-    text_y_4.setAttribute("x", "-3.3%");
-    text_y_4.setAttribute("dy", "0.32em");
-    text_y_4.appendChild(document.createTextNode(scale_y[4]));
+    var line_y_4 = getLineY();
+    var text_y_4 = getTextY(scale_y[4]);
 
-    var g_y_4 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_4.setAttribute("class", "severity-y-tick-4");
-    g_y_4.setAttribute("opacity", "1");
-    g_y_4.appendChild(line_y_4);
-    g_y_4.appendChild(text_y_4);
+    var g_y_4 = getGY(4, line_y_4, text_y_4);
 
-    var line_y_5 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_5.setAttribute("stroke", "#000");
-    line_y_5.setAttribute("x2", "-2%");
-    var text_y_5 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_5.setAttribute("fill", "#000");
-    text_y_5.setAttribute("x", "-3.3%");
-    text_y_5.setAttribute("dy", "0.32em");
-    text_y_5.appendChild(document.createTextNode(scale_y[5]));
+    var line_y_5 = getLineY();
+    var text_y_5 = getTextY(scale_y[5]);
 
-    var g_y_5 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_5.setAttribute("class", "severity-y-tick-5");
-    g_y_5.setAttribute("opacity", "1");
-    g_y_5.appendChild(line_y_5);
-    g_y_5.appendChild(text_y_5);
+    var g_y_5 = getGY(5, line_y_5, text_y_5);
 
-    var line_y_6 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_6.setAttribute("stroke", "#000");
-    line_y_6.setAttribute("x2", "-2%");
-    var text_y_6 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_6.setAttribute("fill", "#000");
-    text_y_6.setAttribute("x", "-3.3%");
-    text_y_6.setAttribute("dy", "0.32em");
-    text_y_6.appendChild(document.createTextNode(scale_y[6]));
+    var line_y_6 = getLineY();
+    var text_y_6 = getTextY(scale_y[6]);
 
-    var g_y_6 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_6.setAttribute("class", "severity-y-tick-6");
-    g_y_6.setAttribute("opacity", "1");
-    g_y_6.appendChild(line_y_6);
-    g_y_6.appendChild(text_y_6);
+    var g_y_6 = getGY(6, line_y_6, text_y_6);
 
-    var line_y_7 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_7.setAttribute("stroke", "#000");
-    line_y_7.setAttribute("x2", "-2%");
-    var text_y_7 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_7.setAttribute("fill", "#000");
-    text_y_7.setAttribute("x", "-3.3%");
-    text_y_7.setAttribute("dy", "0.32em");
-    text_y_7.appendChild(document.createTextNode(scale_y[7]));
+    var line_y_7 = getLineY();
+    var text_y_7 = getTextY(scale_y[7]);
 
-    var g_y_7 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_7.setAttribute("class", "severity-y-tick-7");
-    g_y_7.setAttribute("opacity", "1");
-    g_y_7.appendChild(line_y_7);
-    g_y_7.appendChild(text_y_7);
+    var g_y_7 = getGY(7, line_y_7, text_y_7);
 
-    var line_y_8 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_8.setAttribute("stroke", "#000");
-    line_y_8.setAttribute("x2", "-2%");
-    var text_y_8 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_8.setAttribute("fill", "#000");
-    text_y_8.setAttribute("x", "-3.3%");
-    text_y_8.setAttribute("dy", "0.32em");
-    text_y_8.appendChild(document.createTextNode(scale_y[8]));
+    var line_y_8 = getLineY();
+    var text_y_8 = getTextY(scale_y[8]);
 
-    var g_y_8 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_8.setAttribute("class", "severity-y-tick-8");
-    g_y_8.setAttribute("opacity", "1");
-    g_y_8.appendChild(line_y_8);
-    g_y_8.appendChild(text_y_8);
+    var g_y_8 = getGY(8, line_y_8, text_y_8);
 
-    var line_y_9 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_9.setAttribute("stroke", "#000");
-    line_y_9.setAttribute("x2", "-2%");
-    var text_y_9 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_9.setAttribute("fill", "#000");
-    text_y_9.setAttribute("x", "-3.3%");
-    text_y_9.setAttribute("dy", "0.32em");
-    text_y_9.appendChild(document.createTextNode(scale_y[9]));
+    var line_y_9 = getLineY();
+    var text_y_9 = getTextY(scale_y[9]);
 
-    var g_y_9 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_9.setAttribute("class", "severity-y-tick-9");
-    g_y_9.setAttribute("opacity", "1");
-    g_y_9.appendChild(line_y_9);
-    g_y_9.appendChild(text_y_9);
+    var g_y_9 = getGY(9, line_y_9, text_y_9);
 
-    var line_y_10 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_y_10.setAttribute("stroke", "#000");
-    line_y_10.setAttribute("x2", "-2%");
-    var text_y_10 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_y_10.setAttribute("fill", "#000");
-    text_y_10.setAttribute("x", "-3.3%");
-    text_y_10.setAttribute("dy", "0.32em");
-    text_y_10.appendChild(document.createTextNode(scale_y[10]));
+    var line_y_10 = getLineY();
+    var text_y_10 = getTextY(scale_y[10]);
 
-    var g_y_10 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y_10.setAttribute("class", "severity-y-tick-10");
-    g_y_10.setAttribute("opacity", "1");
-    g_y_10.appendChild(line_y_10);
-    g_y_10.appendChild(text_y_10);
+    var g_y_10 = getGY(10, line_y_10, text_y_10);
 
     var path_y = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path_y.setAttribute("class", "severity-domain");
+    path_y.setAttribute("class", "graph-domain");
     path_y.setAttribute("stroke", "#000");
 
     var g_y = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_y.setAttribute("class", "severity-axis-y");
+    g_y.setAttribute("class", "graph-axis-y");
     g_y.setAttribute("fill", "none");
     g_y.setAttribute("font-size", "12");
     g_y.setAttribute("text-anchor", "end");
@@ -1227,7 +921,7 @@ function makeCategoryDiv(resultsArray, nReports){
     g_y.appendChild(g_y_10);
 
     var svg_severity = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg_severity.setAttribute("class", "severity-chart");
+    svg_severity.setAttribute("class", "graph-chart");
     svg_severity.setAttribute("width", "75%");
     svg_severity.setAttribute("height", "95%");
     svg_severity.appendChild(g_plot);
@@ -1290,7 +984,7 @@ function makeCategoryDiv(resultsArray, nReports){
 
 function getLineX(n){
     var line_x = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line_x.setAttribute("class", "severity-x-tick-" + n + "-line");
+    line_x.setAttribute("class", "graph-x-tick-" + n + "-line");
     line_x.setAttribute("stroke", "#000");
     line_x.setAttribute("y2", "2%");
 
@@ -1299,7 +993,7 @@ function getLineX(n){
 
 function getTextX(text){
     var text_x = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text_x.setAttribute("class", "severity-x-tick-text");
+    text_x.setAttribute("class", "graph-x-tick-text");
     text_x.setAttribute("fill", "#000");
     text_x.setAttribute("y", "3.3%");
     text_x.setAttribute("dy", "0.71em");
@@ -1313,7 +1007,7 @@ function getRectPlot(n){
     var array = ["5.1%", "22.8%", "40.6%", "58.4%", "76.2%"];
 
     var rect_plot = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect_plot.setAttribute("class", "severity-bar");
+    rect_plot.setAttribute("class", "graph-bar");
     rect_plot.setAttribute("x", array[n-1]);
 
     return rect_plot;
@@ -1338,12 +1032,42 @@ function getGplot(rect1, rect2){
     return g_plot;
 }
 
-function getGX(n, line, text){
+function getGX(n, line, text, cond){
     var g_x = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g_x.setAttribute("class", "severity-x-tick-" + n);
+    g_x.setAttribute("class", "graph-x-tick-" + n);
     g_x.setAttribute("opacity", "1");
     g_x.appendChild(line);
-    g_x.appendChild(text);
+    if(cond){
+        g_x.appendChild(text);
+    }
 
     return g_x;
+}
+
+function getLineY(){
+    var line_y = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line_y.setAttribute("stroke", "#000");
+    line_y.setAttribute("x2", "-2%");
+
+    return line_y;
+}
+
+function getTextY(text){
+    var text_y = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text_y.setAttribute("fill", "#000");
+    text_y.setAttribute("x", "-3.3%");
+    text_y.setAttribute("dy", "0.32em");
+    text_y.appendChild(document.createTextNode(text));
+
+    return text_y;
+}
+
+function getGY(n, line, text){
+    var g_y = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g_y.setAttribute("class", "graph-y-tick-" + n);
+    g_y.setAttribute("opacity", "1");
+    g_y.appendChild(line);
+    g_y.appendChild(text);
+
+    return g_y;
 }
