@@ -20,7 +20,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
     </head>
-    <body onload="showCurrentConfig()">
+    <body>
 
         <div id="title-cont" class="container-fluid">
             <img src="images/logo.png" class="img-fluid" alt="Logo Multiview">
@@ -31,13 +31,13 @@
                 <div class="container-fluid">
                     <div class="collapse navbar-collapse">
                         <div class="navbar-nav">
-                            <a id="link" class="nav-link" href="./general_enhanced.html">General</a>
-                            <a id="link" class="nav-link" href="./index_enhanced.html">Individual</a>
+                            <a id="link" class="nav-link" href="./general.html">General</a>
+                            <a id="link" class="nav-link" href="./index.html">Individual</a>
                         </div>
                     </div>
                     <div class="nav justify-content-end">
                         <div class="navbar-nav">
-                            <a id="link2" class="nav-link active" href="#">Info</a>
+                            <a id="link2" class="nav-link active" href="./info.html">Info</a>
                         </div>
                     </div>
                 </div>
@@ -52,25 +52,31 @@
                 <div id="settings" class="col">
                     <h4>Settings</h4>
                     <br/>
-                    <h5 style="margin-bottom: 1%;">Please, indicate how do you want to generate the summary results:</h5>
+                    <h5 style="margin-bottom: 1%;">This is the demo configuration:</h5>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="" onclick="showEmptyInput()">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="" disabled>
                         <label class="form-check-label" for="inlineRadio1">Directory</label>
                     </div>
                     <div class="form-check form-check-inline" style="margin-bottom: 2%;">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="" onclick="showEmptyInput()">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="" disabled checked>
                         <label class="form-check-label" for="inlineRadio2">Specific Files</label>
                     </div>
                     <br/>
                     <div id="inputs" class="col-4">
-                        <!--<input id="input0" type="text" class="form-control" value="something" placeholder="file:///X:/Path/To/Report" onkeyup="addSubstractNewInput(0)" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;">-->
+                        <input id="input0" type="text" class="form-control" value="./testData/report1" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;" disabled/>
+                        <input id="input1" type="text" class="form-control" value="./testData/report2" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;" disabled/>
+                        <input id="input2" type="text" class="form-control" value="./testData/report3" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;" disabled/>
+                        <input id="input3" type="text" class="form-control" value="./testData/report4" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;" disabled/>
+                        <input id="input4" type="text" class="form-control" value="./testData/report5" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;" disabled/>
+                        <input id="input5" type="text" class="form-control" value="./testData/report6" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;" disabled/>
+                        <input id="input6" type="text" class="form-control" value="./testData/report7" aria-label="New Path" aria-describedby="basic-addon1" style="margin-bottom: 1.5%;" disabled/>
                     </div>
                 </div>
             </div>
             <div id="btns-settings" class="row">
                 <div class="col-3" style="margin-top: 3%;">
-                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="saveSettings()" target="hiddenFrame">Save changes!</button>
-                    <button class="btn btn-outline-danger" type="button" id="button-addon2" onclick="deleteSettings()" target="hiddenFrame">Delete settings!</button>
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" target="hiddenFrame" disabled>Save changes!</button>
+                    <button class="btn btn-outline-danger" type="button" id="button-addon2" target="hiddenFrame"disabled>Delete settings!</button>
                 </div>
             </div>
         </div>

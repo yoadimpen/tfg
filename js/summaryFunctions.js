@@ -1,3 +1,16 @@
+function loadTestDataSummary(){
+    var divs = document.getElementById("sum-row");
+    divs.innerHTML = "";
+
+    var paths = "./testData/report1;./testData/report2;" +
+    "./testData/report3;./testData/report4;" +
+    "./testData/report5;./testData/report6;" +
+    "./testData/report7";
+
+    generateSummaryDivs(paths);
+    
+}
+
 function loadSummaryFromConfig(){
 
     var divs = document.getElementById("sum-row");
@@ -130,7 +143,9 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
 
     var request1 = new XMLHttpRequest();
     request1.withCredentials = true;
-    request1.open('GET', path.concat("/widgets/summaryCopy.json"));
+    pathSummary = path.concat("/summary.json");
+    request1.open('GET', pathSummary);
+    console.log(pathSummary);
     request1.overrideMimeType("application/json");
     request1.send();
     request1.onreadystatechange = function() {
@@ -147,7 +162,9 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
     
     var request2 = new XMLHttpRequest();
     request2.withCredentials = true;
-    request2.open('GET', path.concat("/widgets/severity.json"));
+    pathSeverity = path.concat("/severity.json");
+    request2.open('GET', pathSeverity);
+    console.log(pathSeverity);
     request2.overrideMimeType("application/json");
     request2.send();
     request2.onreadystatechange = function() {
@@ -164,7 +181,9 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
 
     var request3 = new XMLHttpRequest();
     request3.withCredentials = true;
-    request3.open('GET', path.concat("/widgets/categories.json"));
+    pathCategories = path.concat("/categories.json");
+    request3.open('GET', pathCategories);
+    console.log(pathCategories);
     request3.overrideMimeType("application/json");
     request3.send();
     request3.onreadystatechange = function() {
@@ -692,7 +711,7 @@ function getCategoryResults(json, valuesArray, nameArray){
         var statistic = items[i].statistic;
         var total = statistic.total;
         var name = items[i].name;
-        valuesArray[i] = total;
+        valuesArray[i] = + valuesArray[i] + total;
         nameArray[i] = name;
     }
 
@@ -948,15 +967,15 @@ function makeCategoryDiv(resultsArray, nReports){
             "<span class='tooltip-text'>" +
                 "<b>Help</b>" +
                 "<br>" +
-                "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Ignored tests" +
+                "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Product defects" +
                 "<br>" +
-                "<i class='fas fa-circle' style='color:#d31121;' aria-hidden='true'></i> Infrastructure problems" +
+                "<i class='fas fa-circle' style='color:#d31121;' aria-hidden='true'></i> Test defects" +
                 "<br>" +
                 "<i class='fas fa-circle' style='color:#fa5c2e;' aria-hidden='true'></i> Outdated tests" +
                 "<br>" +
-                "<i class='fas fa-circle' style='color:#feab4b;' aria-hidden='true'></i> Test defects" +
+                "<i class='fas fa-circle' style='color:#feab4b;' aria-hidden='true'></i> Infrastructure problems" +
                 "<br>" +
-                "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Product defects" +
+                "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Ignored tests" +
             "</span>";
 
     titleRow.appendChild(div1);

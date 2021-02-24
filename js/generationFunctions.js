@@ -1,3 +1,16 @@
+function loadTestDataIndex(){
+    deleteWidgets();
+
+    var paths = ["./testData/report1/summary.json", "./testData/report2/summary.json",
+    "./testData/report3/summary.json", "./testData/report4/summary.json",
+    "./testData/report5/summary.json", "./testData/report6/summary.json",
+    "./testData/report7/summary.json"];
+
+    paths.forEach(function(path){
+        readJSON(path, "#");
+    })
+}
+
 function loadDataFromConfig(){
 
     deleteWidgets();
@@ -139,11 +152,15 @@ function generateWidget(jobject, folderPath){
 
     var day = getDayName(launchDate.getUTCDay());
     var date = launchDate.getUTCDate();
+    date = ("0" + date).slice(-2);
     var month = getMonthName(launchDate.getUTCMonth());
     var year = launchDate.getUTCFullYear();
     var hours = launchDate.getUTCHours();
+    hours = ("0" + hours).slice(-2);
     var minutes = launchDate.getUTCMinutes();
+    minutes = ("0" + minutes).slice(-2);
     var seconds = launchDate.getUTCSeconds();
+    seconds = ("0" + seconds).slice(-2);
 
     var date = String(day).concat(" ").concat(String(date)).concat(" ").concat(String(month)).concat(" ").concat(String(year)).concat("\n\r").concat(String(hours)).concat(":").concat(String(minutes)).concat(":").concat(String(seconds)).concat(" UTC"); //POR TERMINAR
 
