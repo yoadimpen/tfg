@@ -692,7 +692,7 @@ function getCategoryResults(json, valuesArray, nameArray){
         var statistic = items[i].statistic;
         var total = statistic.total;
         var name = items[i].name;
-        valuesArray[i] = total;
+        valuesArray[i] = valuesArray[i] + total;
         nameArray[i] = name;
     }
 
