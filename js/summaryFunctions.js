@@ -318,7 +318,7 @@ function makeTypeDiv(array, totalReports){
     div2.setAttribute("class", "col-2");
     div2.setAttribute("style", "padding:auto;");
 
-    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
+    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true'></i>" + 
             "<span class='tooltip-text'>" +
                 "<b>Help</b>" +
                 "<br>" +
