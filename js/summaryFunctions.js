@@ -53,6 +53,7 @@ function loadSummaryFromConfig(){
 
             var reportsPath = localStorage.getItem("links_temp");
             generateSummaryDivs(reportsPath);
+        // en caso de que se hayan guardado rutas directas a los informes
         } else {
             var links = config_json.links;
             var reportsPath = "";
@@ -63,19 +64,24 @@ function loadSummaryFromConfig(){
             }
             generateSummaryDivs(reportsPath);
         }
+    //en caso de que no haya ninguna configuración añadida
     } else {
         showNoConfigMessageOnGeneral();
     }
 }
 
 function actualizaTemp(links, cont){
+    //reinicia el JSON para la nueva generación
     if(cont == 0){
         localStorage.removeItem("links_temp");
     }
 
+    //se procede a iterar todos los enlaces de rutas del directorio actual
     links.forEach(function(link){
+        //en caso de que sea el primer enlace
         if(localStorage.getItem("links_temp") == null){
             localStorage.setItem("links_temp", link);
+        //todos los demás enlaces se concatenan al existente
         } else{
             var links_temp = localStorage.getItem("links_temp").concat(";").concat(link);
             localStorage.removeItem("links_temp");
@@ -85,6 +91,8 @@ function actualizaTemp(links, cont){
 }
 
 function getPathsFromHTTPRequest(response){
+    //se utiliza para sacar el nombre de las carpetas que contienen los informes
+
     var res = [];
     var firstSplit = response.split("201: ");
 
@@ -95,24 +103,10 @@ function getPathsFromHTTPRequest(response){
     return res;
 }
 
-function generateSummary(){
-    var divs = document.getElementById("sum-row");
-    divs.innerHTML = "";
-
-    //file:///F:/-TFG/code/allure-report; file:///F:/-TFG/code/allure-report-2
-    var reportsPath = document.getElementById("generateSummaryInput").value;
-
-    if(reportsPath.trim() == ''){
-        showEmptyMessage();
-    } else {
-        generateSummaryDivs(reportsPath);
-    }
-
-}
-
 function generateSummaryDivs(reportsPath){
     var pathsArray = reportsPath.split(";");
 
+    //arrays de resultados que se van reutilizando
     var statusArray = [0,0,0,0,0];
     var severityArray = [0,0,0,0,0];
     var categoryArray = [0,0,0,0,0];
@@ -120,11 +114,13 @@ function generateSummaryDivs(reportsPath){
 
     pathsArray.forEach(function(path){
         path = path.trim();
+        //se procede a leer los JSON summary.json, severity.json y categories.json
         readJSONs(path, statusArray, severityArray, categoryArray, categoryNameArray, pathsArray.length);
     })
 }
 
 function readJSONs (path, statusArray, severityArray, categoryArray, categoryNameArray, nReports){
+    //lectura del JSON summary.json
     var data1 = "";
     var jobject1 = "";
 
@@ -142,6 +138,7 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
         makeTypeDiv(res1, nReports);
     };
 
+    //lectura del JSON severity.json
     var data2 = "";
     var jobject2 = "";
     
@@ -159,6 +156,7 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
         }
     };
 
+    //lectura del JSON categories.json
     var data3 = "";
     var jobject3 = "";
 

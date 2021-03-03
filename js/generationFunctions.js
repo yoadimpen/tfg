@@ -145,7 +145,7 @@ function generateWidget(jobject, folderPath){
     var minutes = launchDate.getUTCMinutes();
     var seconds = launchDate.getUTCSeconds();
 
-    var date = String(day).concat(" ").concat(String(date)).concat(" ").concat(String(month)).concat(" ").concat(String(year)).concat("\n\r").concat(String(hours)).concat(":").concat(String(minutes)).concat(":").concat(String(seconds)).concat(" UTC"); //POR TERMINAR
+    var date = String(day).concat(" ").concat(String(date)).concat(" ").concat(String(month)).concat(" ").concat(String(year)).concat("\n\r").concat(String(hours)).concat(":").concat(String(minutes)).concat(":").concat(String(seconds)).concat(" UTC");
 
     var dashFailed, dashBroken, dashSkipped, dashPassed, dashUnknown;
     var failed, broken, skipped, passed, unknown;
