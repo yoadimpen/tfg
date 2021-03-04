@@ -135,7 +135,8 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             jobject1 = JSON.parse(data1);
             var res1 = getTypeResults(jobject1, statusArray);
         }
-        makeTypeDiv(res1, nReports);
+        //makeTypeDiv(res1, nReports);
+        makeTypeDivAux(res1, nReports);
     };
 
     //lectura del JSON severity.json
@@ -345,6 +346,102 @@ function makeTypeDiv(array, totalReports){
     div.setAttribute("class", "col");
     div.appendChild(titleRow);
     div.appendChild(svg);
+    div.appendChild(exp);
+
+    var br = document.createElement("br");
+    div.appendChild(br);
+
+    resultsDiv.appendChild(div);
+}
+
+function makeTypeDivAux(array, totalReports){
+    var resultsDiv = document.getElementById("sum-row");
+    resultsDiv.innerHTML = "";
+
+    var total = 0;
+    for(var i in array) {
+        total += array[i];
+    }
+
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute("id", "myChart");
+
+    var ctx = canvas.getContext('2d');
+
+    var myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [array[0], array[1], array[2], array[3], array[4]],
+                backgroundColor: [
+                    "#fc4e03",
+                    "#fcdf03",
+                    "#a80068",
+                    "#a3db02",
+                    "#454545"
+                ]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Failed',
+                'Broken',
+                'Skipped',
+                'Passed',
+                'Unknown'
+            ]
+        },
+        options: {
+            legend: {
+                display: false
+            }
+        }
+    });
+
+    var title = document.createElement("h2");
+
+    title.appendChild(document.createTextNode("Status"));
+    title.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
+
+    var titleRow = document.createElement("div");
+    titleRow.setAttribute("class", "row");
+
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "col");
+
+    div1.appendChild(title);
+
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "col-2");
+    div2.setAttribute("style", "padding:auto;");
+
+    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true'></i>" + 
+            "<span class='tooltip-text'>" +
+                "<b>Help</b>" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i> Failed tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i> Broken tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i> Skipped tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i> Passed tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i> Unknown tests" +
+            "</span>";
+
+    titleRow.appendChild(div1);
+    titleRow.appendChild(div2);
+
+    var exp = document.createElement("p");
+    exp.setAttribute("id", "status");
+    exp.appendChild(document.createTextNode("This summary has been made over a total of " + totalReports + " reports from the provided paths."));
+
+    var div = document.createElement("div");
+    div.setAttribute("id", "sum-col");
+    div.setAttribute("class", "col");
+    div.appendChild(titleRow);
+    div.appendChild(canvas);
     div.appendChild(exp);
 
     var br = document.createElement("br");
