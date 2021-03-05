@@ -153,7 +153,8 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             data2 = request2.responseText;
             jobject2 = JSON.parse(data2);
             var res2 = getSeverityLevelResults(jobject2, severityArray);
-            makeSeverityDiv(res2, nReports);
+            //makeSeverityDiv(res2, nReports);
+            makeSeverityDivAux(res2);
         }
     };
 
@@ -171,7 +172,8 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             data3 = request3.responseText;
             jobject3 = JSON.parse(data3);
             var res3 = getCategoryResults(jobject3, categoryArray, categoryNameArray);
-            makeCategoryDiv(res3, nReports);
+            //makeCategoryDiv(res3, nReports);
+            makeCategoryDivAux(res3);
         }
     };
 
@@ -365,10 +367,11 @@ function makeTypeDivAux(array, totalReports){
 
     var canvas = document.createElement("canvas");
     canvas.setAttribute("id", "myChart");
+    canvas.setAttribute("style", "margin-top:15%;");
 
     var ctx = canvas.getContext('2d');
 
-    var myDoughnutChart = new Chart(ctx, {
+    var chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             datasets: [{
@@ -443,9 +446,6 @@ function makeTypeDivAux(array, totalReports){
     div.appendChild(titleRow);
     div.appendChild(canvas);
     div.appendChild(exp);
-
-    var br = document.createElement("br");
-    div.appendChild(br);
 
     resultsDiv.appendChild(div);
 }
@@ -752,6 +752,78 @@ function makeSeverityDiv(array){
     div_severity.setAttribute("style", "padding-bottom: 10%;");
     div_severity.appendChild(title_severity);
     div_severity.appendChild(svg_severity);
+    div_severity.appendChild(description);
+
+    resultsDiv.appendChild(div_severity);
+}
+
+function makeSeverityDivAux(array){
+    var resultsDiv = document.getElementById("sum-row");
+
+    var total = 0;
+    for(var i in array) {
+        total += array[i];
+    }
+
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute("id", "severity");
+    canvas.setAttribute("width", "75%");
+    canvas.setAttribute("height", "54%");
+    canvas.setAttribute("style", "margin-top:10%;");
+
+    var ctx = canvas.getContext('2d');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [{
+                data: [array[0], array[1], array[2], array[3], array[4]],
+                backgroundColor: [
+                    "#6dd6cd",
+                    "#6dd6cd",
+                    "#6dd6cd",
+                    "#6dd6cd",
+                    "#6dd6cd"
+                ],
+                borderWidth: 1,
+                borderColor: [
+                    "#46827d",
+                    "#46827d",
+                    "#46827d",
+                    "#46827d",
+                    "#46827d"
+                ]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'blocker',
+                'critical',
+                'normal',
+                'minor',
+                'trivial'
+            ]
+        },
+        options: {
+            legend: {
+                display: false
+            }
+        }
+    });
+
+    var title_severity = document.createElement("h2");
+    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
+    title_severity.appendChild(document.createTextNode("Severities"));
+    
+    var description = document.createElement("p");
+    description.setAttribute("style", "margin-left:10px; margin-top: 2px; bottom: 0px;");
+    description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this summary."));
+
+    var div_severity = document.createElement("div");
+    div_severity.setAttribute("id", "sum-col");
+    div_severity.setAttribute("class", "col");
+    div_severity.appendChild(title_severity);
+    div_severity.appendChild(canvas);
     div_severity.appendChild(description);
 
     resultsDiv.appendChild(div_severity);
@@ -1073,6 +1145,121 @@ function makeCategoryDiv(resultsArray, nReports){
     blank.setAttribute("id", "sum-col");
     blank.setAttribute("class", "col");
     blank.appendChild(document.createTextNode("Blank div for development purpose :)"));
+
+    resultsDiv.appendChild(div_severity);
+}
+
+function makeCategoryDivAux(array){
+    var resultsDiv = document.getElementById("sum-row");
+    var arrayN = array.slice(0,5);
+    var total = 0;
+
+    for(var i in arrayN) {
+        total += arrayN[i];
+    }
+
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute("id", "category");
+    canvas.setAttribute("width", "75%");
+    canvas.setAttribute("height", "50%");
+    canvas.setAttribute("style", "margin-top:6.5%;");
+
+    var ctx = canvas.getContext('2d');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [{
+                data: [arrayN[0], arrayN[1], arrayN[2], arrayN[3], arrayN[4]],
+                backgroundColor: [
+                    "#800026",
+                    "#d31121",
+                    "#fa5c2e",
+                    "#feab4b",
+                    "#fee087"
+                ],
+                borderWidth: 1,
+                borderColor: [
+                    "#63001e",
+                    "#a30d19",
+                    "#cf4b25",
+                    "#cc893b",
+                    "#d1b86d"
+                ]
+            }],
+
+            // These labels appear in the legend and in the tooltips when hovering different arcs
+            labels: [
+                'Product defects',
+                'Test defects',
+                'Outdated tests',
+                'Infrastructure problems',
+                'Ignored tests'
+            ]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            scales:{
+                xAxes: [{
+                    ticks: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    var titleRow = document.createElement("div");
+    titleRow.setAttribute("class", "row");
+
+    var title_severity = document.createElement("h2");
+    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
+    title_severity.appendChild(document.createTextNode("Categories"));
+
+    var div1 = document.createElement("div");
+    div1.setAttribute("class", "col");
+
+    div1.appendChild(title_severity);
+
+    var div2 = document.createElement("div");
+    div2.setAttribute("class", "col-2");
+    div2.setAttribute("style", "padding:auto;");
+
+    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
+            "<span class='tooltip-text'>" +
+                "<b>Help</b>" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Product defects" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#d31121;' aria-hidden='true'></i> Test defects" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fa5c2e;' aria-hidden='true'></i> Outdated tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#feab4b;' aria-hidden='true'></i> Infrastructure problems" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Ignored defects" +
+            "</span>";
+
+    titleRow.appendChild(div1);
+    titleRow.appendChild(div2);
+    
+    var description = document.createElement("p");
+    description.setAttribute("style", "margin-left:10px; margin-top: 23px; position:relative; bottom:0;");
+    description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this part of the summary."));
+
+    var div_severity = document.createElement("div");
+    div_severity.setAttribute("id", "sum-col");
+    div_severity.setAttribute("class", "col");
+    div_severity.appendChild(titleRow);
+    div_severity.appendChild(canvas);
+    div_severity.appendChild(description);
 
     resultsDiv.appendChild(div_severity);
 }
