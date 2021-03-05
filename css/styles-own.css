@@ -406,8 +406,13 @@ body{
 
 /*Administration panel*/
 #btn-login{
+	position: absolute;
 	float: right;
 	border: 1px solid #6c757d;
-	margin-top: 2%;
-	margin-right: 2%;
+	width: 5%;
+	min-width: 75px;
+	max-width: 80px;
+	max-height: 35px;
+	right: 0;
+	margin: 0.7%;
 }

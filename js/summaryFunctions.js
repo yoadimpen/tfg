@@ -117,6 +117,8 @@ function generateSummaryDivs(reportsPath){
         //se procede a leer los JSON summary.json, severity.json y categories.json
         readJSONs(path, statusArray, severityArray, categoryArray, categoryNameArray, pathsArray.length);
     })
+
+    showTotalReports(pathsArray.length);
 }
 
 function readJSONs (path, statusArray, severityArray, categoryArray, categoryNameArray, nReports){
@@ -396,56 +398,39 @@ function makeTypeDivAux(array, totalReports){
         },
         options: {
             legend: {
-                display: false
+                display: true,
+                labels: {
+                    boxWidth: 15
+                },
+                position: 'bottom'
             }
         }
     });
 
     var title = document.createElement("h2");
-
+    title.setAttribute("style", "margin: 10px");
     title.appendChild(document.createTextNode("Status"));
-    title.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
 
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
 
-    var div1 = document.createElement("div");
-    div1.setAttribute("class", "col");
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "col");
 
-    div1.appendChild(title);
+    titleDiv.appendChild(title);
 
-    var div2 = document.createElement("div");
-    div2.setAttribute("class", "col-2");
-    div2.setAttribute("style", "padding:auto;");
+    titleRow.appendChild(titleDiv);
 
-    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true'></i>" + 
-            "<span class='tooltip-text'>" +
-                "<b>Help</b>" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fc4e03;' aria-hidden='true'></i> Failed tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fcdf03;' aria-hidden='true'></i> Broken tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#a80068;' aria-hidden='true'></i> Skipped tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#a3db02;' aria-hidden='true'></i> Passed tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#454545;' aria-hidden='true'></i> Unknown tests" +
-            "</span>";
-
-    titleRow.appendChild(div1);
-    titleRow.appendChild(div2);
-
-    var exp = document.createElement("p");
-    exp.setAttribute("id", "status");
-    exp.appendChild(document.createTextNode("This summary has been made over a total of " + totalReports + " reports from the provided paths."));
+    var description = document.createElement("p");
+    description.setAttribute("id", "status");
+    description.appendChild(document.createTextNode("This summary has been made over a total of " + totalReports + " reports from the provided paths."));
 
     var div = document.createElement("div");
     div.setAttribute("id", "sum-col");
     div.setAttribute("class", "col");
     div.appendChild(titleRow);
     div.appendChild(canvas);
-    div.appendChild(exp);
+    div.appendChild(description);
 
     resultsDiv.appendChild(div);
 }
@@ -811,22 +796,32 @@ function makeSeverityDivAux(array){
         }
     });
 
-    var title_severity = document.createElement("h2");
-    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
-    title_severity.appendChild(document.createTextNode("Severities"));
+    var title = document.createElement("h2");
+    title.setAttribute("style", "margin: 10px;");
+    title.appendChild(document.createTextNode("Severities"));
+
+    var titleRow = document.createElement("div");
+    titleRow.setAttribute("class", "row");
+
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "col");
+
+    titleDiv.appendChild(title);
+
+    titleRow.appendChild(titleDiv);
     
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px; margin-top: 2px; bottom: 0px;");
     description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this summary."));
 
-    var div_severity = document.createElement("div");
-    div_severity.setAttribute("id", "sum-col");
-    div_severity.setAttribute("class", "col");
-    div_severity.appendChild(title_severity);
-    div_severity.appendChild(canvas);
-    div_severity.appendChild(description);
+    var div = document.createElement("div");
+    div.setAttribute("id", "sum-col");
+    div.setAttribute("class", "col");
+    div.appendChild(titleRow);
+    div.appendChild(canvas);
+    div.appendChild(description);
 
-    resultsDiv.appendChild(div_severity);
+    resultsDiv.appendChild(div);
 }
 
 function showNoConfigMessageOnGeneral(){
@@ -1162,13 +1157,20 @@ function makeCategoryDivAux(array){
     canvas.setAttribute("id", "category");
     canvas.setAttribute("width", "75%");
     canvas.setAttribute("height", "50%");
-    canvas.setAttribute("style", "margin-top:6.5%;");
+    canvas.setAttribute("style", "margin-top:10%;");
 
     var ctx = canvas.getContext('2d');
 
     var chart = new Chart(ctx, {
         type: 'bar',
         data: {
+            labels: [
+                'Product defects',
+                'Test defects',
+                'Outdated tests',
+                'Infrastructure problems',
+                'Ignored tests'
+            ],
             datasets: [{
                 data: [arrayN[0], arrayN[1], arrayN[2], arrayN[3], arrayN[4]],
                 backgroundColor: [
@@ -1187,8 +1189,6 @@ function makeCategoryDivAux(array){
                     "#d1b86d"
                 ]
             }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: [
                 'Product defects',
                 'Test defects',
@@ -1199,12 +1199,23 @@ function makeCategoryDivAux(array){
         },
         options: {
             legend: {
-                display: false
+                display: false,
+                labels: {
+                    boxWidth: 15
+                },
+                position: 'bottom'
             },
             scales:{
                 xAxes: [{
                     ticks: {
-                        display: false
+                        display: true,
+                        callback: function(label, index, labels) {
+                            if (/\s/.test(label)) {
+                              return label.split(" ");
+                            }else{
+                              return label;
+                            }              
+                          }
                     }
                 }],
                 yAxes: [{
@@ -1216,52 +1227,32 @@ function makeCategoryDivAux(array){
         }
     });
 
+    var title = document.createElement("h2");
+    title.setAttribute("style", "margin: 10px;");
+    title.appendChild(document.createTextNode("Categories"));
+
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
 
-    var title_severity = document.createElement("h2");
-    title_severity.setAttribute("style", "margin: 10px; margin-bottom: 15px;");
-    title_severity.appendChild(document.createTextNode("Categories"));
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "col");
 
-    var div1 = document.createElement("div");
-    div1.setAttribute("class", "col");
+    titleDiv.appendChild(title);
 
-    div1.appendChild(title_severity);
-
-    var div2 = document.createElement("div");
-    div2.setAttribute("class", "col-2");
-    div2.setAttribute("style", "padding:auto;");
-
-    div2.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: #6c757d; width: 10%; margin: 1rem;' aria-hidden='true';></i>" + 
-            "<span class='tooltip-text'>" +
-                "<b>Help</b>" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Product defects" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#d31121;' aria-hidden='true'></i> Test defects" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fa5c2e;' aria-hidden='true'></i> Outdated tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#feab4b;' aria-hidden='true'></i> Infrastructure problems" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Ignored defects" +
-            "</span>";
-
-    titleRow.appendChild(div1);
-    titleRow.appendChild(div2);
+    titleRow.appendChild(titleDiv);
     
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px; margin-top: 23px; position:relative; bottom:0;");
     description.appendChild(document.createTextNode("A total of " + total + " tests have been taken into account to make this part of the summary."));
 
-    var div_severity = document.createElement("div");
-    div_severity.setAttribute("id", "sum-col");
-    div_severity.setAttribute("class", "col");
-    div_severity.appendChild(titleRow);
-    div_severity.appendChild(canvas);
-    div_severity.appendChild(description);
+    var div = document.createElement("div");
+    div.setAttribute("id", "sum-col");
+    div.setAttribute("class", "col");
+    div.appendChild(titleRow);
+    div.appendChild(canvas);
+    div.appendChild(description);
 
-    resultsDiv.appendChild(div_severity);
+    resultsDiv.appendChild(div);
 }
 
 function getLineX(n){
