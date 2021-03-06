@@ -217,7 +217,6 @@ function makeTypeDiv(array, totalReports){
                 ]
             }],
 
-            // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: [
                 'Failed',
                 'Broken',
@@ -320,24 +319,10 @@ function makeSeverityDiv(array){
         data: {
             datasets: [{
                 data: [array[0], array[1], array[2], array[3], array[4]],
-                backgroundColor: [
-                    "#6dd6cd",
-                    "#6dd6cd",
-                    "#6dd6cd",
-                    "#6dd6cd",
-                    "#6dd6cd"
-                ],
+                backgroundColor: "#6dd6cd",
                 borderWidth: 1,
-                borderColor: [
-                    "#46827d",
-                    "#46827d",
-                    "#46827d",
-                    "#46827d",
-                    "#46827d"
-                ]
+                borderColor: "#46827d"
             }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
             labels: [
                 'blocker',
                 'critical',
@@ -475,14 +460,7 @@ function makeCategoryDiv(array){
                     "#cc893b",
                     "#d1b86d"
                 ]
-            }],
-            labels: [
-                'Product defects',
-                'Test defects',
-                'Outdated tests',
-                'Infrastructure problems',
-                'Ignored tests'
-            ]
+            }]
         },
         options: {
             legend: {
