@@ -1,11 +1,8 @@
 @charset "UTF-8";
 
 html, body{
-	min-height: 100%;
-}
-
-body{
-	position: relative;
+	height: 100%;
+	overflow: auto;
 }
 
 /*Individual Page*/
@@ -187,21 +184,17 @@ body{
  /*General Page*/
  
  #sum-col{
+	position: relative;
 	border: 1px solid #dee2e6;
 	border-radius: 10px;
 	margin: 5px;
-	min-height: 80%;
-	padding-bottom: 2%;
+	width: 30%;
  }
 
  .donut-status{
 	 width: 70%;
 	 display: block;
 	 margin: auto;
- }
-
- #status{
-	 margin: 1rem;
  }
 
  .tooltip-text {
@@ -405,6 +398,9 @@ body{
 #btn-login{
 	float: right;
 	border: 1px solid #6c757d;
-	margin-top: 2%;
-	margin-right: 2%;
+	width: 5%;
+	min-width: 75px;
+	max-width: 80px;
+	max-height: 35px;
+	margin: 15%;
 }
