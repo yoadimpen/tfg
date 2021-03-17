@@ -118,11 +118,11 @@ function makeTypeDiv(array){
             datasets: [{
                 data: [array[0], array[1], array[2], array[3], array[4]],
                 backgroundColor: [
-                    "#fc4e03",
-                    "#fcdf03",
-                    "#a80068",
-                    "#a3db02",
-                    "#454545"
+                    "#fd5a3e",
+                    "#ffd050",
+                    "#aaaaaa",
+                    "#97cc64",
+                    "#d35ebe"
                 ]
             }],
 

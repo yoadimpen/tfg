@@ -239,11 +239,11 @@ function generateWidget(jobject, folderPath){
     circleRing.setAttribute("stroke", "#d2d3d4");
     circleRing.setAttribute("stroke-width", "3");
 
-    var circle1 = getCircle("#fc4e03", failed, dashFailed);
-    var circle2 = getCircle("#fcdf03", broken, dashBroken);
-    var circle3 = getCircle("#a80068", skipped, dashSkipped);
-    var circle4 = getCircle("#a3db02", passed, dashPassed);
-    var circle5 = getCircle("#454545", unknown, dashUnknown);
+    var circle1 = getCircle("#fd5a3e", failed, dashFailed);
+    var circle2 = getCircle("#ffd050", broken, dashBroken);
+    var circle3 = getCircle("#aaaaaa", skipped, dashSkipped);
+    var circle4 = getCircle("#97cc64", passed, dashPassed);
+    var circle5 = getCircle("#d35ebe", unknown, dashUnknown);
 
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "100%");
