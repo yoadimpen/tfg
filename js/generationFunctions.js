@@ -1,28 +1,67 @@
-function generateView(){
-    
+function loadDataFromConfig(){
+
     deleteWidgets();
 
-    var reportsPath = document.getElementById("generateInput").value;
+    var config = String(localStorage.getItem("config"));
 
-    if(reportsPath.trim() == ''){
-        console.log("entra aqui");
-        showNotFound();
-    } else{
-        var div = document.getElementById("errorMessageDiv");
-        div.style.display = "none";
+    if(config != "null"){
+        var config_json = JSON.parse(config);
+        if(config_json.type == "directory"){
+            var directories = config_json.links;
+            directories.forEach(function(directory){
+                var request = new XMLHttpRequest();
+                var data = "";
 
-        var pathsArray = reportsPath.split(";");
+                request.withCredentials = true;
+                
+                request.open('GET', directory);
 
-        pathsArray.forEach(function(path){
-            path = path.trim();
-            var fullPath = path.concat("/widgets/summaryCopy.json");
-            readJSON(fullPath, path);
-        });
+                request.overrideMimeType("application/json");
+            
+                request.send();
+
+                request.onreadystatechange = function() {
+                    if(this.readyState === 4) {
+                        data = request.responseText;
+                        
+                        var realDataArray = getPathsFromHTTPRequest(data);
+
+                        for(i=0;i<realDataArray.length;i++){
+                            realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
+                        }
+
+                        realDataArray.forEach(function(realData){
+                            var fullPath = realData.concat("/widgets/summaryCopy.json");
+                            readJSON(fullPath, realData);
+                        })
+                    }
+                };
+            })
+        } else {
+            var links = config_json.links;
+
+            links.forEach(function(link){
+                link = link.trim();
+                var fullPath = link.concat("/widgets/summaryCopy.json");
+                readJSON(fullPath, link);
+            })
+        }
+    } else {
+        showNoConfigMessageOnIndividual();
+    }
+}
+
+function getPathsFromHTTPRequest(response){
+    var res = [];
+
+    var firstSplit = response.split("201: ");
+
+    for(i=1;i<firstSplit.length;i++){
+        var secondSplit = firstSplit[i].split(" 4096");
+        res[i-1] = secondSplit[0];
     }
 
-    //document.getElementById("pageInput").value = 10;
-    //doPagination();
-
+    return res;
 }
 
 function readJSON (JSONFile, folderPath) {
@@ -41,22 +80,72 @@ function readJSON (JSONFile, folderPath) {
     
     request.onreadystatechange = function() {
         if(this.readyState === 4) {
-            //console.log(this.responseText);
             data = request.responseText;
             jobject = JSON.parse(data);
             
-            //console.log(jobject);
             generateWidget(jobject, folderPath);
         }
     };
 
 }
 
+function toDateTime(secs){
+    var t = new Date(1970, 0, 1); // Epoch
+    t.setMilliseconds(secs);
+    return t;
+}
+
+function getDayName(n){
+    var days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    return days[n];
+}
+
+function getMonthName(m){
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return months[m];
+}
+
+function getCircle(stroke, dasharray, dashoffset){
+    var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("class", "donut-segment");
+    circle.setAttribute("cx", "21");
+    circle.setAttribute("cy", "21");
+    circle.setAttribute("r", "15.91549430918954");
+    circle.setAttribute("fill", "transparent");
+    circle.setAttribute("stroke", stroke);
+    circle.setAttribute("stroke-width", "3");
+    circle.setAttribute("stroke-dasharray", dasharray);
+    circle.setAttribute("stroke-dashoffset", dashoffset);
+
+    return circle;
+}
+
+function getHiddenElement(id, text){
+    var hidden = document.createElement("p");
+    hidden.setAttribute("id", id);
+    hidden.setAttribute("hidden", "true");
+    hidden.appendChild(document.createTextNode(text));
+
+    return hidden;
+}
+
 function generateWidget(jobject, folderPath){
-    //console.log(jobject.reportName);
-    //console.log(jobject.statistic);
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
+    var time = jobject.time;
+
+    var launch = time.start;
+    var launchDate = toDateTime(launch);
+
+    var day = getDayName(launchDate.getUTCDay());
+    var date = launchDate.getUTCDate();
+    var month = getMonthName(launchDate.getUTCMonth());
+    var year = launchDate.getUTCFullYear();
+    var hours = launchDate.getUTCHours();
+    var minutes = launchDate.getUTCMinutes();
+    var seconds = launchDate.getUTCSeconds();
+
+    var date = String(day).concat(" ").concat(String(date)).concat(" ").concat(String(month)).concat(" ").concat(String(year)).concat("\n\r").concat(String(hours)).concat(":").concat(String(minutes)).concat(":").concat(String(seconds)).concat(" UTC");
 
     var dashFailed, dashBroken, dashSkipped, dashPassed, dashUnknown;
     var failed, broken, skipped, passed, unknown;
@@ -64,8 +153,6 @@ function generateWidget(jobject, folderPath){
     var failed2, broken2, skipped2, passed2, unknown2;
 
     var total = statistic.total;
-
-    //console.log(statistic.failed);
 
     if(parseInt(total) == 0){
         failed1 = 0;
@@ -135,60 +222,11 @@ function generateWidget(jobject, folderPath){
     circleRing.setAttribute("stroke", "#d2d3d4");
     circleRing.setAttribute("stroke-width", "3");
 
-    var circle1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle1.setAttribute("class", "donut-segment");
-    circle1.setAttribute("cx", "21");
-    circle1.setAttribute("cy", "21");
-    circle1.setAttribute("r", "15.91549430918954");
-    circle1.setAttribute("fill", "transparent");
-    circle1.setAttribute("stroke", "#fc4e03");
-    circle1.setAttribute("stroke-width", "3");
-    circle1.setAttribute("stroke-dasharray", failed);
-    circle1.setAttribute("stroke-dashoffset", dashFailed);
-
-    var circle2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle2.setAttribute("class", "donut-segment");
-    circle2.setAttribute("cx", "21");
-    circle2.setAttribute("cy", "21");
-    circle2.setAttribute("r", "15.91549430918954");
-    circle2.setAttribute("fill", "transparent");
-    circle2.setAttribute("stroke", "#fcdf03");
-    circle2.setAttribute("stroke-width", "3");
-    circle2.setAttribute("stroke-dasharray", broken);
-    circle2.setAttribute("stroke-dashoffset", dashBroken);
-
-    var circle3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle3.setAttribute("class", "donut-segment");
-    circle3.setAttribute("cx", "21");
-    circle3.setAttribute("cy", "21");
-    circle3.setAttribute("r", "15.91549430918954");
-    circle3.setAttribute("fill", "transparent");
-    circle3.setAttribute("stroke", "#a80068");
-    circle3.setAttribute("stroke-width", "3");
-    circle3.setAttribute("stroke-dasharray", skipped);
-    circle3.setAttribute("stroke-dashoffset", dashSkipped);
-
-    var circle4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle4.setAttribute("class", "donut-segment");
-    circle4.setAttribute("cx", "21");
-    circle4.setAttribute("cy", "21");
-    circle4.setAttribute("r", "15.91549430918954");
-    circle4.setAttribute("fill", "transparent");
-    circle4.setAttribute("stroke", "#a3db02");
-    circle4.setAttribute("stroke-width", "3");
-    circle4.setAttribute("stroke-dasharray", passed);
-    circle4.setAttribute("stroke-dashoffset", dashPassed);
-
-    var circle5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle5.setAttribute("class", "donut-segment");
-    circle5.setAttribute("cx", "21");
-    circle5.setAttribute("cy", "21");
-    circle5.setAttribute("r", "15.91549430918954");
-    circle5.setAttribute("fill", "transparent");
-    circle5.setAttribute("stroke", "#454545");
-    circle5.setAttribute("stroke-width", "3");
-    circle5.setAttribute("stroke-dasharray", unknown);
-    circle5.setAttribute("stroke-dashoffset", dashUnknown);
+    var circle1 = getCircle("#fc4e03", failed, dashFailed);
+    var circle2 = getCircle("#fcdf03", broken, dashBroken);
+    var circle3 = getCircle("#a80068", skipped, dashSkipped);
+    var circle4 = getCircle("#a3db02", passed, dashPassed);
+    var circle5 = getCircle("#454545", unknown, dashUnknown);
 
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "100%");
@@ -214,37 +252,18 @@ function generateWidget(jobject, folderPath){
 
     var p2 = document.createElement("p");
     p2.setAttribute("id", "API_description");
-    p2.appendChild(document.createTextNode("Brief description"));
+    p2.appendChild(document.createTextNode(date));
 
     var divDescription = document.createElement("div");
     divDescription.setAttribute("class", "description");
     divDescription.appendChild(p1);
     divDescription.appendChild(p2);
 
-    var hiddenFailed = document.createElement("p");
-    hiddenFailed.setAttribute("id", "hiddenFailed");
-    hiddenFailed.setAttribute("hidden", "true");
-    hiddenFailed.appendChild(document.createTextNode(statistic.failed));
-
-    var hiddenBroken = document.createElement("p");
-    hiddenBroken.setAttribute("id", "hiddenBroken");
-    hiddenBroken.setAttribute("hidden", "true");
-    hiddenBroken.appendChild(document.createTextNode(statistic.broken));
-
-    var hiddenSkipped = document.createElement("p");
-    hiddenSkipped.setAttribute("id", "hiddenSkipped");
-    hiddenSkipped.setAttribute("hidden", "true");
-    hiddenSkipped.appendChild(document.createTextNode(statistic.skipped));
-
-    var hiddenPassed = document.createElement("p");
-    hiddenPassed.setAttribute("id", "hiddenPassed");
-    hiddenPassed.setAttribute("hidden", "true");
-    hiddenPassed.appendChild(document.createTextNode(statistic.passed));
-    
-    var hiddenUnknown = document.createElement("p");
-    hiddenUnknown.setAttribute("id", "hiddenUnknown");
-    hiddenUnknown.setAttribute("hidden", "true");
-    hiddenUnknown.appendChild(document.createTextNode(statistic.unknown));
+    var hiddenFailed = getHiddenElement("hiddenFailed", statistic.failed);
+    var hiddenBroken = getHiddenElement("hiddenBroken", statistic.broken);
+    var hiddenSkipped = getHiddenElement("hiddenSkipped", statistic.skipped);
+    var hiddenPassed = getHiddenElement("hiddenPassed", statistic.passed);
+    var hiddenUnknown = getHiddenElement("hiddenUnknown", statistic.unknown);
 
     var divSummary = document.createElement("div");
     divSummary.setAttribute("class", "widget_summary");
@@ -271,7 +290,22 @@ function deleteWidgets(){
     document.getElementById("widgets").innerHTML = "";
 }
 
-function showNotFound(){
-    var div = document.getElementById("errorMessageDiv");
-    div.style.display = "";
+function showNoConfigMessageOnIndividual(){
+    div = document.getElementById("filters");
+
+    rowDiv = document.createElement("div");
+    rowDiv.setAttribute("class", "row justify-content-center");
+
+    btnDiv = document.createElement("div");
+    btnDiv.setAttribute("class", "col-5");
+
+    btn = document.createElement("button");
+    btn.setAttribute("type", "button");
+    btn.setAttribute("class", "btn btn-warning btn-lg disabled");
+    btn.setAttribute("disabled", "true");
+    btn.appendChild(document.createTextNode("There are no current configuration settings saved. Maybe head to the admin options :)"));
+
+    btnDiv.appendChild(btn);
+    rowDiv.appendChild(btnDiv);
+    div.appendChild(rowDiv);
 }

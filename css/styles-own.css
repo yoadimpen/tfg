@@ -1,12 +1,11 @@
 @charset "UTF-8";
 
 html, body{
-	min-height: 100%;
+	height: 100%;
+	overflow: auto;
 }
 
-body{
-	position: relative;
-}
+/*Individual Page*/
 
 #link{
 	font-size: 1.4rem;
@@ -139,7 +138,7 @@ body{
   
 #API_description{
 	color: #8a8a8a;
-	font-size: 12px;
+	font-size: 10px;
 	text-anchor: middle;
 	text-align: left;
 	-moz-transform: translateY(-0.25em);
@@ -155,4 +154,253 @@ body{
 	color: rgb(252, 90, 90);
  }
 
+ #generalInput{
+	width: 40%;
+ }
+
+ #spaceTab{
+	width: 44%;
+ }
+
+ #spaceTab:hover{
+	border-color: white;
+	border-bottom-color:#dee2e6;
+ }
+
+ #generalInput:hover{
+	border: 2px white;
+ }
+
+ #nav-summary-tab{
+	font-size: 1.1rem;
+	color: #495057;
+ }
+
+ #nav-details-tab{
+	font-size: 1.1rem;
+	color: #495057;
+ }
+
+ /*General Page*/
  
+ #sum-col{
+	position: relative;
+	border: 1px solid #dee2e6;
+	border-radius: 10px;
+	margin: 5px;
+	width: 30%;
+ }
+
+ .donut-status{
+	 width: 70%;
+	 display: block;
+	 margin: auto;
+ }
+
+ .tooltip-text {
+    position: absolute;
+    display: none;
+    background: ghostwhite;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 3px; 
+    transition: opacity 1s ease-out;
+}
+.far {
+    font-size: 16px;
+    transition: .5s ease-in-out;
+}
+
+.far.fa-question-circle:hover + .tooltip-text {
+    display: block;
+    color: black;
+    animation: fadeIn 1s;
+}
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}  
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/*Category Chart*/
+
+#cat-it{
+	fill: #fee087;
+}
+
+#cat-ip{
+	fill: #feab4b;
+}
+
+#cat-ot{
+	fill: #fa5c2e;
+}
+
+#cat-td{
+	fill: #d31121;
+}
+
+#cat-pd{
+	fill: #800026;
+}
+
+/*Severity Chart*/
+
+.graph-chart{
+	display: block;
+	margin: auto;
+	padding-top:5%;
+}
+
+.graph-bar{
+	fill: #6dd6cd;
+}
+
+.graph-plot{
+	-moz-transform: translate(7.5%, 35.5%);
+	transform: translate(7.5%, 35.5%);
+}
+
+.graph-axis-x{
+	-moz-transform: translate(7%, 83.5%);
+	transform: translate(7%, 83.5%);
+}
+
+.graph-axis-y{
+	-moz-transform: translate(11%, 4%);
+	transform: translate(11%, 4%);
+}
+
+.graph-x-tick-1{
+	-moz-transform: translate(19%, 0%);
+	transform: translate(19%, 0%);
+}
+
+.graph-x-tick-1-line{
+	-moz-transform: translate(3.5%, 0%);
+	transform: translate(3.5%, 0%);
+}
+
+.graph-x-tick-2{
+	-moz-transform: translate(37%, 0%);
+	transform: translate(37%, 0%);
+}
+
+.graph-x-tick-2-line{
+	-moz-transform: translate(3.5%, 0%);
+	transform: translate(3.5%, 0%);
+}
+
+.graph-x-tick-3{
+	-moz-transform: translate(55%, 0%);
+	transform: translate(55%, 0%);
+}
+
+.graph-x-tick-3-line{
+	-moz-transform: translate(3.5%, 0%);
+	transform: translate(3.5%, 0%);
+}
+
+.graph-x-tick-4{
+	-moz-transform: translate(72.5%, 0%);
+	transform: translate(72.5%, 0%);
+}
+
+.graph-x-tick-4-line{
+	-moz-transform: translate(3.5%, 0%);
+	transform: translate(3.5%, 0%);
+}
+
+.graph-x-tick-5{
+	-moz-transform: translate(89%, 0%);
+	transform: translate(89%, 0%);
+}
+
+.graph-x-tick-5-line{
+	-moz-transform: translate(3.5%, 0%);
+	transform: translate(3.5%, 0%);
+}
+
+.graph-x-tick-text{
+	-moz-transform: translate(-4.5%, 0%);
+	transform: translate(-4.5%, 0%);
+}
+
+.graph-y-h-line{
+	-moz-transform: translate(0%, 0%);
+	transform: translate(0%, 0%);
+}
+
+.graph-y-v-line{
+	-moz-transform: translate(0%, 0%);
+	transform: translate(0%, 0%);
+}
+
+.graph-y-tick-0{
+	-moz-transform: translate(0%, 79.5%);
+	transform: translate(0%, 79.5%);
+}
+
+.graph-y-tick-1{
+	-moz-transform: translate(0%, 72%);
+	transform: translate(0%, 72%);
+}
+
+.graph-y-tick-2{
+	-moz-transform: translate(0%, 64%);
+	transform: translate(0%, 64%);
+}
+
+.graph-y-tick-3{
+	-moz-transform: translate(0%, 56%);
+	transform: translate(0%, 56%);
+}
+
+.graph-y-tick-4{
+	-moz-transform: translate(0%, 48%);
+	transform: translate(0%, 48%);
+}
+
+.graph-y-tick-5{
+	-moz-transform: translate(0%, 40%);
+	transform: translate(0%, 40%);
+}
+
+.graph-y-tick-6{
+	-moz-transform: translate(0%, 32%);
+	transform: translate(0%, 32%);
+}
+
+.graph-y-tick-7{
+	-moz-transform: translate(0%, 24%);
+	transform: translate(0%, 24%);
+}
+
+.graph-y-tick-8{
+	-moz-transform: translate(0%, 16%);
+	transform: translate(0%, 16%);
+}
+
+.graph-y-tick-9{
+	-moz-transform: translate(0%, 8%);
+	transform: translate(0%, 8%);
+}
+
+.graph-y-tick-10{
+	-moz-transform: translate(0%, 0.2%);
+	transform: translate(0%, 0.2%);
+}
+
+/*Administration panel*/
+#btn-login{
+	float: right;
+	border: 1px solid #6c757d;
+	width: 5%;
+	min-width: 75px;
+	max-width: 80px;
+	max-height: 35px;
+	margin: 15%;
+}
