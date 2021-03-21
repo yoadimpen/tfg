@@ -24,7 +24,27 @@ function generateSummaryDivs(reportsPath){
         readJSONs(path, statusArray, severityArray, categoryArray, categoryNameArray, pathsArray.length);
     })
 
+    var status = processResults(localStorage.getItem("statusArrayH"));
+    var severity = processResults(localStorage.getItem("severityArrayH"));
+    var category = processResults(localStorage.getItem("categoryArrayH"));
+
+    localStorage.removeItem("statusArrayH");
+    localStorage.removeItem("severityArrayH");
+    localStorage.removeItem("categoryArrayH");
+
+    makeTypeDiv(status);
+    makeSeverityDiv(severity);
+    makeCategoryDiv(category);
+
     showTotalReports(pathsArray.length);
+}
+
+function processResults(results){
+    var array = results.split(",");
+    for (i=0;i<array.length;i++){
+        array[i] = parseInt(array[i]);
+    }
+    return array;
 }
 
 function readJSONs (path, statusArray, severityArray, categoryArray, categoryNameArray, nReports){
@@ -44,7 +64,6 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             jobject1 = JSON.parse(data1);
             var res1 = getTypeResults(jobject1, statusArray);
         }
-        makeTypeDiv(res1);
     };
 
     var data2 = "";
@@ -62,7 +81,6 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             data2 = request2.responseText;
             jobject2 = JSON.parse(data2);
             var res2 = getSeverityLevelResults(jobject2, severityArray);
-            makeSeverityDiv(res2);
         }
     };
 
@@ -81,7 +99,6 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             data3 = request3.responseText;
             jobject3 = JSON.parse(data3);
             var res3 = getCategoryResults(jobject3, categoryArray, categoryNameArray);
-            makeCategoryDiv(res3);
         }
     };
 
@@ -94,6 +111,7 @@ function getTypeResults(json, resultsArray){
     resultsArray[2] = resultsArray[2] + statistic.skipped;
     resultsArray[3] = resultsArray[3] + statistic.passed;
     resultsArray[4] = resultsArray[4] + statistic.unknown;
+    localStorage.setItem("statusArrayH", resultsArray);
     return resultsArray;
 }
 
@@ -204,6 +222,8 @@ function getSeverityLevelResults(jobject, array){
         }
     }
 
+    localStorage.setItem("severityArrayH", array);
+
     return array;
 }
 
@@ -301,6 +321,9 @@ function getCategoryResults(json, valuesArray, nameArray){
     nameArray.forEach(function(name){
         res.push(name);
     })
+
+    localStorage.setItem("categoryArrayH", valuesArray);
+
     return res;
 }
 
