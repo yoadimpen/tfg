@@ -118,7 +118,27 @@ function generateSummaryDivs(reportsPath){
         readJSONs(path, statusArray, severityArray, categoryArray, categoryNameArray, pathsArray.length);
     })
 
+    var status = processResults(localStorage.getItem("statusArray"));
+    var severity = processResults(localStorage.getItem("severityArray"));
+    var category = processResults(localStorage.getItem("categoryArray"));
+
+    localStorage.removeItem("statusArray");
+    localStorage.removeItem("severityArray");
+    localStorage.removeItem("categoryArray");
+
+    makeTypeDiv(status);
+    makeSeverityDiv(severity);
+    makeCategoryDiv(category);
+
     showTotalReports(pathsArray.length);
+}
+
+function processResults(results){
+    var array = results.split(",");
+    for (i=0;i<array.length;i++){
+        array[i] = parseInt(array[i]);
+    }
+    return array;
 }
 
 function readJSONs (path, statusArray, severityArray, categoryArray, categoryNameArray, nReports){
@@ -137,7 +157,6 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             jobject1 = JSON.parse(data1);
             var res1 = getTypeResults(jobject1, statusArray);
         }
-        makeTypeDiv(res1);
     };
 
     //lectura del JSON severity.json
@@ -154,7 +173,6 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             data2 = request2.responseText;
             jobject2 = JSON.parse(data2);
             var res2 = getSeverityLevelResults(jobject2, severityArray);
-            makeSeverityDiv(res2);
         }
     };
 
@@ -172,7 +190,6 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
             data3 = request3.responseText;
             jobject3 = JSON.parse(data3);
             var res3 = getCategoryResults(jobject3, categoryArray, categoryNameArray);
-            makeCategoryDiv(res3);
         }
     };
 
@@ -185,10 +202,11 @@ function getTypeResults(json, resultsArray){
     resultsArray[2] = resultsArray[2] + statistic.skipped;
     resultsArray[3] = resultsArray[3] + statistic.passed;
     resultsArray[4] = resultsArray[4] + statistic.unknown;
+    localStorage.setItem("statusArray", resultsArray);
     return resultsArray;
 }
 
-function makeTypeDiv(array, totalReports){
+function makeTypeDiv(array){
     var resultsDiv = document.getElementById("sum-row");
     resultsDiv.innerHTML = "";
 
@@ -209,11 +227,11 @@ function makeTypeDiv(array, totalReports){
             datasets: [{
                 data: [array[0], array[1], array[2], array[3], array[4]],
                 backgroundColor: [
-                    "#fc4e03",
-                    "#fcdf03",
-                    "#a80068",
-                    "#a3db02",
-                    "#454545"
+                    "#fd5a3e",
+                    "#ffd050",
+                    "#aaaaaa",
+                    "#97cc64",
+                    "#d35ebe"
                 ]
             }],
 
@@ -294,6 +312,8 @@ function getSeverityLevelResults(jobject, array){
                 break;
         }
     }
+
+    localStorage.setItem("severityArray", array);
 
     return array;
 }
@@ -413,6 +433,8 @@ function getCategoryResults(json, valuesArray, nameArray){
     nameArray.forEach(function(name){
         res.push(name);
     })
+
+    localStorage.setItem("categoryArray", valuesArray);
     return res;
 }
 
