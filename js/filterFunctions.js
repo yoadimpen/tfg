@@ -1,13 +1,13 @@
 //SEARCH (FILTER THROUGH NAMES)
 function searchAPIs() {
     var input, filter, ul, li, p, i, txtValue;
-    input = document.getElementById('searchInput');
+    input = document.getElementById('search-input');
     filter = input.value.toUpperCase();
     ul = document.getElementById("widgets");
     li = ul.getElementsByTagName('li');
     
     for (i = 0; i < li.length; i++) {
-        p = li[i].querySelectorAll('#API_title, p')[0];
+        p = li[i].querySelectorAll('#name, p')[0];
         txtValue = p.textContent || p.innerText;
         if(txtValue.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
@@ -33,9 +33,9 @@ function getCorrectCriteria(arrayOfP, criteria){
 }
 
 function showOrderedWidgets(){
-    var criteria = document.getElementById("orderByInput").value;
+    var criteria = document.getElementById("order-by-input").value;
 
-    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
 
     function customSorter(a,b){
         var res = 0;
@@ -103,11 +103,11 @@ function doPagination(){
 
 function makePages(){
 
-    var nElement = document.getElementById("pageInput").value;
+    var nElement = document.getElementById("page-input").value;
 
     var n = parseInt(nElement);
 
-    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
 
     var arrayOfPages = [];
 
@@ -129,7 +129,7 @@ function makePages(){
 
 function addPagesAccessToHtml(nP){
     //var paginationDiv = document.getElementById("paginationDiv");
-    var pagesAccess = document.getElementById("pagesAccess");
+    var pagesAccess = document.getElementById("pages-access");
 
     /*if(document.getElementById("pages") == null){
         pagesAccess = document.createElement("div");
@@ -143,8 +143,8 @@ function addPagesAccessToHtml(nP){
 
     for(i = 0; i < nP; i++){
         var buttonAccessToPage = document.createElement("button");
-        //buttonAccessToPage.setAttribute("id", "btn-access-page");
-        buttonAccessToPage.setAttribute("class", "btn btn-secondary");
+        buttonAccessToPage.setAttribute("id", "btn-access-page");
+        buttonAccessToPage.setAttribute("class", "btn");
         buttonAccessToPage.setAttribute("type", "button");
         buttonAccessToPage.setAttribute("value", i);
         buttonAccessToPage.setAttribute("onclick", "goToPage(" + i + ")");
@@ -164,7 +164,7 @@ function hideAllDivs(arrayOfDivs){
 }
 
 function goToPage(i){
-    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
 
     hideAllDivs(divs);
 

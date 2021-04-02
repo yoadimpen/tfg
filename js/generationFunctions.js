@@ -210,7 +210,7 @@ function generateWidget(jobject, folderPath){
     circleHole.setAttribute("cx", "21");
     circleHole.setAttribute("cy", "21");
     circleHole.setAttribute("r", "15.91549430918954");
-    circleHole.setAttribute("fill", "#fff");
+    circleHole.setAttribute("fill", "rgba(255,255,255,0.4)");
 
 
     var circleRing = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -247,15 +247,15 @@ function generateWidget(jobject, folderPath){
     divWidget.appendChild(svg);
 
     var p1 = document.createElement("p");
-    p1.setAttribute("id", "API_title");
+    p1.setAttribute("id", "name");
     p1.appendChild(document.createTextNode(reportName));
 
     var p2 = document.createElement("p");
-    p2.setAttribute("id", "API_description");
+    p2.setAttribute("id", "launch-date");
     p2.appendChild(document.createTextNode(date));
 
     var divDescription = document.createElement("div");
-    divDescription.setAttribute("class", "description");
+    divDescription.setAttribute("class", "data");
     divDescription.appendChild(p1);
     divDescription.appendChild(p2);
 
@@ -266,7 +266,7 @@ function generateWidget(jobject, folderPath){
     var hiddenUnknown = getHiddenElement("hiddenUnknown", statistic.unknown);
 
     var divSummary = document.createElement("div");
-    divSummary.setAttribute("class", "widget_summary");
+    divSummary.setAttribute("class", "widget-summary");
     divSummary.appendChild(divDescription);
     divSummary.appendChild(divWidget);
 
@@ -277,7 +277,7 @@ function generateWidget(jobject, folderPath){
     divSummary.appendChild(hiddenUnknown);
 
     var li = document.createElement("li");
-    li.setAttribute("class", "apiSummary");
+    li.setAttribute("class", "api-summary");
     var pathToIndex = folderPath.concat("/index.html");
     li.setAttribute("onclick", "location.href = " + "'" + pathToIndex + "';");
     li.appendChild(divSummary);
