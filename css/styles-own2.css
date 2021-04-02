@@ -1,19 +1,33 @@
 body {
 	min-height: 100%;
+	background: #000;
 }
 
 /*-------------------BACKGROUND PAGE-------------------*/
+
+.dark {
+	position: absolute;
+	z-index: 0;
+	min-height:100%;
+	width:100%;
+	background: linear-gradient(to bottom, #404040 40%,#312036);
+	opacity: 0;
+	transition: opacity 2s;
+}
 
 .page {
 	position:absolute;
 	min-height:100%;
 	width:100%;
 	background: linear-gradient(to bottom, #ffffff, #e0fff8);
+	transition: 2s;
 }
 
 /*--------------------------MENU------------------------*/
 
 #header{
+	position: relative;
+	z-index: 1;
 	margin: 10px;
 	margin-top: 20px;
     border-radius: 5px;
@@ -34,6 +48,7 @@ body {
 #nav-part {
 	padding-right: 0%;
 	width: 33.33%;
+	z-index: 1;
 }
 
 #logo {
@@ -56,6 +71,7 @@ body {
 	top: 4px;
 	width: 35px;
 	height: 17px;
+	z-index: 1;
 }
   
 /* Hide default HTML checkbox */
@@ -117,6 +133,8 @@ input:checked + .slider:before {
 /*------------------------FILTERS-----------------------*/
 
 #search-input, #order-by-input, #page-input{
+	position: relative;
+	z-index: 1;
 	border: 0px;
 	background-color: rgba(235, 235, 235, 0.3);
 	box-shadow:
@@ -131,6 +149,8 @@ input:checked + .slider:before {
 }
 
 #button-addon2, #btn-access-page {
+	position: relative;
+	z-index: 1;
 	margin-left: 0px;
 	border: 0px;
 	background-color: rgba(235, 235, 235, 0.3);
@@ -153,6 +173,8 @@ input:checked + .slider:before {
 /*--------------------------GRID------------------------*/
 
 .auto-grid {
+	position: relative;
+	z-index: 1;
 	--auto-grid-min-size: 16rem;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
@@ -176,7 +198,7 @@ input:checked + .slider:before {
 .widget-summary{
 	margin: 0.5% 0.5% 0.5% 0.5%;
 	border-radius: 10px;
-	background-color: rgba(255, 255, 255, 0.4);
+	background-color: rgba(245, 245, 245, 0.4);
 	box-shadow:
 	0px 3px 15px rgba(0, 0, 0, 0.10),
 	0px -3px 15px rgba(0, 0, 0, 0.10);

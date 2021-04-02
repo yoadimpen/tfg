@@ -210,7 +210,7 @@ function generateWidget(jobject, folderPath){
     circleHole.setAttribute("cx", "21");
     circleHole.setAttribute("cy", "21");
     circleHole.setAttribute("r", "15.91549430918954");
-    circleHole.setAttribute("fill", "rgba(255,255,255,0.4)");
+    circleHole.setAttribute("fill", "rgba(245,245,245,0.1)");
 
 
     var circleRing = document.createElementNS("http://www.w3.org/2000/svg", "circle");

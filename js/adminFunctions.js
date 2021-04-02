@@ -1,3 +1,11 @@
+function test(){
+    var page = document.getElementsByClassName("page")[0];
+    //page.setAttribute("style", "background: black;");
+
+    var dark = document.getElementsByClassName("dark")[0];
+    dark.setAttribute("style", "opacity: 1.0;");
+}
+
 function showCurrentConfig(){
 
     var config = String(localStorage.getItem("config"));
