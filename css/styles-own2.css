@@ -10,7 +10,8 @@ body {
 	z-index: 0;
 	min-height:100%;
 	width:100%;
-	background: linear-gradient(to bottom, #404040 40%,#312036);
+	/*background: linear-gradient(to bottom, #404040 40%,#312036);*/
+	background: linear-gradient(to bottom, #4b4b4b,#3b3b3b);
 	opacity: 0;
 	transition: opacity 2s;
 }
@@ -19,7 +20,8 @@ body {
 	position:absolute;
 	min-height:100%;
 	width:100%;
-	background: linear-gradient(to bottom, #ffffff, #e0fff8);
+	/*background: linear-gradient(to bottom, #ffffff, #e0fff8);*/
+	background: linear-gradient(to bottom, #ffffff, #d3d3d3);
 	transition: 2s;
 }
 
@@ -130,7 +132,37 @@ input:checked + .slider:before {
 	border-radius: 50%;
 }
 
+/*------------------------MENU-SM-----------------------*/
+
+#menu-little{
+    width: 60%;
+    display: none;
+    position: relative;
+	z-index: 1;
+    margin: 20px;
+    margin-left: 20%;
+    border-radius: 5px;
+	background-color: rgba(235, 235, 235, 0.3);
+	box-shadow:
+	0px 10px 20px rgba(0, 0, 0, 0.10),
+	0px -2px 20px rgba(0, 0, 0, 0.15);
+}
+
+#menu-item{
+	text-align: center;
+	color: rgba(116, 44, 145, 0.6);
+}
+
+#menu-item-active{
+	text-align: center;
+	color: rgba(116, 44, 145, 1);
+}
+
 /*------------------------FILTERS-----------------------*/
+
+#filters{
+	padding-top: 10px;
+}
 
 #search-input, #order-by-input, #page-input{
 	position: relative;
