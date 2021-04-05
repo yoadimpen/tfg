@@ -6,12 +6,12 @@ body {
 /*-------------------BACKGROUND PAGE-------------------*/
 
 .dark {
-	position: absolute;
+	position: fixed;
 	z-index: 0;
 	min-height:100%;
 	width:100%;
 	/*background: linear-gradient(to bottom, #404040 40%,#312036);*/
-	background: linear-gradient(to bottom, #4b4b4b,#3b3b3b);
+	background: linear-gradient(to bottom, #727272 50%, #2c2c2c);
 	opacity: 0;
 	transition: opacity 2s;
 }
@@ -64,6 +64,10 @@ body {
 
 #link-nav:hover, #link-nav-active {
 	color: rgba(116, 44, 145, 1);
+}
+
+#settings-icon {
+	cursor: pointer;
 }
 
 /* The switch - the box around the slider */
@@ -151,10 +155,15 @@ input:checked + .slider:before {
 #menu-item{
 	text-align: center;
 	color: rgba(116, 44, 145, 0.6);
+	cursor: pointer;
 }
 
 #menu-item-active{
 	text-align: center;
+	color: rgba(116, 44, 145, 1);
+}
+
+#menu-item:hover{
 	color: rgba(116, 44, 145, 1);
 }
 
@@ -306,6 +315,64 @@ input:checked + .slider:before {
 #pages-access-div{
 	margin-bottom: 20px;
 }
+
+/*------------------------SUMMARY-----------------------*/
+
+#summary-info {
+	margin-top: 10vh;
+	background-color: rgba(235, 235, 235, 0.3);
+	box-shadow:
+	0px 10px 20px rgba(0, 0, 0, 0.10),
+	0px -2px 20px rgba(0, 0, 0, 0.15);
+	border-radius: 5px;
+	padding-bottom: 8px;
+}
+
+#sum-col {
+	position: relative;
+	border: 0px;
+	margin: 5px;
+	width: 30%;
+	z-index: 1;
+}
+
+#total-reports {
+	position: relative;
+	z-index: 1;
+}
+
+.tooltip-text {
+    position: absolute;
+    display: none;
+    background-color: rgba(235, 235, 235, 0.3);
+	box-shadow:
+	0px 10px 20px rgba(0, 0, 0, 0.10),
+	0px -2px 20px rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 3px; 
+    transition: opacity 1s ease-out;
+    min-width: 150px;
+}
+.far {
+    font-size: 12px;
+    transition: .5s ease-in-out;
+}
+.far.fa-question-circle:hover + .tooltip-text {
+    display: block;
+    color: black;
+    animation: fadeIn 1s;
+}
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}  
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/*-------------------------MEDIA------------------------*/
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {

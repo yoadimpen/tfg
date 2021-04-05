@@ -232,7 +232,8 @@ function makeTypeDiv(array){
                     "#aaaaaa",
                     "#97cc64",
                     "#d35ebe"
-                ]
+                ],
+                borderColor: "rgba(0, 0, 0, 0.0)"
             }],
 
             labels: [
@@ -511,15 +512,33 @@ function makeCategoryDiv(array){
     title.setAttribute("style", "margin: 10px;");
     title.appendChild(document.createTextNode("Category"));
 
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "col-10");
+
+    var legendDiv = document.createElement("div");
+    legendDiv.setAttribute("class", "col-2");
+    legendDiv.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: black; margin-top: 1.1rem;' aria-hidden='true';></i>" + 
+            "<span class='tooltip-text'>" +
+                "<b>Help</b>" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Product defects" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#d31121;' aria-hidden='true'></i> Test defects" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fa5c2e;' aria-hidden='true'></i> Outdated tests" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#feab4b;' aria-hidden='true'></i> Infrastructure problems" +
+                "<br>" +
+                "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Ignored tests" +
+            "</span>";
+
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
-
-    var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col");
 
     titleDiv.appendChild(title);
 
     titleRow.appendChild(titleDiv);
+    titleRow.appendChild(legendDiv);
     
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
@@ -543,7 +562,7 @@ function makeCategoryDiv(array){
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
-    div.appendChild(legend);
+    //div.appendChild(legend);
 
     resultsDiv.appendChild(div);
 }
@@ -552,7 +571,7 @@ function showTotalReports(n){
     var div = document.getElementById("summary-info");
 
     var h4 = document.createElement("h4");
-    h4.setAttribute("style", "margin-top:1%");
+    h4.setAttribute("id", "total-reports");
     h4.appendChild(document.createTextNode("Total reports used: " + n));
 
     div.appendChild(h4);
