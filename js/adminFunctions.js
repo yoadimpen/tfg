@@ -6,6 +6,172 @@ function test(){
     dark.setAttribute("style", "opacity: 1.0;");
 }
 
+function deleteRow(n) {
+    document.getElementById("config-table").deleteRow(n);
+
+    var config = localStorage.getItem("config");
+
+    if(config != null) {
+        var configJSON = JSON.parse(config);
+        configJSON.links.splice(n-1, 1);
+
+        var i = 1;
+
+        configJSON.links.forEach(function(element){
+            element.id = i;
+            i = i + 1;
+        })
+
+        localStorage.setItem("config", JSON.stringify(configJSON));
+    }
+
+    var dataDiv = document.getElementById("config-data");
+    dataDiv.innerHTML = "";
+
+    loadConfig();
+}
+
+function updatePreference(){
+    var config = String(localStorage.getItem("config"));
+
+    console.log(config);
+
+    if(config != null){
+        var configJSON = JSON.parse(config);
+
+        var optionInput = document.getElementById("inlineRadio1");
+        if(optionInput.checked){
+            configJSON.type = "directory";
+        } else {
+            configJSON.type = "specific_files";
+        }
+        localStorage.setItem("config", JSON.stringify(configJSON));
+    }
+}
+
+function resetConfig() {
+    localStorage.removeItem("config");
+
+    var json = '{"type": "directory", "links":[]}';
+    configJSON = JSON.parse(json);
+
+    console.log(configJSON);
+
+    localStorage.setItem("config", JSON.stringify(configJSON));
+
+    var dataDiv = document.getElementById("config-data");
+    dataDiv.innerHTML = "";
+
+    loadConfig();
+}
+
+function loadConfig() {
+    var tableDiv = document.createElement("div");
+    tableDiv.setAttribute("class", "table-responsive-xxl");
+
+    var table = document.createElement("table");
+    table.setAttribute("id", "config-table");
+    table.setAttribute("class", "table");
+
+    var thead = document.createElement("thead");
+
+    var headerRow = document.createElement("tr");
+    
+    var header1 = document.createElement("th");
+    header1.setAttribute("scope", "col");
+    header1.appendChild(document.createTextNode("#"));
+
+    var header2 = document.createElement("th");
+    header2.setAttribute("scope", "col");
+    header2.setAttribute("class", "w-75");
+    header2.appendChild(document.createTextNode("Path"));
+
+    var header3 = document.createElement("th");
+    header3.setAttribute("scope", "col");
+    header3.appendChild(document.createTextNode("Last Modified"));
+
+    var header4 = document.createElement("th");
+    header4.setAttribute("scope", "col");
+    header4.appendChild(document.createTextNode(""));
+
+    headerRow.appendChild(header1);
+    headerRow.appendChild(header2);
+    headerRow.appendChild(header3);
+    headerRow.appendChild(header4);
+
+    thead.appendChild(headerRow);
+
+    var tbody = document.createElement("tbody");
+
+    var config = String(localStorage.getItem("config"));
+
+    if(config != null){
+        var configJSON = JSON.parse(config);
+        var links = configJSON.links;
+
+        links.forEach(function(link){
+            var row = document.createElement("tr");
+            var id = "-";
+            var path = link;
+            var last_modified = "-";
+
+            var td1 = document.createElement("td");
+            td1.setAttribute("scope", "row");
+            td1.appendChild(document.createTextNode(link.id));
+
+            var td2 = document.createElement("td");
+            td2.appendChild(document.createTextNode(link.path));
+
+            var td3 = document.createElement("td");
+            td3.appendChild(document.createTextNode(link.last_modified));
+
+            var td4 = document.createElement("td");
+            var i = document.createElement("i");
+            i.setAttribute("class", "fas fa-times");
+            i.setAttribute("onclick", "deleteRow(" + link.id + ")");
+            td4.appendChild(i);
+
+            row.appendChild(td1);
+            row.appendChild(td2);
+            row.appendChild(td3);
+            row.appendChild(td4);
+
+            tbody.appendChild(row);
+        })
+    } else {
+        //cosas
+    }
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    tableDiv.appendChild(table);
+
+    var div = document.getElementById("config-data");
+    div.appendChild(tableDiv);
+
+}
+
+function addNewPath(){
+    var path = document.getElementById("config-path-input").value;
+    var today = new Date();
+    var time = today.getDate() + "/" + (today.getMonth()+1) + "/" + today.getFullYear() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    
+    var config = localStorage.getItem("config");
+
+    if(config != null){
+        var configJSON = JSON.parse(config);
+        configJSON.links.push({"id":configJSON.links.length + 1, "path":path, "last_modified":time});
+        console.log(configJSON);
+        localStorage.setItem("config", JSON.stringify(configJSON));
+    }
+
+    var dataDiv = document.getElementById("config-data");
+    dataDiv.innerHTML = "";
+
+    loadConfig();
+}
+
 function showCurrentConfig(){
 
     var config = String(localStorage.getItem("config"));

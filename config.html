@@ -17,7 +17,7 @@
         
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     </head>
-    <body onload="loadSummaryFromConfig()">
+    <body onload="loadConfig()">
         <script>
             function showLittleMenu(){
                 var menu = document.getElementById("menu-little");
@@ -99,60 +99,84 @@
                 </div>
                 <div class="container-lg">
                     <div id="config">
-                        <div id="config-title" class="row text-center">
+                        <div id="config-title" class="row text-center" style="margin-bottom: 20px;">
                             <h2>Multiview Configuration</h2>
-                        </div>
-                        <div id="config-user" class="row">
-                            <h4 id="user">John Doe</h4>
                         </div>
                         <div id="config-method" class="row">
                             <div class="col-2" style="display: flex;"> 
-                                <h5 style="margin: auto; margin-left: 0px;">Reports stored in</h5>
+                                <h5 style="margin: auto; margin-left: 0px;">Saving preferences</h5>
                             </div>
                             <div class="col-2" style="display: flex;">
-                                <i id="method" class="far fa-folder fa-2x" style="vertical-align: middle; color: rgb(165, 165, 165);"></i>
-                                <h5 style="margin: auto; margin-left: 10px; color: rgb(165, 165, 165);">Directories</h5>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="">
+                                    <label class="form-check-label" for="inlineRadio1" style="display: flex;">
+                                        <i id="method" class="far fa-folder fa-2x" style="vertical-align: middle; color: rgb(165, 165, 165);"></i>
+                                        <h5 style="margin: auto; margin-left: 10px; color: rgb(165, 165, 165);">Directories</h5></label>
+                                </div>
                             </div>
-                            <div class="col-3" style="display: flex;">
-                                <i id="method-active" class="far fa-file-alt fa-2x"></i>
-                                <h5 style="margin: auto; margin-left: 10px;">Specific Files</h5>
+                            <div class="col-2" style="display: flex;">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="">
+                                    <label class="form-check-label" for="inlineRadio2" style="display: flex;">
+                                        <i id="method-active" class="far fa-file-alt fa-2x"></i>
+                                        <h5 style="margin: auto; margin-left: 10px;">Specific Files</h5></label>
+                                </div>
                             </div>
-                            <div class="col-3">
-
+                            <div class="col-6" style="display: flex;">
+                                <button type="button" id="btn-new-config" class="btn" onclick="updatePreference()">Update</button>
                             </div>
                         </div>
                         <div id="config-data" class="row">
-                            <div class="table-responsive-xxl">
-                                <table class="table">
+                            <!--<div class="table-responsive-xxl">
+                                <table id="config-table" class="table">
                                     <thead>
                                         <tr>
                                           <th scope="col">#</th>
-                                          <th scope="col">First</th>
-                                          <th scope="col">Last</th>
-                                          <th scope="col">Handle</th>
+                                          <th scope="col" class="w-75">Path</th>
+                                          <th scope="col">Last modified</th>
+                                          <th scope="col"></th>
                                         </tr>
                                       </thead>
                                       <tbody>
                                         <tr>
                                           <th scope="row">1</th>
                                           <td>Mark</td>
-                                          <td>Otto</td>
                                           <td>@mdo</td>
+                                          <td>
+                                            <i class="fas fa-times" onclick="deleteRow(1)"></i>
+                                          </td>
                                         </tr>
                                         <tr>
                                           <th scope="row">2</th>
                                           <td>Jacob</td>
-                                          <td>Thornton</td>
                                           <td>@fat</td>
+                                          <td>
+                                            <i class="fas fa-times" onclick="deleteRow(2)"></i>
+                                          </td>
                                         </tr>
                                         <tr>
                                           <th scope="row">3</th>
-                                          <td colspan="2">Larry the Bird</td>
+                                          <td>Larry the Bird</td>
                                           <td>@twitter</td>
+                                          <td>
+                                            <i class="fas fa-times" onclick="deleteRow(3)"></i>
+                                          </td>
                                         </tr>
                                       </tbody>
                                 </table>
-                              </div>
+                            </div>-->
+                        </div>
+                        <div id="config-new" class="row">
+                            <label class="form-label">Add a new path to your configuration</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon3">file:///path/to/report</span>
+                                <input type="text" class="form-control" id="config-path-input" aria-describedby="basic-addon3">
+                                <button type="button" id="btn-new-config" class="btn" onclick="addNewPath()">Add</button>
+                            </div>
+                            <label class="form-label">Reset configuration</label>
+                            <div class="input-group">
+                                <button type="button" id="btn-new-config" class="btn" onclick="resetConfig()">Reset</button>
+                            </div>
                         </div>
                     </div>
                 </div>

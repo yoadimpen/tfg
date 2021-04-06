@@ -14,7 +14,7 @@ function loadDataFromConfig(){
 
                 request.withCredentials = true;
                 
-                request.open('GET', directory);
+                request.open('GET', directory.path);
 
                 request.overrideMimeType("application/json");
             
@@ -27,7 +27,7 @@ function loadDataFromConfig(){
                         var realDataArray = getPathsFromHTTPRequest(data);
 
                         for(i=0;i<realDataArray.length;i++){
-                            realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
+                            realDataArray[i] = directory.path.concat("/".concat(realDataArray[i]));
                         }
 
                         realDataArray.forEach(function(realData){
@@ -41,7 +41,7 @@ function loadDataFromConfig(){
             var links = config_json.links;
 
             links.forEach(function(link){
-                link = link.trim();
+                link = link.path.trim();
                 var fullPath = link.concat("/widgets/summaryCopy.json");
                 readJSON(fullPath, link);
             })

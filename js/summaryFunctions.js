@@ -24,7 +24,7 @@ function loadSummaryFromConfig(){
 
                     request[k] = new XMLHttpRequest();
                     request[k].withCredentials = true;
-                    request[k].open('GET', directories[k]);
+                    request[k].open('GET', directories[k].path);
                     request[k].overrideMimeType("application/json");
                     request[k].send();
                     request[k].onreadystatechange = function() {
@@ -37,7 +37,7 @@ function loadSummaryFromConfig(){
 
                             //se forma la ruta completa = directorio + nombre de la carpeta del informe
                             for(i=0;i<realDataArray.length;i++){
-                                realDataArray[i] = directories[k].concat("/".concat(realDataArray[i]));
+                                realDataArray[i] = directories[k].path.concat("/".concat(realDataArray[i]));
                             }
 
                             realDataArray.forEach(function(realData){
@@ -57,10 +57,10 @@ function loadSummaryFromConfig(){
         } else {
             var links = config_json.links;
             var reportsPath = "";
-            reportsPath = links[0];
+            reportsPath = links[0].path;
 
             for(z=1;z<links.length;z++){
-                reportsPath = reportsPath.concat(";").concat(links[z]);
+                reportsPath = reportsPath.concat(";").concat(links[z].path);
             }
             generateSummaryDivs(reportsPath);
         }
