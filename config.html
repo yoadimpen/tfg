@@ -102,69 +102,41 @@
                         <div id="config-title" class="row text-center" style="margin-bottom: 20px;">
                             <h2>Multiview Configuration</h2>
                         </div>
+                        <div id="config-message" class="row text-center" style="margin-bottom: 15px;">
+                        </div>
                         <div id="config-method" class="row">
                             <div class="col-2" style="display: flex;"> 
-                                <h5 style="margin: auto; margin-left: 0px;">Saving preferences</h5>
+                                <h5 style="margin: auto; margin-left: 0px; margin-bottom: 8px;">Saving preferences</h5>
                             </div>
                             <div class="col-2" style="display: flex;">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="" onclick="turnActive('directory-method')">
                                     <label class="form-check-label" for="inlineRadio1" style="display: flex;">
-                                        <i id="method" class="far fa-folder fa-2x" style="vertical-align: middle; color: rgb(165, 165, 165);"></i>
-                                        <h5 style="margin: auto; margin-left: 10px; color: rgb(165, 165, 165);">Directories</h5></label>
+                                        <i id="directory-method-icon" class="far fa-folder fa-2x"></i>
+                                        <h5 id="directory-method-text" style="margin: auto; margin-left: 10px;">Directories</h5></label>
                                 </div>
                             </div>
                             <div class="col-2" style="display: flex;">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="" onclick="turnActive('files-method')">
                                     <label class="form-check-label" for="inlineRadio2" style="display: flex;">
-                                        <i id="method-active" class="far fa-file-alt fa-2x"></i>
-                                        <h5 style="margin: auto; margin-left: 10px;">Specific Files</h5></label>
+                                        <i id="files-method-icon" class="far fa-file-alt fa-2x"></i>
+                                        <h5 id="files-method-text" style="margin: auto; margin-left: 10px;">Specific Files</h5></label>
                                 </div>
                             </div>
-                            <div class="col-6" style="display: flex;">
+                            <div class="col-1" style="display: flex;">
                                 <button type="button" id="btn-new-config" class="btn" onclick="updatePreference()">Update</button>
+                            </div>
+                            <div class="col-5">
+                                <button id="message" type="button" class="btn btn-success" disable>
+                                    New settings have been saved!
+                                </button>
+                                <button id="reset-message" type="button" class="btn btn-dark message-no" disable>
+                                    Configuration has been reset!
+                                </button>
                             </div>
                         </div>
                         <div id="config-data" class="row">
-                            <!--<div class="table-responsive-xxl">
-                                <table id="config-table" class="table">
-                                    <thead>
-                                        <tr>
-                                          <th scope="col">#</th>
-                                          <th scope="col" class="w-75">Path</th>
-                                          <th scope="col">Last modified</th>
-                                          <th scope="col"></th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <th scope="row">1</th>
-                                          <td>Mark</td>
-                                          <td>@mdo</td>
-                                          <td>
-                                            <i class="fas fa-times" onclick="deleteRow(1)"></i>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <th scope="row">2</th>
-                                          <td>Jacob</td>
-                                          <td>@fat</td>
-                                          <td>
-                                            <i class="fas fa-times" onclick="deleteRow(2)"></i>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <th scope="row">3</th>
-                                          <td>Larry the Bird</td>
-                                          <td>@twitter</td>
-                                          <td>
-                                            <i class="fas fa-times" onclick="deleteRow(3)"></i>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                </table>
-                            </div>-->
                         </div>
                         <div id="config-new" class="row">
                             <label class="form-label">Add a new path to your configuration</label>
@@ -182,7 +154,10 @@
                 </div>
             </div>
         </div>
-        <!--<div class="dark">
+        <div class="dark">
+        </div>
+        <!--<div class="loader">
+            <img id="loader" src="images/multiview logo minimalist.png"/>
         </div>-->
     </body>
 </html>

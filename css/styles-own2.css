@@ -25,6 +25,48 @@ body {
 	transition: 2s;
 }
 
+/*------------------------LOADER-----------------------*/
+
+/*
+
+.loader {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 1;
+	animation: loading-div linear 2s;
+	animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes loading-div {
+	100% {
+		z-index: -1;
+		opacity: 0;
+		display: none;
+	}
+}
+
+#loader {
+	height: 100px;
+	width: 100px;
+	display: block;
+	margin: auto;
+	margin-top: 20%;
+	animation: loading linear 2s;
+	animation-fill-mode: forwards;
+	z-index: 1;
+}
+
+@-webkit-keyframes loading {
+	100% {
+		transform: rotate(360deg);
+		opacity: 0;
+		display: none;
+	}
+}
+
+*/
+
 /*--------------------------MENU------------------------*/
 
 #header{
@@ -56,6 +98,14 @@ body {
 #logo {
 	width: 40px;
 	height: 40px;
+}
+
+#logo:hover {
+	animation: spin linear 2s infinite;
+}
+
+@keyframes spin {
+	100% {transform: rotate(360deg);}
 }
 
 #link-nav {
@@ -385,6 +435,7 @@ input:checked + .slider:before {
 /*-------------------------CONFIG-----------------------*/
 
 #config {
+	position: relative;
 	margin-top: 10vh;
 	background-color: rgba(235, 235, 235, 0.3);
 	box-shadow:
@@ -397,11 +448,51 @@ input:checked + .slider:before {
 
 #config-title, #config-user, #config-method {
 	padding-bottom: 15px;
+	z-index: 1;
 }
 
 #config-data {
 	margin-top: 5vh;
 	margin-bottom: 5vh;
+}
+
+.method {
+	vertical-align: middle;
+	color: rgb(165, 165, 165);
+	z-index: 1;
+}
+
+.active-method {
+	vertical-align: middle;
+	color: #000;
+	z-index: 1;
+}
+
+#inlineRadio1:checked, #inlineRadio2:checked {
+	background-color: rgba(116, 44, 145, 0.8);
+	border: rgba(116, 44, 145, 1);
+	box-shadow: none;
+}
+
+.message-no {
+	opacity: 0;
+	visibility: hidden;
+}
+
+.message {
+	animation: fade ease-in-out 7s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes fade {
+	0% {
+		opacity: 1;
+		visibility: visible;
+	}
+	100% {
+		opacity: 0;
+		visibility: hidden;
+	}
 }
 
 /*-------------------------MEDIA------------------------*/

@@ -6,6 +6,34 @@ function test(){
     dark.setAttribute("style", "opacity: 1.0;");
 }
 
+function turnActive(method){
+    var i1 = document.getElementById("directory-method-icon");
+    var text1 = document.getElementById("directory-method-text");
+
+    var i2 = document.getElementById("files-method-icon");
+    var text2 = document.getElementById("files-method-text");
+    
+    if(method == "directory-method"){
+        i1.classList.remove("method");
+        text1.classList.remove("method");
+        i1.classList.add("method-active");
+        text1.classList.add("method-active");
+        i2.classList.remove("method-active");
+        text2.classList.remove("method-active");
+        i2.classList.add("method");
+        text2.classList.add("method");
+    } else {
+        i2.classList.remove("method");
+        text2.classList.remove("method");
+        i2.classList.add("method-active");
+        text2.classList.add("method-active");
+        i1.classList.remove("method-active");
+        text1.classList.remove("method-active");
+        i1.classList.add("method");
+        text1.classList.add("method");
+    }
+}
+
 function deleteRow(n) {
     document.getElementById("config-table").deleteRow(n);
 
@@ -29,6 +57,15 @@ function deleteRow(n) {
     dataDiv.innerHTML = "";
 
     loadConfig();
+
+    var message = document.getElementById("message");
+    message.classList.remove("message-no");
+    message.classList.add("message");
+
+    setTimeout(function(){
+        message.classList.remove("message");
+        message.classList.add("message-no");
+    }, 5500);
 }
 
 function updatePreference(){
@@ -47,6 +84,20 @@ function updatePreference(){
         }
         localStorage.setItem("config", JSON.stringify(configJSON));
     }
+
+    var dataDiv = document.getElementById("config-data");
+    dataDiv.innerHTML = "";
+
+    loadConfig();
+
+    var message = document.getElementById("message");
+    message.classList.remove("message-no");
+    message.classList.add("message");
+
+    setTimeout(function(){
+        message.classList.remove("message");
+        message.classList.add("message-no");
+    }, 5500);
 }
 
 function resetConfig() {
@@ -63,9 +114,32 @@ function resetConfig() {
     dataDiv.innerHTML = "";
 
     loadConfig();
+
+    var resetMessage = document.getElementById("reset-message");
+    resetMessage.classList.remove("message-no");
+    resetMessage.classList.add("message");
+
+    setTimeout(function(){
+        resetMessage.classList.remove("message");
+        resetMessage.classList.add("message-no");
+    }, 5500);
 }
 
 function loadConfig() {
+
+    var i1 = document.getElementById("directory-method-icon");
+    var text1 = document.getElementById("directory-method-text");
+    var input1 = document.getElementById("inlineRadio1");
+
+    var i2 = document.getElementById("files-method-icon");
+    var text2 = document.getElementById("files-method-text");
+    var input2 = document.getElementById("inlineRadio2");
+
+    var message = document.getElementById("message");
+
+    message.classList.remove("message");
+    message.classList.remove("message-no");
+
     var tableDiv = document.createElement("div");
     tableDiv.setAttribute("class", "table-responsive-xxl");
 
@@ -138,6 +212,23 @@ function loadConfig() {
 
             tbody.appendChild(row);
         })
+
+        if(configJSON.type == "directory"){
+            i1.classList.add("method-active");
+            text1.classList.add("method-active");
+            input1.checked = true;
+            i2.classList.add("method");
+            text2.classList.add("method");
+            input2.checked = false;
+        } else {
+            i2.classList.add("method-active");
+            text2.classList.add("method-active");
+            input2.checked = true;
+            i1.classList.add("method");
+            text1.classList.add("method");
+            input1.checked = false;
+        }
+        message.classList.add("message-no");
     } else {
         //cosas
     }
@@ -170,6 +261,15 @@ function addNewPath(){
     dataDiv.innerHTML = "";
 
     loadConfig();
+
+    var message = document.getElementById("message");
+    message.classList.remove("message-no");
+    message.classList.add("message");
+
+    setTimeout(function(){
+        message.classList.remove("message");
+        message.classList.add("message-no");
+    }, 5500);
 }
 
 function showCurrentConfig(){
