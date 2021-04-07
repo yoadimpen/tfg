@@ -378,6 +378,10 @@ input:checked + .slider:before {
 
 /*------------------------SUMMARY-----------------------*/
 
+#summary-data-div {
+	margin-bottom: 5vh;
+}
+
 #summary-info {
 	margin-top: 10vh;
 	background-color: rgba(235, 235, 235, 0.3);
@@ -414,11 +418,30 @@ input:checked + .slider:before {
     transition: opacity 1s ease-out;
     min-width: 150px;
 }
+.tooltip-text-method {
+    position: absolute;
+    display: none;
+    background-color: rgba(235, 235, 235, 0.3);
+	box-shadow:
+	0px 10px 20px rgba(0, 0, 0, 0.10),
+	0px -2px 20px rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 3px; 
+    transition: opacity 1s ease-out;
+	min-width: 150px;
+	margin-left: 110px;
+}
 .far {
     font-size: 12px;
     transition: .5s ease-in-out;
 }
 .far.fa-question-circle:hover + .tooltip-text {
+    display: block;
+    color: black;
+    animation: fadeIn 1s;
+}
+.far.fa-question-circle:hover + .tooltip-text-method {
     display: block;
     color: black;
     animation: fadeIn 1s;
@@ -437,6 +460,7 @@ input:checked + .slider:before {
 #config {
 	position: relative;
 	margin-top: 10vh;
+	margin-bottom: 5vh;
 	background-color: rgba(235, 235, 235, 0.3);
 	box-shadow:
 	0px 10px 20px rgba(0, 0, 0, 0.10),
@@ -447,6 +471,7 @@ input:checked + .slider:before {
 }
 
 #config-title, #config-user, #config-method {
+	position: relative;
 	padding-bottom: 15px;
 	z-index: 1;
 }
@@ -495,6 +520,34 @@ input:checked + .slider:before {
 	}
 }
 
+#no-data-message {
+	position: relative;
+	background-color: rgba(116, 44, 145, 0.6);
+	color: #ffffff;
+	z-index: 1;
+}
+
+#message, #neg-message, #reset-message, #no-data-message {
+	cursor: context-menu;
+}
+
+#delete-icon, #inlineRadio1, #inlineRadio2 {
+	cursor: pointer;
+}
+
+#method-info-icon{
+	position: relative;
+	vertical-align: middle;
+	z-index: 1;
+	color: #000;
+	margin-top: 13px;
+	margin-left: 8px;
+}
+
+#method-update {
+	display: flex;
+}
+
 /*-------------------------MEDIA------------------------*/
 
 /* Extra small devices (phones, 600px and down) */
@@ -517,6 +570,43 @@ input:checked + .slider:before {
 	}
 	#search-div, #order-div, #page-div{
 		width: 80%;
+	}
+
+	#sum-col {
+		width: 100%;
+	}
+	#total-reports {
+		margin-top: 15px;
+	}
+
+	#config-method {
+		display: inline;
+	}
+	#method-title {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	#method-option {
+		width: 50%;
+		margin-bottom: 10px;
+	}
+	#method-update {
+		width: 10%;
+		display: inline;
+	}
+	#config-messages-div {
+		margin-top: 15px;
+		width: 100%;
+	}
+	#method-info-icon {
+		margin-top: 5px;
+	}
+	.tooltip-text-method {
+		margin-top: 20px;
+		margin-left: 0px;
+	}
+	#config-data {
+		margin-top: 0px;
 	}
 }
 
@@ -548,6 +638,43 @@ input:checked + .slider:before {
 	#page-div{
 		width: 40%;
 	}
+
+	#sum-col {
+		width: 100%;
+	}
+	#total-reports {
+		margin-top: 15px;
+	}
+
+	#config-method {
+		display: flex;
+	}
+	#method-title {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	#method-option {
+		width: 50%;
+		margin-bottom: 10px;
+	}
+	#method-update {
+		width: 100%;
+		display: inline;
+	}
+	#config-messages-div {
+		margin-top: 15px;
+		width: 100%;
+	}
+	#method-info-icon {
+		margin-top: 5px;
+	}
+	.tooltip-text-method {
+		margin-top: 20px;
+		margin-left: 0px;
+	}
+	#config-data {
+		margin-top: 0px;
+	}
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
@@ -555,14 +682,107 @@ input:checked + .slider:before {
 	#search-div, #order-div, #page-div{
 		width: 30%;
 	}
+
+	#sum-col {
+		width: 40%;
+	}
+	#total-reports {
+		margin-top: 15px;
+	}
+
+	#config-method {
+		display: flex;
+	}
+	#method-title {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	#method-option {
+		width: 40%;
+		margin-bottom: 10px;
+	}
+	#method-update {
+		width: 20%;
+		display: inline;
+	}
+	#config-messages-div {
+		margin-top: 15px;
+		width: 100%;
+	}
+	#method-info-icon {
+		margin-top: 5px;
+	}
+	.tooltip-text-method {
+		margin-top: 20px;
+		margin-left: 0px;
+	}
+	#config-data {
+		margin-top: 0px;
+	}
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) and (max-width: 1200px){
-	
+	#config-method {
+		display: flex;
+	}
+	#method-title {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	#method-option {
+		width: 25%;
+		margin-bottom: 10px;
+	}
+	#method-update {
+		width: 50%;
+		display: inline;
+	}
+	#config-messages-div {
+		margin-top: 15px;
+		width: 100%;
+	}
+	#method-info-icon {
+		margin-top: 5px;
+	}
+	.tooltip-text-method {
+		margin-top: 20px;
+		margin-left: 0px;
+	}
+	#config-data {
+		margin-top: 0px;
+	}
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-
+	#config-method {
+		display: flex;
+	}
+	#method-title {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+	#method-option {
+		width: 25%;
+		margin-bottom: 10px;
+	}
+	#method-update {
+		width: 50%;
+		display: inline;
+	}
+	#config-messages-div {
+		margin-top: 15px;
+		width: 100%;
+	}
+	#method-info-icon {
+		margin-top: 5px;
+	}
+	.tooltip-text-method {
+		margin-top: 20px;
+		margin-left: 0px;
+	}
+	#config-data {
+		margin-top: 0px;
+	}
 }

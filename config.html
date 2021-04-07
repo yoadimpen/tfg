@@ -72,14 +72,14 @@
                 <div id="menu-little" class="container-fluid justify-content-center">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a id="menu-item-active" class="nav-link" href="#">General</a>
+                            <a id="menu-item" class="nav-link" href="index.html">Individual</a>
                         </li>
                         <li class="nav-item">
-                            <a id="menu-item" class="nav-link" href="index.html">Individual</a>
+                            <a id="menu-item" class="nav-link" href="general.html">General</a>
                         </li>
                         <li class="nav-item" style="display: flex;">
                             <div id="menu-item" class="col-6">
-                                <a id="menu-item" href="config.html">
+                                <a id="menu-item-active" href="config.html">
                                     <i class="far fa-user-circle fa-lg"></i>
                                 </a>
                             </div>
@@ -105,10 +105,10 @@
                         <div id="config-message" class="row text-center" style="margin-bottom: 15px;">
                         </div>
                         <div id="config-method" class="row">
-                            <div class="col-2" style="display: flex;"> 
+                            <div id="method-title" class="col-2" style="display: flex;"> 
                                 <h5 style="margin: auto; margin-left: 0px; margin-bottom: 8px;">Saving preferences</h5>
                             </div>
-                            <div class="col-2" style="display: flex;">
+                            <div id="method-option" class="col-2" style="display: flex;">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="" onclick="turnActive('directory-method')">
                                     <label class="form-check-label" for="inlineRadio1" style="display: flex;">
@@ -116,7 +116,7 @@
                                         <h5 id="directory-method-text" style="margin: auto; margin-left: 10px;">Directories</h5></label>
                                 </div>
                             </div>
-                            <div class="col-2" style="display: flex;">
+                            <div id="method-option" class="col-2" style="display: flex;">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="" onclick="turnActive('files-method')">
                                     <label class="form-check-label" for="inlineRadio2" style="display: flex;">
@@ -124,15 +124,19 @@
                                         <h5 id="files-method-text" style="margin: auto; margin-left: 10px;">Specific Files</h5></label>
                                 </div>
                             </div>
-                            <div class="col-1" style="display: flex;">
+                            <div id="method-update" class="col-1">
                                 <button type="button" id="btn-new-config" class="btn" onclick="updatePreference()">Update</button>
+                                <i id="method-info-icon" class='far fa-question-circle fa-sm' aria-hidden='true';></i>
+                                <span class="tooltip-text-method">
+                                    This option will update <b>only the saving method.</b>
+                                </span>
                             </div>
-                            <div class="col-5">
+                            <div id="config-messages-div" class="col">
                                 <button id="message" type="button" class="btn btn-success" disable>
                                     New settings have been saved!
                                 </button>
-                                <button id="reset-message" type="button" class="btn btn-dark message-no" disable>
-                                    Configuration has been reset!
+                                <button id="neg-message" type="button" class="btn btn-danger message-no" disable>
+                                    A problem occurred, try again!
                                 </button>
                             </div>
                         </div>
@@ -146,8 +150,15 @@
                                 <button type="button" id="btn-new-config" class="btn" onclick="addNewPath()">Add</button>
                             </div>
                             <label class="form-label">Reset configuration</label>
-                            <div class="input-group">
-                                <button type="button" id="btn-new-config" class="btn" onclick="resetConfig()">Reset</button>
+                            <div class="row" style="display: flex;">
+                                <div class="col-1">
+                                    <button type="button" id="btn-new-config" class="btn" onclick="resetConfig()">Reset</button>
+                                </div>
+                                <div class="col-3">
+                                    <button id="reset-message" type="button" class="btn btn-dark message-no" disable>
+                                        Configuration has been reset!
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

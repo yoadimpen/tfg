@@ -9,60 +9,64 @@ function loadSummaryFromConfig(){
         //se obtiene el objeto JSON de la configuracion
         var config_json = JSON.parse(config);
 
-        //si se han guardado directorios se hace lo siguiente
-        if(config_json.type == "directory"){
-            //se cogen todos los enlaces a los directorios guardados
-            var directories = config_json.links;
-            var request = [];
-
-            //para cada uno de los directorios se hace lo siguiente
-            for(k=0;k<directories.length;k++){
-                (function(k){
-                    //se hace una peticion HTTP para hallar la ruta completa de los informes
-                    var allLinks = [];
-                    var data = "";
-
-                    request[k] = new XMLHttpRequest();
-                    request[k].withCredentials = true;
-                    request[k].open('GET', directories[k].path);
-                    request[k].overrideMimeType("application/json");
-                    request[k].send();
-                    request[k].onreadystatechange = function() {
-
-                        if(this.readyState === 4) {
-                            data = request[k].responseText;
-
-                            //se obtiene el nombre de las carpetas en las cuales hay un informe de Allure
-                            var realDataArray = getPathsFromHTTPRequest(data);
-
-                            //se forma la ruta completa = directorio + nombre de la carpeta del informe
-                            for(i=0;i<realDataArray.length;i++){
-                                realDataArray[i] = directories[k].path.concat("/".concat(realDataArray[i]));
-                            }
-
-                            realDataArray.forEach(function(realData){
-                                allLinks.push(realData);
-                            })
-
-                            //se actualiza la variable con las rutas nuevas
-                            actualizaTemp(allLinks, k);
-                        }
-                    };
-                })(k);
-            }
-
-            var reportsPath = localStorage.getItem("links_temp");
-            generateSummaryDivs(reportsPath);
-        // en caso de que se hayan guardado rutas directas a los informes
+        if (config_json.links.length == 0) {
+            showNoConfigMessageOnGeneral();
         } else {
-            var links = config_json.links;
-            var reportsPath = "";
-            reportsPath = links[0].path;
+            //si se han guardado directorios se hace lo siguiente
+            if(config_json.type == "directory"){
+                //se cogen todos los enlaces a los directorios guardados
+                var directories = config_json.links;
+                var request = [];
 
-            for(z=1;z<links.length;z++){
-                reportsPath = reportsPath.concat(";").concat(links[z].path);
+                //para cada uno de los directorios se hace lo siguiente
+                for(k=0;k<directories.length;k++){
+                    (function(k){
+                        //se hace una peticion HTTP para hallar la ruta completa de los informes
+                        var allLinks = [];
+                        var data = "";
+
+                        request[k] = new XMLHttpRequest();
+                        request[k].withCredentials = true;
+                        request[k].open('GET', directories[k].path);
+                        request[k].overrideMimeType("application/json");
+                        request[k].send();
+                        request[k].onreadystatechange = function() {
+
+                            if(this.readyState === 4) {
+                                data = request[k].responseText;
+
+                                //se obtiene el nombre de las carpetas en las cuales hay un informe de Allure
+                                var realDataArray = getPathsFromHTTPRequest(data);
+
+                                //se forma la ruta completa = directorio + nombre de la carpeta del informe
+                                for(i=0;i<realDataArray.length;i++){
+                                    realDataArray[i] = directories[k].path.concat("/".concat(realDataArray[i]));
+                                }
+
+                                realDataArray.forEach(function(realData){
+                                    allLinks.push(realData);
+                                })
+
+                                //se actualiza la variable con las rutas nuevas
+                                actualizaTemp(allLinks, k);
+                            }
+                        };
+                    })(k);
+                }
+
+                var reportsPath = localStorage.getItem("links_temp");
+                generateSummaryDivs(reportsPath);
+            // en caso de que se hayan guardado rutas directas a los informes
+            } else {
+                var links = config_json.links;
+                var reportsPath = "";
+                reportsPath = links[0].path;
+
+                for(z=1;z<links.length;z++){
+                    reportsPath = reportsPath.concat(";").concat(links[z].path);
+                }
+                generateSummaryDivs(reportsPath);
             }
-            generateSummaryDivs(reportsPath);
         }
     //en caso de que no haya ninguna configuración añadida
     } else {
@@ -393,6 +397,7 @@ function makeSeverityDiv(array){
 
 function showNoConfigMessageOnGeneral(){
 
+    /*
     div = document.getElementById("summary-info");
 
     rowDiv = document.createElement("div");
@@ -410,7 +415,13 @@ function showNoConfigMessageOnGeneral(){
     btnDiv.appendChild(btn);
     rowDiv.appendChild(btnDiv);
     div.appendChild(rowDiv);
+    */
+   var message = document.getElementById("no-data-message");
+   message.style.display = "inline";
+   message.style.marginTop = "20px";
 
+   var dataDiv = document.getElementById("summary-data-div");
+   dataDiv.style.display = "none";
 }
 
 function getCategoryResults(json, valuesArray, nameArray){
@@ -548,21 +559,12 @@ function makeCategoryDiv(array){
     divdesc.setAttribute("id", "description");
     divdesc.appendChild(description);
 
-    var legend = document.createElement("div");
-    legend.setAttribute("style", "font-size:12px; color:#6c757d; margin:10px;");
-    legend.innerHTML = "<i class='fas fa-square-full' style='color:#800026'></i> Product defects  </br>" + 
-                    "<i class='fas fa-square-full' style='color:#d31121'></i> Test defects  </br>" + 
-                    "<i class='fas fa-square-full' style='color:#fa5c2e'></i> Outdated tests  </br>" + 
-                    "<i class='fas fa-square-full' style='color:#feab4b'></i> Infrastructure problems  </br>" + 
-                    "<i class='fas fa-square-full' style='color:#fee087'></i> Ignored tests  ";
-
     var div = document.createElement("div");
     div.setAttribute("id", "sum-col");
     div.setAttribute("class", "col");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
-    //div.appendChild(legend);
 
     resultsDiv.appendChild(div);
 }

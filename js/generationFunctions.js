@@ -6,45 +6,50 @@ function loadDataFromConfig(){
 
     if(config != "null"){
         var config_json = JSON.parse(config);
-        if(config_json.type == "directory"){
-            var directories = config_json.links;
-            directories.forEach(function(directory){
-                var request = new XMLHttpRequest();
-                var data = "";
 
-                request.withCredentials = true;
-                
-                request.open('GET', directory.path);
-
-                request.overrideMimeType("application/json");
-            
-                request.send();
-
-                request.onreadystatechange = function() {
-                    if(this.readyState === 4) {
-                        data = request.responseText;
-                        
-                        var realDataArray = getPathsFromHTTPRequest(data);
-
-                        for(i=0;i<realDataArray.length;i++){
-                            realDataArray[i] = directory.path.concat("/".concat(realDataArray[i]));
-                        }
-
-                        realDataArray.forEach(function(realData){
-                            var fullPath = realData.concat("/widgets/summaryCopy.json");
-                            readJSON(fullPath, realData);
-                        })
-                    }
-                };
-            })
+        if (config_json.links.length == 0) {
+            showNoConfigMessageOnIndividual();
         } else {
-            var links = config_json.links;
+            if(config_json.type == "directory"){
+                var directories = config_json.links;
+                directories.forEach(function(directory){
+                    var request = new XMLHttpRequest();
+                    var data = "";
 
-            links.forEach(function(link){
-                link = link.path.trim();
-                var fullPath = link.concat("/widgets/summaryCopy.json");
-                readJSON(fullPath, link);
-            })
+                    request.withCredentials = true;
+                    
+                    request.open('GET', directory.path);
+
+                    request.overrideMimeType("application/json");
+                
+                    request.send();
+
+                    request.onreadystatechange = function() {
+                        if(this.readyState === 4) {
+                            data = request.responseText;
+                            
+                            var realDataArray = getPathsFromHTTPRequest(data);
+
+                            for(i=0;i<realDataArray.length;i++){
+                                realDataArray[i] = directory.path.concat("/".concat(realDataArray[i]));
+                            }
+
+                            realDataArray.forEach(function(realData){
+                                var fullPath = realData.concat("/widgets/summaryCopy.json");
+                                readJSON(fullPath, realData);
+                            })
+                        }
+                    };
+                })
+            } else {
+                var links = config_json.links;
+
+                links.forEach(function(link){
+                    link = link.path.trim();
+                    var fullPath = link.concat("/widgets/summaryCopy.json");
+                    readJSON(fullPath, link);
+                })
+            }
         }
     } else {
         showNoConfigMessageOnIndividual();
@@ -291,6 +296,7 @@ function deleteWidgets(){
 }
 
 function showNoConfigMessageOnIndividual(){
+    /*
     div = document.getElementById("filters");
 
     rowDiv = document.createElement("div");
@@ -308,4 +314,8 @@ function showNoConfigMessageOnIndividual(){
     btnDiv.appendChild(btn);
     rowDiv.appendChild(btnDiv);
     div.appendChild(rowDiv);
+    */
+
+    var message = document.getElementById("no-data-message");
+    message.style.display = "inline";
 }

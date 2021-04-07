@@ -185,9 +185,6 @@ function loadConfig() {
 
         links.forEach(function(link){
             var row = document.createElement("tr");
-            var id = "-";
-            var path = link;
-            var last_modified = "-";
 
             var td1 = document.createElement("td");
             td1.setAttribute("scope", "row");
@@ -202,6 +199,7 @@ function loadConfig() {
             var td4 = document.createElement("td");
             var i = document.createElement("i");
             i.setAttribute("class", "fas fa-times");
+            i.setAttribute("id", "delete-icon");
             i.setAttribute("onclick", "deleteRow(" + link.id + ")");
             td4.appendChild(i);
 
@@ -245,31 +243,66 @@ function loadConfig() {
 
 function addNewPath(){
     var path = document.getElementById("config-path-input").value;
-    var today = new Date();
-    var time = today.getDate() + "/" + (today.getMonth()+1) + "/" + today.getFullYear() + " " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    
-    var config = localStorage.getItem("config");
 
-    if(config != null){
-        var configJSON = JSON.parse(config);
-        configJSON.links.push({"id":configJSON.links.length + 1, "path":path, "last_modified":time});
-        console.log(configJSON);
-        localStorage.setItem("config", JSON.stringify(configJSON));
+    if(path.trim() != ""){
+        var today = new Date();
+
+        var date = today.getDate();
+        var month = today.getMonth()+1;
+        var hours = today.getHours();
+        var minutes = today.getMinutes();
+        var seconds = today.getSeconds();
+
+        if (date < 10) {
+            date = "0"+date;
+        }
+        if (month < 10) {
+            month = "0"+month;
+        }
+        if (hours < 10) {
+            hours = "0"+hours;
+        }
+        if (minutes < 10) {
+            minutes = "0"+minutes;
+        }
+        if (seconds < 10) {
+            seconds = "0"+seconds;
+        }
+
+        var time = date + "/" + month + "/" + today.getFullYear() + " " + hours + ":" + minutes + ":" + seconds;
+        
+        var config = localStorage.getItem("config");
+
+        if(config != null){
+            var configJSON = JSON.parse(config);
+            configJSON.links.push({"id":configJSON.links.length + 1, "path":path, "last_modified":time});
+            console.log(configJSON);
+            localStorage.setItem("config", JSON.stringify(configJSON));
+        }
+
+        var dataDiv = document.getElementById("config-data");
+        dataDiv.innerHTML = "";
+
+        loadConfig();
+
+        var message = document.getElementById("message");
+        message.classList.remove("message-no");
+        message.classList.add("message");
+
+        setTimeout(function(){
+            message.classList.remove("message");
+            message.classList.add("message-no");
+        }, 5500);
+    } else {
+        var negMessage = document.getElementById("neg-message");
+        negMessage.classList.remove("message-no");
+        negMessage.classList.add("message");
+
+        setTimeout(function(){
+            negMessage.classList.remove("message");
+            negMessage.classList.add("message-no");
+        }, 5500);
     }
-
-    var dataDiv = document.getElementById("config-data");
-    dataDiv.innerHTML = "";
-
-    loadConfig();
-
-    var message = document.getElementById("message");
-    message.classList.remove("message-no");
-    message.classList.add("message");
-
-    setTimeout(function(){
-        message.classList.remove("message");
-        message.classList.add("message-no");
-    }, 5500);
 }
 
 function showCurrentConfig(){
