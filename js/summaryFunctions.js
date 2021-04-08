@@ -395,35 +395,6 @@ function makeSeverityDiv(array){
     resultsDiv.appendChild(div);
 }
 
-function showNoConfigMessageOnGeneral(){
-
-    /*
-    div = document.getElementById("summary-info");
-
-    rowDiv = document.createElement("div");
-    rowDiv.setAttribute("class", "row justify-content-center");
-
-    btnDiv = document.createElement("div");
-    btnDiv.setAttribute("class", "col-5");
-
-    btn = document.createElement("button");
-    btn.setAttribute("type", "button");
-    btn.setAttribute("class", "btn btn-warning btn-lg disabled");
-    btn.setAttribute("disabled", "true");
-    btn.appendChild(document.createTextNode("There are no current configuration settings saved. Maybe head to the admin options :)"));
-
-    btnDiv.appendChild(btn);
-    rowDiv.appendChild(btnDiv);
-    div.appendChild(rowDiv);
-    */
-   var message = document.getElementById("no-data-message");
-   message.style.display = "inline";
-   message.style.marginTop = "20px";
-
-   var dataDiv = document.getElementById("summary-data-div");
-   dataDiv.style.display = "none";
-}
-
 function getCategoryResults(json, valuesArray, nameArray){
     var items = json.items;
     var totalItems = json.total;
@@ -578,3 +549,12 @@ function showTotalReports(n){
 
     div.appendChild(h4);
 }
+
+function showNoConfigMessageOnGeneral(){
+    var message = document.getElementById("no-data-message");
+    message.style.display = "inline";
+    message.style.marginTop = "20px";
+ 
+    var dataDiv = document.getElementById("summary-data-div");
+    dataDiv.style.display = "none";
+ }

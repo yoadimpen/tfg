@@ -116,10 +116,8 @@ function makePages(){
     for (i = 0; i < divs.length; i=i+n) {
         if(i+n < divs.length){
             arrayOfPages[j] = divs.slice(i, i+n);
-            //console.log(arrayOfPages[j]);
         } else {
             arrayOfPages[j] = divs.slice(i, divs.length);
-            //console.log(arrayOfPages[j]);
         }
         j = j + 1;
     }
@@ -128,16 +126,7 @@ function makePages(){
 }
 
 function addPagesAccessToHtml(nP){
-    //var paginationDiv = document.getElementById("paginationDiv");
     var pagesAccess = document.getElementById("pages-access");
-
-    /*if(document.getElementById("pages") == null){
-        pagesAccess = document.createElement("div");
-        pagesAccess.setAttribute("id", "pages");
-    } else {
-        pagesAccess = document.getElementById("pages")
-        document.getElementById("pages").innerHTML = "";
-    }*/
 
     pagesAccess.innerHTML = "";
 
@@ -152,8 +141,6 @@ function addPagesAccessToHtml(nP){
 
         pagesAccess.appendChild(buttonAccessToPage);
     }
-
-    //paginationDiv.appendChild(pagesAccess);
 
 }
 

@@ -10,7 +10,6 @@ body {
 	z-index: 0;
 	min-height:100%;
 	width:100%;
-	/*background: linear-gradient(to bottom, #404040 40%,#312036);*/
 	background: linear-gradient(to bottom, #727272 50%, #2c2c2c);
 	opacity: 0;
 	transition: opacity 2s;
@@ -20,7 +19,6 @@ body {
 	position:absolute;
 	min-height:100%;
 	width:100%;
-	/*background: linear-gradient(to bottom, #ffffff, #e0fff8);*/
 	background: linear-gradient(to bottom, #ffffff, #d3d3d3);
 	transition: 2s;
 }

@@ -144,11 +144,15 @@ function generateWidget(jobject, folderPath){
 
     var day = getDayName(launchDate.getUTCDay());
     var date = launchDate.getUTCDate();
+    date = ("0" + date).slice(-2);
     var month = getMonthName(launchDate.getUTCMonth());
     var year = launchDate.getUTCFullYear();
     var hours = launchDate.getUTCHours();
+    hours = ("0" + hours).slice(-2);
     var minutes = launchDate.getUTCMinutes();
+    minutes = ("0" + minutes).slice(-2);
     var seconds = launchDate.getUTCSeconds();
+    seconds = ("0" + seconds).slice(-2);
 
     var date = String(day).concat(" ").concat(String(date)).concat(" ").concat(String(month)).concat(" ").concat(String(year)).concat("\n\r").concat(String(hours)).concat(":").concat(String(minutes)).concat(":").concat(String(seconds)).concat(" UTC");
 
@@ -296,26 +300,6 @@ function deleteWidgets(){
 }
 
 function showNoConfigMessageOnIndividual(){
-    /*
-    div = document.getElementById("filters");
-
-    rowDiv = document.createElement("div");
-    rowDiv.setAttribute("class", "row justify-content-center");
-
-    btnDiv = document.createElement("div");
-    btnDiv.setAttribute("class", "col-5");
-
-    btn = document.createElement("button");
-    btn.setAttribute("type", "button");
-    btn.setAttribute("class", "btn btn-warning btn-lg disabled");
-    btn.setAttribute("disabled", "true");
-    btn.appendChild(document.createTextNode("There are no current configuration settings saved. Maybe head to the admin options :)"));
-
-    btnDiv.appendChild(btn);
-    rowDiv.appendChild(btnDiv);
-    div.appendChild(rowDiv);
-    */
-
     var message = document.getElementById("no-data-message");
     message.style.display = "inline";
 }
