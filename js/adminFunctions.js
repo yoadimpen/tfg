@@ -1,11 +1,3 @@
-function test(){
-    var page = document.getElementsByClassName("page")[0];
-    //page.setAttribute("style", "background: black;");
-
-    var dark = document.getElementsByClassName("dark")[0];
-    dark.setAttribute("style", "opacity: 1.0;");
-}
-
 function loadConfig() {
 
     var i1 = document.getElementById("directory-method-icon");
@@ -142,6 +134,136 @@ function loadConfig() {
     var div = document.getElementById("config-data");
     div.appendChild(tableDiv);
 
+    var mode = localStorage.getItem("multiview-mode");
+
+    if(mode != null) {
+        if(mode === 'dark'){
+            fillDark();
+        } else if (mode === 'light') {
+            fillLight();
+        }
+    }
+
+    if (mode == null){
+        localStorage.setItem("multiview-mode", "light");
+        fillLight();
+    }
+
+}
+
+function changeMode(){
+    var mode = localStorage.getItem("multiview-mode");
+    if(mode === 'light'){
+        localStorage.setItem("multiview-mode", "dark");
+        mode = localStorage.getItem("multiview-mode");
+        fillDark();
+    } else if(mode === 'dark') {
+        localStorage.setItem("multiview-mode", "light");
+        mode = localStorage.getItem("multiview-mode");
+        fillLight();
+    }
+}
+
+function fillLight(){
+    var dark = document.getElementsByClassName("dark")[0];
+    dark.setAttribute("style", "opacity: 0;");
+
+    var slider = document.getElementById("slider-mode");
+    slider.checked = false;
+
+    var sliderLittle = document.getElementById("slider-little-mode");
+    sliderLittle.checked = false;
+
+    var navElements = document.getElementsByClassName("nav-mode");
+    Array.prototype.slice.call(navElements).forEach(function(el){
+        if(el.id.includes("active")){
+            el.classList.remove("nav-dark-active");
+            el.classList.add("nav-light-active");
+        } else {
+            el.classList.remove("nav-dark");
+            el.classList.add("nav-light");
+        }
+    })
+
+    /*
+    var inputElements = document.getElementsByClassName("input-mode");
+    Array.prototype.slice.call(inputElements).forEach(function(el){
+        /*el.classList.remove("input-dark");
+        el.classList.add("input-light");
+
+        //el.setAttribute("style", "color: rgba(116, 44, 145, 1.0);");
+    })
+    */
+
+    var btnElements = document.getElementsByClassName("btn-mode");
+    Array.prototype.slice.call(btnElements).forEach(function(el){
+        /*el.classList.remove("input-dark");
+        el.classList.add("input-light");*/
+        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
+        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+    })
+
+    var sliderElements = document.getElementsByClassName("slider");
+    Array.prototype.slice.call(sliderElements).forEach(function(el){
+        el.classList.remove("slider-dark");
+        el.classList.add("slider-light");
+    })
+
+    var radioElements = document.getElementsByClassName("radio-mode");
+    Array.prototype.slice.call(radioElements).forEach(function(el){
+        el.classList.remove("radio-dark");
+        el.classList.add("radio-light");
+    })
+}
+
+function fillDark(){
+    var dark = document.getElementsByClassName("dark")[0];
+    dark.setAttribute("style", "opacity: 1;");
+
+    var slider = document.getElementById("slider-mode");
+    slider.checked = true;
+
+    var sliderLittle = document.getElementById("slider-little-mode");
+    sliderLittle.checked = true;
+
+    var navElements = document.getElementsByClassName("nav-mode");
+    Array.prototype.slice.call(navElements).forEach(function(el){
+        if(el.id.includes("active")){
+            el.classList.remove("nav-light-active");
+            el.classList.add("nav-dark-active");
+        } else {
+            el.classList.remove("nav-light");
+            el.classList.add("nav-dark");
+        }
+    })
+
+    /*
+    var inputElements = document.getElementsByClassName("input-mode");
+    Array.prototype.slice.call(inputElements).forEach(function(el){
+        el.classList.remove("input-light");
+        el.classList.add("input-dark");
+    })
+    */
+
+    var btnElements = document.getElementsByClassName("btn-mode");
+    Array.prototype.slice.call(btnElements).forEach(function(el){
+        /*el.classList.remove("input-light");
+        el.classList.add("input-dark");*/
+        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
+        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+    })
+
+    var sliderElements = document.getElementsByClassName("slider");
+    Array.prototype.slice.call(sliderElements).forEach(function(el){
+        el.classList.remove("slider-light");
+        el.classList.add("slider-dark");
+    })
+
+    var radioElements = document.getElementsByClassName("radio-mode");
+    Array.prototype.slice.call(radioElements).forEach(function(el){
+        el.classList.remove("radio-light");
+        el.classList.add("radio-dark");
+    })
 }
 
 function turnActive(method){

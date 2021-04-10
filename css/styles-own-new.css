@@ -465,22 +465,31 @@ input:checked + .slider:before {
 
 #summary-data-div {
 	margin-bottom: 5vh;
+	position: relative;
+	z-index: 1;
 }
 
 #summary-info {
 	margin-top: 10vh;
+	/*
 	background-color: rgba(235, 235, 235, 0.3);
 	box-shadow:
 	0px 10px 20px rgba(0, 0, 0, 0.10),
 	0px -2px 20px rgba(0, 0, 0, 0.15);
 	border-radius: 5px;
+	*/
 	padding-bottom: 8px;
 }
 
 #sum-col {
+	background-color: rgba(235, 235, 235, 0.3);
+	box-shadow:
+	0px 10px 20px rgba(0, 0, 0, 0.10),
+	0px -2px 20px rgba(0, 0, 0, 0.15);
+	border-radius: 5px;
 	position: relative;
 	border: 0px;
-	margin: 5px;
+	margin: 10px;
 	width: 30%;
 	z-index: 1;
 }
@@ -493,7 +502,7 @@ input:checked + .slider:before {
 .tooltip-text {
     position: absolute;
     display: none;
-    background-color: rgba(235, 235, 235, 0.3);
+    background-color: rgba(235, 235, 235, 0.6);
 	box-shadow:
 	0px 10px 20px rgba(0, 0, 0, 0.10),
 	0px -2px 20px rgba(0, 0, 0, 0.15);
@@ -518,7 +527,6 @@ input:checked + .slider:before {
 	margin-left: 110px;
 }
 .far {
-    font-size: 12px;
     transition: .5s ease-in-out;
 }
 .far.fa-question-circle:hover + .tooltip-text {
@@ -572,15 +580,30 @@ input:checked + .slider:before {
 	z-index: 1;
 }
 
-.active-method {
+.method-active {
 	vertical-align: middle;
 	color: #000;
 	z-index: 1;
 }
 
-#inlineRadio1:checked, #inlineRadio2:checked {
+.form-check-input .radio-mode .radio-light:checked {
+	background-color: rgba(116, 44, 145, 0.0);
+}
+
+.form-check-input .radio-mode .radio-dark:checked {
+	background-color: rgba(116, 44, 145, 0.0);
+}
+
+/*#inlineRadio1:checked, #inlineRadio2:checked {*/
+.radio-light:checked {
 	background-color: rgba(116, 44, 145, 0.8);
 	border: rgba(116, 44, 145, 1);
+	box-shadow: none;
+}
+
+.radio-dark:checked {
+	background-color: rgba(97, 253, 217, 0.8);
+	border: rgba(97, 253, 217, 1);
 	box-shadow: none;
 }
 

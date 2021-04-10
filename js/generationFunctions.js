@@ -105,13 +105,15 @@ function fillLight(){
         }
     })
 
+    /*
     var inputElements = document.getElementsByClassName("input-mode");
     Array.prototype.slice.call(inputElements).forEach(function(el){
         /*el.classList.remove("input-dark");
-        el.classList.add("input-light");*/
+        el.classList.add("input-light");
 
         //el.setAttribute("style", "color: rgba(116, 44, 145, 1.0);");
     })
+    */
 
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
@@ -161,11 +163,13 @@ function fillDark(){
         }
     })
 
+    /*
     var inputElements = document.getElementsByClassName("input-mode");
     Array.prototype.slice.call(inputElements).forEach(function(el){
         el.classList.remove("input-light");
         el.classList.add("input-dark");
     })
+    */
 
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
@@ -415,6 +419,19 @@ function generateWidget(jobject, folderPath){
 
     var divSummary = document.createElement("div");
     divSummary.setAttribute("class", "widget-summary");
+
+    var mode = localStorage.getItem("multiview-mode");
+
+    if(mode != null) {
+        if(mode === 'light'){
+            divSummary.classList.add("widget-light");
+        } else if(mode === 'dark'){
+            divSummary.classList.add("widget-dark");
+        }
+    } else {
+        divSummary.classList.add("widget-light");
+    }
+
     divSummary.appendChild(divDescription);
     divSummary.appendChild(divWidget);
 

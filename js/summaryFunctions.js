@@ -72,6 +72,128 @@ function loadSummaryFromConfig(){
     } else {
         showNoConfigMessageOnGeneral();
     }
+
+    var mode = localStorage.getItem("multiview-mode");
+
+    if(mode != null) {
+        if(mode === 'dark'){
+            fillDark();
+        } else if (mode === 'light') {
+            fillLight();
+        }
+    }
+
+    if (mode == null){
+        localStorage.setItem("multiview-mode", "light");
+        fillLight();
+    }
+}
+
+function changeMode(){
+    var mode = localStorage.getItem("multiview-mode");
+    if(mode === 'light'){
+        localStorage.setItem("multiview-mode", "dark");
+        mode = localStorage.getItem("multiview-mode");
+        fillDark();
+    } else if(mode === 'dark') {
+        localStorage.setItem("multiview-mode", "light");
+        mode = localStorage.getItem("multiview-mode");
+        fillLight();
+    }
+}
+
+function fillLight(){
+    var dark = document.getElementsByClassName("dark")[0];
+    dark.setAttribute("style", "opacity: 0;");
+
+    var slider = document.getElementById("slider-mode");
+    slider.checked = false;
+
+    var sliderLittle = document.getElementById("slider-little-mode");
+    sliderLittle.checked = false;
+
+    var navElements = document.getElementsByClassName("nav-mode");
+    Array.prototype.slice.call(navElements).forEach(function(el){
+        if(el.id.includes("active")){
+            el.classList.remove("nav-dark-active");
+            el.classList.add("nav-light-active");
+        } else {
+            el.classList.remove("nav-dark");
+            el.classList.add("nav-light");
+        }
+    })
+
+    /*
+    var btnElements = document.getElementsByClassName("btn-mode");
+    Array.prototype.slice.call(btnElements).forEach(function(el){
+        /*el.classList.remove("input-dark");
+        el.classList.add("input-light");
+
+        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
+        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+    })
+    */
+
+    var sliderElements = document.getElementsByClassName("slider");
+    Array.prototype.slice.call(sliderElements).forEach(function(el){
+        el.classList.remove("slider-dark");
+        el.classList.add("slider-light");
+    })
+
+    /*
+    var widgetElements = document.getElementsByClassName("widget-summary");
+    Array.prototype.slice.call(widgetElements).forEach(function(el){
+        el.classList.remove("widget-dark");
+        el.classList.add("widget-light");
+    })
+    */
+}
+
+function fillDark(){
+    var dark = document.getElementsByClassName("dark")[0];
+    dark.setAttribute("style", "opacity: 1;");
+
+    var slider = document.getElementById("slider-mode");
+    slider.checked = true;
+
+    var sliderLittle = document.getElementById("slider-little-mode");
+    sliderLittle.checked = true;
+
+    var navElements = document.getElementsByClassName("nav-mode");
+    Array.prototype.slice.call(navElements).forEach(function(el){
+        if(el.id.includes("active")){
+            el.classList.remove("nav-light-active");
+            el.classList.add("nav-dark-active");
+        } else {
+            el.classList.remove("nav-light");
+            el.classList.add("nav-dark");
+        }
+    })
+
+    /*
+    var btnElements = document.getElementsByClassName("btn-mode");
+    Array.prototype.slice.call(btnElements).forEach(function(el){
+        /*el.classList.remove("input-light");
+        el.classList.add("input-dark");
+
+        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
+        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+    })
+    */
+
+    var sliderElements = document.getElementsByClassName("slider");
+    Array.prototype.slice.call(sliderElements).forEach(function(el){
+        el.classList.remove("slider-light");
+        el.classList.add("slider-dark");
+    })
+
+    /*
+    var widgetElements = document.getElementsByClassName("widget-summary");
+    Array.prototype.slice.call(widgetElements).forEach(function(el){
+        el.classList.remove("widget-light");
+        el.classList.add("widget-dark");
+    })
+    */
 }
 
 function actualizaTemp(links, cont){

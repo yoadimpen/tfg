@@ -130,10 +130,26 @@ function addPagesAccessToHtml(nP){
 
     pagesAccess.innerHTML = "";
 
+    var mode = localStorage.getItem("multiview-mode");
+
     for(i = 0; i < nP; i++){
         var buttonAccessToPage = document.createElement("button");
         buttonAccessToPage.setAttribute("id", "btn-access-page");
-        buttonAccessToPage.setAttribute("class", "btn");
+        buttonAccessToPage.setAttribute("class", "btn btn-mode");
+
+        if(mode != null) {
+            if(mode === 'dark'){
+                buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
+                buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+            } else if (mode === 'light') {
+                buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
+                buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+            }
+        } else {
+            buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
+            buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+        }
+
         buttonAccessToPage.setAttribute("type", "button");
         buttonAccessToPage.setAttribute("value", i);
         buttonAccessToPage.setAttribute("onclick", "goToPage(" + i + ")");
@@ -162,4 +178,17 @@ function goToPage(i){
     desiredPage.forEach(function(divForDisplay){
         divForDisplay.style.display = "";
     })
+}
+
+function deleteFilters(){
+    var pagesAccess = document.getElementById("pages-access");
+    pagesAccess.innerHTML = "";
+
+    var orderInput = document.getElementById("order-by-input");
+    orderInput.value = "A-Z";
+
+    var pageInput = document.getElementById("page-input");
+    pageInput.value = "5";
+
+    loadDataFromConfig();
 }
