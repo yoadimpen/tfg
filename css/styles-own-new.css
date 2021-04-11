@@ -676,7 +676,7 @@ input:checked + .slider:before {
 	.nav-link.settings-icon{
 		text-align: end;
 	}
-	#search-div, #order-div, #page-div{
+	#search-div, #order-div, #page-div, #reset-div{
 		width: 80%;
 	}
 
@@ -736,7 +736,7 @@ input:checked + .slider:before {
 	.nav-link.settings-icon{
 		text-align: end;
 	}
-	#search-div{
+	#search-div, #reset-div{
 		width: 80%;
 	}
 	#order-div{
@@ -789,6 +789,9 @@ input:checked + .slider:before {
 @media only screen and (min-width: 768px) and (max-width: 992px){
 	#search-div, #order-div, #page-div{
 		width: 30%;
+	}
+	#reset-div {
+		width: 90%;
 	}
 
 	#sum-col {
