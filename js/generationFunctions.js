@@ -73,20 +73,35 @@ function loadDataFromConfig(){
 
 function changeMode(){
     var mode = localStorage.getItem("multiview-mode");
+
+    var page = document.getElementsByClassName("page")[0];
+    page.style.transition = "0.3s";
+
+    setTimeout(function(){
+        page.removeAttribute("style");
+    }, 500);
+
     if(mode === 'light'){
         localStorage.setItem("multiview-mode", "dark");
         mode = localStorage.getItem("multiview-mode");
+
         fillDark();
     } else if(mode === 'dark') {
         localStorage.setItem("multiview-mode", "light");
         mode = localStorage.getItem("multiview-mode");
+
         fillLight();
     }
 }
 
 function fillLight(){
-    var dark = document.getElementsByClassName("dark")[0];
-    dark.setAttribute("style", "opacity: 0;");
+    var page = document.getElementsByClassName("page")[0];
+    page.classList.remove("background-dark");
+    page.classList.add("background-light");
+
+    var header = document.getElementById("header");
+    header.classList.remove("background-div-dark");
+    header.classList.add("background-div-light");
 
     var slider = document.getElementById("slider-mode");
     slider.checked = false;
@@ -105,22 +120,16 @@ function fillLight(){
         }
     })
 
-    /*
     var inputElements = document.getElementsByClassName("input-mode");
     Array.prototype.slice.call(inputElements).forEach(function(el){
-        /*el.classList.remove("input-dark");
+        el.classList.remove("input-dark");
         el.classList.add("input-light");
-
-        //el.setAttribute("style", "color: rgba(116, 44, 145, 1.0);");
     })
-    */
 
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
-        /*el.classList.remove("input-dark");
-        el.classList.add("input-light");*/
-        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
-        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+        el.classList.remove("btn-own-dark");
+        el.classList.add("btn-own-light");
     })
 
     var sliderElements = document.getElementsByClassName("slider");
@@ -135,16 +144,21 @@ function fillLight(){
         el.classList.add("widget-light");
     })
 
-    var launchElements = document.getElementsByClassName("launch-date-mode");
-    Array.prototype.slice.call(launchElements).forEach(function(el){
-        el.classList.remove("launch-date-dark");
-        el.classList.add("launch-date-light");
+    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
+    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
+        el.classList.remove("widget-text-dark");
+        el.classList.add("widget-text-light");
     })
 }
 
 function fillDark(){
-    var dark = document.getElementsByClassName("dark")[0];
-    dark.setAttribute("style", "opacity: 1;");
+    var page = document.getElementsByClassName("page")[0];
+    page.classList.remove("background-light");
+    page.classList.add("background-dark");
+
+    var header = document.getElementById("header");
+    header.classList.remove("background-div-light");
+    header.classList.add("background-div-dark");
 
     var slider = document.getElementById("slider-mode");
     slider.checked = true;
@@ -163,20 +177,16 @@ function fillDark(){
         }
     })
 
-    /*
     var inputElements = document.getElementsByClassName("input-mode");
     Array.prototype.slice.call(inputElements).forEach(function(el){
         el.classList.remove("input-light");
         el.classList.add("input-dark");
     })
-    */
 
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
-        /*el.classList.remove("input-light");
-        el.classList.add("input-dark");*/
-        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
-        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+        el.classList.remove("btn-own-light");
+        el.classList.add("btn-own-dark");
     })
 
     var sliderElements = document.getElementsByClassName("slider");
@@ -191,10 +201,10 @@ function fillDark(){
         el.classList.add("widget-dark");
     })
 
-    var launchElements = document.getElementsByClassName("launch-date-mode");
-    Array.prototype.slice.call(launchElements).forEach(function(el){
-        el.classList.remove("launch-date-light");
-        el.classList.add("launch-date-dark");
+    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
+    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
+        el.classList.remove("widget-text-light");
+        el.classList.add("widget-text-dark");
     })
 }
 
@@ -277,6 +287,9 @@ function getHiddenElement(id, text){
 }
 
 function generateWidget(jobject, folderPath){
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
     var time = jobject.time;
@@ -342,13 +355,15 @@ function generateWidget(jobject, folderPath){
     var text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text1.setAttribute("x", "50%");
     text1.setAttribute("y", "50%");
-    text1.setAttribute("class", "chart-number")
+    text1.classList.add("chart-number");
+    text1.classList.add("widget-text-mode");
     text1.appendChild(document.createTextNode(total));
 
     var text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text2.setAttribute("x", "50%");
     text2.setAttribute("y", "50%");
-    text2.setAttribute("class", "chart-label")
+    text2.classList.add("chart-label");
+    text2.classList.add("widget-text-mode");
     text2.appendChild(document.createTextNode("tests"));
 
     var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -362,7 +377,6 @@ function generateWidget(jobject, folderPath){
     circleHole.setAttribute("cy", "21");
     circleHole.setAttribute("r", "15.91549430918954");
     circleHole.setAttribute("fill", "rgba(255,255,255,0)");
-
 
     var circleRing = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circleRing.setAttribute("class", "donut-ring");
@@ -399,11 +413,12 @@ function generateWidget(jobject, folderPath){
 
     var p1 = document.createElement("p");
     p1.setAttribute("id", "name");
+    p1.classList.add("widget-text-mode");
     p1.appendChild(document.createTextNode(reportName));
 
     var p2 = document.createElement("p");
     p2.setAttribute("id", "launch-date");
-    p2.setAttribute("class", "launch-date-mode");
+    p2.setAttribute("class", "widget-text-mode");
     p2.appendChild(document.createTextNode(date));
 
     var divDescription = document.createElement("div");
@@ -420,16 +435,26 @@ function generateWidget(jobject, folderPath){
     var divSummary = document.createElement("div");
     divSummary.setAttribute("class", "widget-summary");
 
-    var mode = localStorage.getItem("multiview-mode");
-
     if(mode != null) {
         if(mode === 'light'){
             divSummary.classList.add("widget-light");
+            p1.classList.add("widget-text-light");
+            p2.classList.add("widget-text-light");
+            text1.classList.add("widget-text-light");
+            text2.classList.add("widget-text-light");
         } else if(mode === 'dark'){
             divSummary.classList.add("widget-dark");
+            p1.classList.add("widget-text-dark");
+            p2.classList.add("widget-text-dark");
+            text1.classList.add("widget-text-dark");
+            text2.classList.add("widget-text-dark");
         }
     } else {
         divSummary.classList.add("widget-light");
+        p1.classList.add("widget-text-light");
+        p2.classList.add("widget-text-light");
+        text1.classList.add("widget-text-light");
+        text2.classList.add("widget-text-light");
     }
 
     divSummary.appendChild(divDescription);

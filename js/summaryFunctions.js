@@ -91,20 +91,36 @@ function loadSummaryFromConfig(){
 
 function changeMode(){
     var mode = localStorage.getItem("multiview-mode");
+
+    var page = document.getElementsByClassName("page")[0];
+    page.style.transition = "1s";
+
+    setTimeout(function(){
+        page.removeAttribute("style");
+    }, 1000);
+
     if(mode === 'light'){
         localStorage.setItem("multiview-mode", "dark");
         mode = localStorage.getItem("multiview-mode");
+
         fillDark();
     } else if(mode === 'dark') {
         localStorage.setItem("multiview-mode", "light");
         mode = localStorage.getItem("multiview-mode");
+
         fillLight();
     }
 }
 
 function fillLight(){
-    var dark = document.getElementsByClassName("dark")[0];
-    dark.setAttribute("style", "opacity: 0;");
+
+    var page = document.getElementsByClassName("page")[0];
+    page.classList.remove("background-dark");
+    page.classList.add("background-light");
+
+    var header = document.getElementById("header");
+    header.classList.remove("background-div-dark");
+    header.classList.add("background-div-light");
 
     var slider = document.getElementById("slider-mode");
     slider.checked = false;
@@ -123,16 +139,17 @@ function fillLight(){
         }
     })
 
-    /*
+    var inputElements = document.getElementsByClassName("input-mode");
+    Array.prototype.slice.call(inputElements).forEach(function(el){
+        el.classList.remove("input-dark");
+        el.classList.add("input-light");
+    })
+
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
-        /*el.classList.remove("input-dark");
-        el.classList.add("input-light");
-
-        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
-        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+        el.classList.remove("btn-own-dark");
+        el.classList.add("btn-own-light");
     })
-    */
 
     var sliderElements = document.getElementsByClassName("slider");
     Array.prototype.slice.call(sliderElements).forEach(function(el){
@@ -140,18 +157,27 @@ function fillLight(){
         el.classList.add("slider-light");
     })
 
-    /*
-    var widgetElements = document.getElementsByClassName("widget-summary");
+    var widgetElements = document.getElementsByClassName("widget-mode");
     Array.prototype.slice.call(widgetElements).forEach(function(el){
         el.classList.remove("widget-dark");
         el.classList.add("widget-light");
     })
-    */
+
+    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
+    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
+        el.classList.remove("widget-text-dark");
+        el.classList.add("widget-text-light");
+    })
 }
 
 function fillDark(){
-    var dark = document.getElementsByClassName("dark")[0];
-    dark.setAttribute("style", "opacity: 1;");
+    var page = document.getElementsByClassName("page")[0];
+    page.classList.remove("background-light");
+    page.classList.add("background-dark");
+
+    var header = document.getElementById("header");
+    header.classList.remove("background-div-light");
+    header.classList.add("background-div-dark");
 
     var slider = document.getElementById("slider-mode");
     slider.checked = true;
@@ -170,16 +196,17 @@ function fillDark(){
         }
     })
 
-    /*
+    var inputElements = document.getElementsByClassName("input-mode");
+    Array.prototype.slice.call(inputElements).forEach(function(el){
+        el.classList.remove("input-light");
+        el.classList.add("input-dark");
+    })
+
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
-        /*el.classList.remove("input-light");
-        el.classList.add("input-dark");
-
-        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
-        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+        el.classList.remove("btn-own-light");
+        el.classList.add("btn-own-dark");
     })
-    */
 
     var sliderElements = document.getElementsByClassName("slider");
     Array.prototype.slice.call(sliderElements).forEach(function(el){
@@ -187,13 +214,17 @@ function fillDark(){
         el.classList.add("slider-dark");
     })
 
-    /*
-    var widgetElements = document.getElementsByClassName("widget-summary");
+    var widgetElements = document.getElementsByClassName("widget-mode");
     Array.prototype.slice.call(widgetElements).forEach(function(el){
         el.classList.remove("widget-light");
         el.classList.add("widget-dark");
     })
-    */
+
+    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
+    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
+        el.classList.remove("widget-text-light");
+        el.classList.add("widget-text-dark");
+    })
 }
 
 function actualizaTemp(links, cont){
@@ -333,6 +364,9 @@ function getTypeResults(json, resultsArray){
 }
 
 function makeTypeDiv(array){
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var resultsDiv = document.getElementById("sum-row");
     resultsDiv.innerHTML = "";
 
@@ -383,6 +417,7 @@ function makeTypeDiv(array){
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px");
+    title.classList.add("widget-text-mode");
     title.appendChild(document.createTextNode("Status"));
 
     var titleRow = document.createElement("div");
@@ -397,6 +432,7 @@ function makeTypeDiv(array){
 
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
+    description.classList.add("widget-text-mode");
     description.innerHTML = "Total of tests used: " + total;
 
     var divdesc = document.createElement("div");
@@ -405,10 +441,27 @@ function makeTypeDiv(array){
 
     var div = document.createElement("div");
     div.setAttribute("id", "sum-col");
-    div.setAttribute("class", "col");
+    div.classList.add("col");
+    div.classList.add("widget-mode");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
+
+    if(mode != null) {
+        if(mode === 'light'){
+            div.classList.add("widget-light");
+            title.classList.add("widget-text-light");
+            description.classList.add("widget-text-light");
+        } else if(mode === 'dark'){
+            div.classList.add("widget-dark");
+            title.classList.add("widget-text-dark");
+            description.classList.add("widget-text-dark");
+        }
+    } else {
+        div.classList.add("widget-light");
+        title.classList.add("widget-text-light");
+        description.classList.add("widget-text-light");
+    }
 
     resultsDiv.appendChild(div);
 }
@@ -446,6 +499,9 @@ function getSeverityLevelResults(jobject, array){
 }
 
 function makeSeverityDiv(array){
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var resultsDiv = document.getElementById("sum-row");
 
     var total = 0;
@@ -487,6 +543,7 @@ function makeSeverityDiv(array){
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px;");
+    title.classList.add("widget-text-mode");
     title.appendChild(document.createTextNode("Severity"));
 
     var titleRow = document.createElement("div");
@@ -501,6 +558,7 @@ function makeSeverityDiv(array){
     
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
+    description.classList.add("widget-text-mode");
     description.innerHTML = "Total of tests used: " + total;
 
     var divdesc = document.createElement("div");
@@ -509,10 +567,27 @@ function makeSeverityDiv(array){
 
     var div = document.createElement("div");
     div.setAttribute("id", "sum-col");
-    div.setAttribute("class", "col");
+    div.classList.add("col");
+    div.classList.add("widget-mode");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
+
+    if(mode != null) {
+        if(mode === 'light'){
+            div.classList.add("widget-light");
+            title.classList.add("widget-text-light");
+            description.classList.add("widget-text-light");
+        } else if(mode === 'dark'){
+            div.classList.add("widget-dark");
+            title.classList.add("widget-text-dark");
+            description.classList.add("widget-text-dark");
+        }
+    } else {
+        div.classList.add("widget-light");
+        title.classList.add("widget-text-light");
+        description.classList.add("widget-text-light");
+    }
 
     resultsDiv.appendChild(div);
 }
@@ -544,6 +619,9 @@ function getCategoryResults(json, valuesArray, nameArray){
 }
 
 function makeCategoryDiv(array){
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var resultsDiv = document.getElementById("sum-row");
     var arrayN = array.slice(0,5);
     var total = 0;
@@ -614,6 +692,7 @@ function makeCategoryDiv(array){
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px;");
+    title.classList.add("widget-text-mode");
     title.appendChild(document.createTextNode("Category"));
 
     var titleDiv = document.createElement("div");
@@ -621,8 +700,8 @@ function makeCategoryDiv(array){
 
     var legendDiv = document.createElement("div");
     legendDiv.setAttribute("class", "col-2");
-    legendDiv.innerHTML = "<i class='far fa-question-circle' style='font-size: 1.5rem; color: black; margin-top: 1.1rem;' aria-hidden='true';></i>" + 
-            "<span class='tooltip-text'>" +
+    legendDiv.innerHTML = "<i class='far fa-question-circle widget-text-mode' style='font-size: 1.5rem; margin-top: 1.1rem;' aria-hidden='true';></i>" + 
+            "<span class='tooltip-text widget-mode'>" +
                 "<b>Help</b>" +
                 "<br>" +
                 "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Product defects" +
@@ -646,6 +725,7 @@ function makeCategoryDiv(array){
     
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
+    description.classList.add("widget-text-mode");
     description.innerHTML = "Total of tests used: " + total;
 
     var divdesc = document.createElement("div");
@@ -654,20 +734,51 @@ function makeCategoryDiv(array){
 
     var div = document.createElement("div");
     div.setAttribute("id", "sum-col");
-    div.setAttribute("class", "col");
+    div.classList.add("col");
+    div.classList.add("widget-mode");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
+
+    if(mode != null) {
+        if(mode === 'light'){
+            div.classList.add("widget-light");
+            title.classList.add("widget-text-light");
+            description.classList.add("widget-text-light");
+        } else if(mode === 'dark'){
+            div.classList.add("widget-dark");
+            title.classList.add("widget-text-dark");
+            description.classList.add("widget-text-dark");
+        }
+    } else {
+        div.classList.add("widget-light");
+        title.classList.add("widget-text-light");
+        description.classList.add("widget-text-light");
+    }
 
     resultsDiv.appendChild(div);
 }
 
 function showTotalReports(n){
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var div = document.getElementById("summary-info");
 
     var h4 = document.createElement("h4");
     h4.setAttribute("id", "total-reports");
+    h4.classList.add("widget-text-mode");
     h4.appendChild(document.createTextNode("Total reports used: " + n));
+
+    if(mode != null) {
+        if(mode === 'light'){
+            h4.classList.add("widget-text-light");
+        } else if(mode === 'dark'){
+            h4.classList.add("widget-text-dark");
+        }
+    } else {
+        h4.classList.add("widget-text-light");
+    }
 
     div.appendChild(h4);
 }

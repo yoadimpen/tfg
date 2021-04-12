@@ -1,5 +1,7 @@
 function loadConfig() {
 
+    var mode = localStorage.getItem("multiview-mode");
+
     var i1 = document.getElementById("directory-method-icon");
     var text1 = document.getElementById("directory-method-text");
     var input1 = document.getElementById("inlineRadio1");
@@ -26,19 +28,23 @@ function loadConfig() {
     
     var header1 = document.createElement("th");
     header1.setAttribute("scope", "col");
+    header1.classList.add("widget-text-mode");
     header1.appendChild(document.createTextNode("#"));
 
     var header2 = document.createElement("th");
     header2.setAttribute("scope", "col");
     header2.setAttribute("class", "w-75");
+    header2.classList.add("widget-text-mode");
     header2.appendChild(document.createTextNode("Path"));
 
     var header3 = document.createElement("th");
     header3.setAttribute("scope", "col");
+    header3.classList.add("widget-text-mode");
     header3.appendChild(document.createTextNode("Last Modified"));
 
     var header4 = document.createElement("th");
     header4.setAttribute("scope", "col");
+    header4.classList.add("widget-text-mode");
     header4.appendChild(document.createTextNode(""));
 
     headerRow.appendChild(header1);
@@ -61,17 +67,21 @@ function loadConfig() {
 
             var td1 = document.createElement("td");
             td1.setAttribute("scope", "row");
+            td1.classList.add("widget-text-mode");
             td1.appendChild(document.createTextNode(link.id));
 
             var td2 = document.createElement("td");
+            td2.classList.add("widget-text-mode");
             td2.appendChild(document.createTextNode(link.path));
 
             var td3 = document.createElement("td");
+            td3.classList.add("widget-text-mode");
             td3.appendChild(document.createTextNode(link.last_modified));
 
             var td4 = document.createElement("td");
             var i = document.createElement("i");
             i.setAttribute("class", "fas fa-times");
+            i.classList.add("widget-text-mode");
             i.setAttribute("id", "delete-icon");
             i.setAttribute("onclick", "deleteRow(" + link.id + ")");
             td4.appendChild(i);
@@ -84,36 +94,67 @@ function loadConfig() {
             tbody.appendChild(row);
         })
 
-        if(configJSON.type == "directory"){
-            i1.classList.add("method-active");
-            text1.classList.add("method-active");
-            input1.checked = true;
-            i2.classList.add("method");
-            text2.classList.add("method");
-            input2.checked = false;
-        } else {
-            i2.classList.add("method-active");
-            text2.classList.add("method-active");
-            input2.checked = true;
-            i1.classList.add("method");
-            text1.classList.add("method");
-            input1.checked = false;
+        if(mode != null) {
+            if(mode === 'dark'){
+                if(configJSON.type == "directory"){
+                    i1.classList.add("method-dark-active");
+                    text1.classList.add("method-dark-active");
+                    i2.classList.add("method-dark");
+                    text2.classList.add("method-dark");
+                } else {
+                    i2.classList.add("method-dark-active");
+                    text2.classList.add("method-dark-active");
+                    i1.classList.add("method-dark");
+                    text1.classList.add("method-dark");
+                }
+            } else if (mode === 'light') {
+                if(configJSON.type == "directory"){
+                    i1.classList.add("method-light-active");
+                    text1.classList.add("method-light-active");
+                    i2.classList.add("method-light");
+                    text2.classList.add("method-light");
+                } else {
+                    i2.classList.add("method-light-active");
+                    text2.classList.add("method-light-active");
+                    i1.classList.add("method-light");
+                    text1.classList.add("method-light");
+                }
+            }
         }
+    
+        if (mode == null){
+            if(configJSON.type == "directory"){
+                i1.classList.add("method-light-active");
+                text1.classList.add("method-light-active");
+                i2.classList.add("method-light");
+                text2.classList.add("method-light");
+            } else {
+                i2.classList.add("method-light-active");
+                text2.classList.add("method-light-active");
+                i1.classList.add("method-light");
+                text1.classList.add("method-light");
+            }
+        }
+
         message.classList.add("message-no");
     } else {
         var row = document.createElement("tr");
 
         var td1 = document.createElement("td");
         td1.setAttribute("scope", "row");
+        td1.classList.add("widget-text-mode");
         td1.appendChild(document.createTextNode("-"));
 
         var td2 = document.createElement("td");
+        td2.classList.add("widget-text-mode");
         td2.appendChild(document.createTextNode("-"));
 
         var td3 = document.createElement("td");
+        td3.classList.add("widget-text-mode");
         td3.appendChild(document.createTextNode("-"));
 
         var td4 = document.createElement("td");
+        td4.classList.add("widget-text-mode");
         td4.appendChild(document.createTextNode("-"));
 
         row.appendChild(td1);
@@ -134,8 +175,6 @@ function loadConfig() {
     var div = document.getElementById("config-data");
     div.appendChild(tableDiv);
 
-    var mode = localStorage.getItem("multiview-mode");
-
     if(mode != null) {
         if(mode === 'dark'){
             fillDark();
@@ -153,6 +192,14 @@ function loadConfig() {
 
 function changeMode(){
     var mode = localStorage.getItem("multiview-mode");
+
+    var page = document.getElementsByClassName("page")[0];
+    page.style.transition = "1s";
+
+    setTimeout(function(){
+        page.removeAttribute("style");
+    }, 1000);
+
     if(mode === 'light'){
         localStorage.setItem("multiview-mode", "dark");
         mode = localStorage.getItem("multiview-mode");
@@ -165,8 +212,13 @@ function changeMode(){
 }
 
 function fillLight(){
-    var dark = document.getElementsByClassName("dark")[0];
-    dark.setAttribute("style", "opacity: 0;");
+    var page = document.getElementsByClassName("page")[0];
+    page.classList.remove("background-dark");
+    page.classList.add("background-light");
+
+    var header = document.getElementById("header");
+    header.classList.remove("background-div-dark");
+    header.classList.add("background-div-light");
 
     var slider = document.getElementById("slider-mode");
     slider.checked = false;
@@ -185,22 +237,16 @@ function fillLight(){
         }
     })
 
-    /*
     var inputElements = document.getElementsByClassName("input-mode");
     Array.prototype.slice.call(inputElements).forEach(function(el){
-        /*el.classList.remove("input-dark");
+        el.classList.remove("input-dark");
         el.classList.add("input-light");
-
-        //el.setAttribute("style", "color: rgba(116, 44, 145, 1.0);");
     })
-    */
 
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
-        /*el.classList.remove("input-dark");
-        el.classList.add("input-light");*/
-        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
-        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+        el.classList.remove("btn-own-dark");
+        el.classList.add("btn-own-light");
     })
 
     var sliderElements = document.getElementsByClassName("slider");
@@ -214,11 +260,38 @@ function fillLight(){
         el.classList.remove("radio-dark");
         el.classList.add("radio-light");
     })
+
+    var config = document.getElementById("config");
+    config.classList.remove("background-div-dark");
+    config.classList.add("background-div-light");
+
+    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
+    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
+        el.classList.remove("widget-text-dark");
+        el.classList.add("widget-text-light");
+    })
+
+    var methodElements = document.getElementsByClassName("method");
+    Array.prototype.slice.call(methodElements).forEach(function(el){
+        if(el.classList.contains("method-dark")) {
+            el.classList.remove("method-dark");
+            el.classList.add("method-light");
+        }
+        if(el.classList.contains("method-dark-active")) {
+            el.classList.remove("method-dark-active");
+            el.classList.add("method-light-active");
+        }
+    })
 }
 
 function fillDark(){
-    var dark = document.getElementsByClassName("dark")[0];
-    dark.setAttribute("style", "opacity: 1;");
+    var page = document.getElementsByClassName("page")[0];
+    page.classList.remove("background-light");
+    page.classList.add("background-dark");
+
+    var header = document.getElementById("header");
+    header.classList.remove("background-div-light");
+    header.classList.add("background-div-dark");
 
     var slider = document.getElementById("slider-mode");
     slider.checked = true;
@@ -237,20 +310,16 @@ function fillDark(){
         }
     })
 
-    /*
     var inputElements = document.getElementsByClassName("input-mode");
     Array.prototype.slice.call(inputElements).forEach(function(el){
         el.classList.remove("input-light");
         el.classList.add("input-dark");
     })
-    */
 
     var btnElements = document.getElementsByClassName("btn-mode");
     Array.prototype.slice.call(btnElements).forEach(function(el){
-        /*el.classList.remove("input-light");
-        el.classList.add("input-dark");*/
-        el.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
-        el.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+        el.classList.remove("btn-own-light");
+        el.classList.add("btn-own-dark");
     })
 
     var sliderElements = document.getElementsByClassName("slider");
@@ -264,9 +333,34 @@ function fillDark(){
         el.classList.remove("radio-light");
         el.classList.add("radio-dark");
     })
+
+    var config = document.getElementById("config");
+    config.classList.remove("background-div-light");
+    config.classList.add("background-div-dark");
+
+    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
+    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
+        el.classList.remove("widget-text-light");
+        el.classList.add("widget-text-dark");
+    })
+
+    var methodElements = document.getElementsByClassName("method");
+    Array.prototype.slice.call(methodElements).forEach(function(el){
+        if(el.classList.contains("method-light")) {
+            el.classList.remove("method-light");
+            el.classList.add("method-dark");
+        }
+        if(el.classList.contains("method-light-active")) {
+            el.classList.remove("method-light-active");
+            el.classList.add("method-dark-active");
+        }
+    })
 }
 
 function turnActive(method){
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var i1 = document.getElementById("directory-method-icon");
     var text1 = document.getElementById("directory-method-text");
 
@@ -274,23 +368,71 @@ function turnActive(method){
     var text2 = document.getElementById("files-method-text");
     
     if(method == "directory-method"){
-        i1.classList.remove("method");
-        text1.classList.remove("method");
-        i1.classList.add("method-active");
-        text1.classList.add("method-active");
-        i2.classList.remove("method-active");
-        text2.classList.remove("method-active");
-        i2.classList.add("method");
-        text2.classList.add("method");
+        if(mode != null) {
+            if(mode === 'dark'){
+                i1.classList.remove("method-dark");
+                text1.classList.remove("method-dark");
+                i1.classList.add("method-dark-active");
+                text1.classList.add("method-dark-active");
+                i2.classList.remove("method-dark-active");
+                text2.classList.remove("method-dark-active");
+                i2.classList.add("method-dark");
+                text2.classList.add("method-dark");
+            } else if (mode === 'light') {
+                i1.classList.remove("method-light");
+                text1.classList.remove("method-light");
+                i1.classList.add("method-light-active");
+                text1.classList.add("method-light-active");
+                i2.classList.remove("method-light-active");
+                text2.classList.remove("method-light-active");
+                i2.classList.add("method-light");
+                text2.classList.add("method-light");
+            }
+        }
+    
+        if (mode == null){
+            i1.classList.remove("method-light");
+                text1.classList.remove("method-light");
+                i1.classList.add("method-light-active");
+                text1.classList.add("method-light-active");
+                i2.classList.remove("method-light-active");
+                text2.classList.remove("method-light-active");
+                i2.classList.add("method-light");
+                text2.classList.add("method-light");
+        }
     } else {
-        i2.classList.remove("method");
-        text2.classList.remove("method");
-        i2.classList.add("method-active");
-        text2.classList.add("method-active");
-        i1.classList.remove("method-active");
-        text1.classList.remove("method-active");
-        i1.classList.add("method");
-        text1.classList.add("method");
+        if(mode != null) {
+            if(mode === 'dark'){
+                i2.classList.remove("method-dark");
+                text2.classList.remove("method-dark");
+                i2.classList.add("method-dark-active");
+                text2.classList.add("method-dark-active");
+                i1.classList.remove("method-dark-active");
+                text1.classList.remove("method-dark-active");
+                i1.classList.add("method-dark");
+                text1.classList.add("method-dark");
+            } else if (mode === 'light') {
+                i2.classList.remove("method-light");
+                text2.classList.remove("method-light");
+                i2.classList.add("method-light-active");
+                text2.classList.add("method-light-active");
+                i1.classList.remove("method-light-active");
+                text1.classList.remove("method-light-active");
+                i1.classList.add("method-light");
+                text1.classList.add("method-light");
+            }
+        }
+    
+        if (mode == null){
+            i2.classList.remove("method-light");
+            text2.classList.remove("method-light");
+            i2.classList.add("method-light-active");
+            text2.classList.add("method-light-active");
+            i1.classList.remove("method-light-active");
+            text1.classList.remove("method-light-active");
+            i1.classList.add("method-light");
+            text1.classList.add("method-light");
+        }
     }
 }
 
