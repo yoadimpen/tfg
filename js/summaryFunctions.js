@@ -366,9 +366,9 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
     if(chartType === 'doughnut'){
         widgetType = 'A';
     } else if (sameColor == true) {
-        widgetType = 'C';
-    } else {
         widgetType = 'B';
+    } else {
+        widgetType = 'C';
     }
 
     var chartLabels = [];
@@ -502,7 +502,7 @@ function makeTypeDiv(array){
     var ctx = canvas.getContext('2d');
 
     var dataJSON = {
-        name: "test",
+        name: "Status",
         items: [{
             label: "Failed",
             value: array[0],
@@ -641,29 +641,32 @@ function makeSeverityDiv(array){
 
     var ctx = canvas.getContext('2d');
 
-    var chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            datasets: [{
-                data: array,
-                backgroundColor: "#6dd6cd",
-                borderWidth: 1,
-                borderColor: "#46827d"
-            }],
-            labels: [
-                'blocker',
-                'critical',
-                'normal',
-                'minor',
-                'trivial'
-            ]
-        },
-        options: {
-            legend: {
-                display: false
-            }
-        }
-    });
+    var dataJSON = {
+        name: "Severity",
+        items: [{
+            label: "blocker",
+            value: array[0],
+            color: "#6dd6cd"
+        },{
+            label: "critical",
+            value: array[1],
+            color: "#6dd6cd"
+        },{
+            label: "normal",
+            value: array[2],
+            color: "#6dd6cd"
+        },{
+            label: "minor",
+            value: array[3],
+            color: "#6dd6cd"
+        },{
+            label: "trivial",
+            value: array[4],
+            color: "#6dd6cd"
+        }]
+    }
+
+    var chart = getChart(ctx, "bar", true, dataJSON, null);
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px;");
@@ -773,70 +776,32 @@ function makeCategoryDiv(array){
 
     var ctx = canvas.getContext('2d');
 
-    var chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Category'],
-            datasets: [
-                {
-                    label: 'Product defects',
-                    backgroundColor: "#800026",
-                    data: [arrayN[0]],
-                    borderWidth: 1,
-                    borderColor: "#63001e"
-                },
-                {
-                    label: 'Test defects',
-                    backgroundColor: "#d31121",
-                    data: [arrayN[1]],
-                    borderWidth: 1,
-                    borderColor: "#a30d19"
-                },
-                {
-                    label: 'Outdated tests',
-                    backgroundColor: "#fa5c2e",
-                    data: [arrayN[2]],
-                    borderWidth: 1,
-                    borderColor: "#cf4b25"
-                },
-                {
-                    label: 'Infrastructure problems',
-                    backgroundColor: "#feab4b",
-                    data: [arrayN[3]],
-                    borderWidth: 1,
-                    borderColor: "#cc893b"
-                },
-                {
-                    label: 'Ignored tests',
-                    backgroundColor: "#fee087",
-                    data: [arrayN[4]],
-                    borderWidth: 1,
-                    borderColor: "#d1b86d"
-                }
-            ]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    boxWidth: 15
-                },
-                position: 'bottom'
-            },
-            scales:{
-                xAxes: [{
-                    ticks: {
-                        display: false
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
+    var dataJSON = {
+        name: "Category",
+        items: [{
+            label: "Product defects",
+            value: arrayN[0],
+            color: "#800026"
+        },{
+            label: "Test defects",
+            value: arrayN[1],
+            color: "#d31121"
+        },{
+            label: "Outdated tests",
+            value: arrayN[2],
+            color: "#fa5c2e"
+        },{
+            label: "Infrastructure problems",
+            value: arrayN[3],
+            color: "#feab4b"
+        },{
+            label: "Ignored tests",
+            value: arrayN[4],
+            color: "#fee087"
+        }]
+    }
+
+    var chart = getChart(ctx, "bar", false, dataJSON, true);
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px;");
