@@ -101,11 +101,13 @@ function loadConfig() {
                     text1.classList.add("method-dark-active");
                     i2.classList.add("method-dark");
                     text2.classList.add("method-dark");
+                    input1.checked = true;
                 } else {
                     i2.classList.add("method-dark-active");
                     text2.classList.add("method-dark-active");
                     i1.classList.add("method-dark");
                     text1.classList.add("method-dark");
+                    input2.checked = true;
                 }
             } else if (mode === 'light') {
                 if(configJSON.type == "directory"){
@@ -113,11 +115,13 @@ function loadConfig() {
                     text1.classList.add("method-light-active");
                     i2.classList.add("method-light");
                     text2.classList.add("method-light");
+                    input1.checked = true;
                 } else {
                     i2.classList.add("method-light-active");
                     text2.classList.add("method-light-active");
                     i1.classList.add("method-light");
                     text1.classList.add("method-light");
+                    input2.checked = true;
                 }
             }
         }
@@ -128,11 +132,13 @@ function loadConfig() {
                 text1.classList.add("method-light-active");
                 i2.classList.add("method-light");
                 text2.classList.add("method-light");
+                input1.checked = true;
             } else {
                 i2.classList.add("method-light-active");
                 text2.classList.add("method-light-active");
                 i1.classList.add("method-light");
                 text1.classList.add("method-light");
+                input2.checked = true;
             }
         }
 

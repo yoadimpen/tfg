@@ -89,6 +89,8 @@ function loadSummaryFromConfig(){
     }
 }
 
+//------------------------DARK/LIGHT MODE--------------------------//
+
 function changeMode(){
     var mode = localStorage.getItem("multiview-mode");
 
@@ -227,6 +229,8 @@ function fillDark(){
     })
 }
 
+//---------------------LOADING AUX FUNCTIONS----------------------//
+
 function actualizaTemp(links, cont){
     //reinicia el JSON para la nueva generación
     if(cont == 0){
@@ -259,6 +263,8 @@ function getPathsFromHTTPRequest(response){
     }
     return res;
 }
+
+//---------------------SUMMARY GENERATION----------------------//
 
 function generateSummaryDivs(reportsPath){
     var pathsArray = reportsPath.split(";");
@@ -352,6 +358,120 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
 
 }
 
+//---------------------GRAPH TEMPLATES----------------------//
+
+function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
+    var widgetType;
+
+    if(chartType === 'doughnut'){
+        widgetType = 'A';
+    } else if (sameColor == true) {
+        widgetType = 'C';
+    } else {
+        widgetType = 'B';
+    }
+
+    var chartLabels = [];
+    var chartDatasets = [];
+    var chartOptions;
+
+    switch(widgetType) {
+        case 'C':
+            dataJSON.items.forEach(function(item){
+                var datasetItem = {
+                    label: item.label,
+                    backgroundColor: item.color,
+                    data: [item.value],
+                    borderWidth: 1,
+                    borderColor:  "rgba(255, 255, 255, 0.5)"
+                }
+                chartDatasets.push(datasetItem);
+            })
+            chartLabels.push(dataJSON.name);
+            break;
+        default:
+            var labels = [];
+            var data = [];
+            var colors = [];
+            dataJSON.items.forEach(function(item){
+                labels.push(item.label);
+                data.push(item.value);
+                colors.push(item.color);
+            })
+            chartLabels = labels;
+
+            chartDatasets = [{
+                data: data,
+                backgroundColor: colors,
+                borderWidth: 1,
+                borderColor:  "rgba(255, 255, 255, 0.5)"
+            }]
+    }
+
+    switch(widgetType) {
+        case 'A':
+            chartOptions = {
+                legend: {
+                    display: legendDisplay,
+                    labels: {
+                        boxWidth: 15
+                    },
+                    position: 'bottom'
+                }
+            }
+            break;
+        case 'B':
+            chartOptions = {
+                legend: {
+                    display: false
+                },
+                scales:{
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+            break;
+        default:
+            chartOptions = {
+                legend: {
+                    display: legendDisplay,
+                    labels: {
+                        boxWidth: 15
+                    },
+                    position: 'bottom'
+                },
+                scales:{
+                    xAxes: [{
+                        ticks: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+    }
+
+    var chart = new Chart(ctx, {
+        type: chartType,
+        data: {
+            labels: chartLabels,
+            datasets: chartDatasets
+        },
+        options: chartOptions
+    })
+
+    return chart;
+}
+
+//---------------------TYPE SUMMARY WIDGET----------------------//
+
 function getTypeResults(json, resultsArray){
     var statistic = json.statistic;
     resultsArray[0] = resultsArray[0] + statistic.failed;
@@ -381,39 +501,32 @@ function makeTypeDiv(array){
 
     var ctx = canvas.getContext('2d');
 
-    var chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [array[0], array[1], array[2], array[3], array[4]],
-                backgroundColor: [
-                    "#fd5a3e",
-                    "#ffd050",
-                    "#aaaaaa",
-                    "#97cc64",
-                    "#d35ebe"
-                ],
-                borderColor: "rgba(0, 0, 0, 0.0)"
-            }],
+    var dataJSON = {
+        name: "test",
+        items: [{
+            label: "Failed",
+            value: array[0],
+            color: "#fd5a3e"
+        },{
+            label: "Broken",
+            value: array[1],
+            color: "#ffd050"
+        },{
+            label: "Skipped",
+            value: array[2],
+            color: "#aaaaaa"
+        },{
+            label: "Passed",
+            value: array[3],
+            color: "#97cc64"
+        },{
+            label: "Unknown",
+            value: array[4],
+            color: "#d35ebe"
+        }]
+    }
 
-            labels: [
-                'Failed',
-                'Broken',
-                'Skipped',
-                'Passed',
-                'Unknown'
-            ]
-        },
-        options: {
-            legend: {
-                display: true,
-                labels: {
-                    boxWidth: 15
-                },
-                position: 'bottom'
-            }
-        }
-    });
+    var chart = getChart(ctx, "doughnut", false, dataJSON, true);
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px");
@@ -440,12 +553,21 @@ function makeTypeDiv(array){
     divdesc.appendChild(description);
 
     var div = document.createElement("div");
-    div.setAttribute("id", "sum-col");
+    div.setAttribute("id", "type-widget");
     div.classList.add("col");
+    div.classList.add("sum-col");
     div.classList.add("widget-mode");
+    div.setAttribute("draggable", "true");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
+
+    div.addEventListener('dragstart', handleDragStart, false);
+    div.addEventListener('dragenter', handleDragEnter, false);
+    div.addEventListener('dragover', handleDragOver, false);
+    div.addEventListener('dragleave', handleDragLeave, false);
+    div.addEventListener('drop', handleDrop, false);
+    div.addEventListener('dragend', handleDragEnd, false);
 
     if(mode != null) {
         if(mode === 'light'){
@@ -465,6 +587,8 @@ function makeTypeDiv(array){
 
     resultsDiv.appendChild(div);
 }
+
+//---------------------SEVERITY SUMMARY WIDGET----------------------//
 
 function getSeverityLevelResults(jobject, array){
     var n = jobject.length;
@@ -521,7 +645,7 @@ function makeSeverityDiv(array){
         type: 'bar',
         data: {
             datasets: [{
-                data: [array[0], array[1], array[2], array[3], array[4]],
+                data: array,
                 backgroundColor: "#6dd6cd",
                 borderWidth: 1,
                 borderColor: "#46827d"
@@ -566,12 +690,21 @@ function makeSeverityDiv(array){
     divdesc.appendChild(description);
 
     var div = document.createElement("div");
-    div.setAttribute("id", "sum-col");
+    div.setAttribute("id", "severity-widget");
     div.classList.add("col");
+    div.classList.add("sum-col");
     div.classList.add("widget-mode");
+    div.setAttribute("draggable", "true");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
+
+    div.addEventListener('dragstart', handleDragStart, false);
+    div.addEventListener('dragenter', handleDragEnter, false);
+    div.addEventListener('dragover', handleDragOver, false);
+    div.addEventListener('dragleave', handleDragLeave, false);
+    div.addEventListener('drop', handleDrop, false);
+    div.addEventListener('dragend', handleDragEnd, false);
 
     if(mode != null) {
         if(mode === 'light'){
@@ -591,6 +724,8 @@ function makeSeverityDiv(array){
 
     resultsDiv.appendChild(div);
 }
+
+//---------------------CATEGORY SUMMARY WIDGET----------------------//
 
 function getCategoryResults(json, valuesArray, nameArray){
     var items = json.items;
@@ -641,35 +776,48 @@ function makeCategoryDiv(array){
     var chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: [
-                'Product defects',
-                'Test defects',
-                'Outdated tests',
-                'Infrastructure problems',
-                'Ignored tests'
-            ],
-            datasets: [{
-                data: [arrayN[0], arrayN[1], arrayN[2], arrayN[3], arrayN[4]],
-                backgroundColor: [
-                    "#800026",
-                    "#d31121",
-                    "#fa5c2e",
-                    "#feab4b",
-                    "#fee087"
-                ],
-                borderWidth: 1,
-                borderColor: [
-                    "#63001e",
-                    "#a30d19",
-                    "#cf4b25",
-                    "#cc893b",
-                    "#d1b86d"
-                ]
-            }]
+            labels: ['Category'],
+            datasets: [
+                {
+                    label: 'Product defects',
+                    backgroundColor: "#800026",
+                    data: [arrayN[0]],
+                    borderWidth: 1,
+                    borderColor: "#63001e"
+                },
+                {
+                    label: 'Test defects',
+                    backgroundColor: "#d31121",
+                    data: [arrayN[1]],
+                    borderWidth: 1,
+                    borderColor: "#a30d19"
+                },
+                {
+                    label: 'Outdated tests',
+                    backgroundColor: "#fa5c2e",
+                    data: [arrayN[2]],
+                    borderWidth: 1,
+                    borderColor: "#cf4b25"
+                },
+                {
+                    label: 'Infrastructure problems',
+                    backgroundColor: "#feab4b",
+                    data: [arrayN[3]],
+                    borderWidth: 1,
+                    borderColor: "#cc893b"
+                },
+                {
+                    label: 'Ignored tests',
+                    backgroundColor: "#fee087",
+                    data: [arrayN[4]],
+                    borderWidth: 1,
+                    borderColor: "#d1b86d"
+                }
+            ]
         },
         options: {
             legend: {
-                display: false,
+                display: true,
                 labels: {
                     boxWidth: 15
                 },
@@ -696,8 +844,9 @@ function makeCategoryDiv(array){
     title.appendChild(document.createTextNode("Category"));
 
     var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col-10");
+    titleDiv.setAttribute("class", "col");
 
+    /*
     var legendDiv = document.createElement("div");
     legendDiv.setAttribute("class", "col-2");
     legendDiv.innerHTML = "<i class='far fa-question-circle widget-text-mode' style='font-size: 1.5rem; margin-top: 1.1rem;' aria-hidden='true';></i>" + 
@@ -714,6 +863,7 @@ function makeCategoryDiv(array){
                 "<br>" +
                 "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Ignored tests" +
             "</span>";
+    */
 
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
@@ -721,7 +871,7 @@ function makeCategoryDiv(array){
     titleDiv.appendChild(title);
 
     titleRow.appendChild(titleDiv);
-    titleRow.appendChild(legendDiv);
+    //titleRow.appendChild(legendDiv);
     
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
@@ -733,12 +883,21 @@ function makeCategoryDiv(array){
     divdesc.appendChild(description);
 
     var div = document.createElement("div");
-    div.setAttribute("id", "sum-col");
+    div.setAttribute("id", "category-widget");
     div.classList.add("col");
+    div.classList.add("sum-col");
     div.classList.add("widget-mode");
+    div.setAttribute("draggable", "true");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
+
+    div.addEventListener('dragstart', handleDragStart, false);
+    div.addEventListener('dragenter', handleDragEnter, false);
+    div.addEventListener('dragover', handleDragOver, false);
+    div.addEventListener('dragleave', handleDragLeave, false);
+    div.addEventListener('drop', handleDrop, false);
+    div.addEventListener('dragend', handleDragEnd, false);
 
     if(mode != null) {
         if(mode === 'light'){
@@ -758,6 +917,8 @@ function makeCategoryDiv(array){
 
     resultsDiv.appendChild(div);
 }
+
+//---------------------TOTAL SUMMARY REPORTS----------------------//
 
 function showTotalReports(n){
 
@@ -782,6 +943,83 @@ function showTotalReports(n){
 
     div.appendChild(h4);
 }
+
+//---------------------GRID WIDGETS SWAP----------------------//
+
+var dragSrcEl = null;
+
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    
+    dragSrcEl = this;
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+    e.preventDefault();
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+    
+    return false;
+}
+
+function handleDragEnter(e) {
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('over');
+}
+
+function handleDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from redirecting.
+    }
+    
+    if (dragSrcEl != this) {
+        var sourceID = dragSrcEl.id;
+        var targetID = this.id;
+        var sourceDiv = document.getElementById(sourceID);
+        var targetDiv = document.getElementById(targetID);
+        var sourceChildren = sourceDiv.children;
+        var targetChildren = targetDiv.children;
+
+        var srcChildren = sourceChildren;
+        var trgChildren = targetChildren;
+
+        var div = document.createElement("div");
+
+        Array.prototype.slice.call(srcChildren).forEach(function(child){
+            div.appendChild(child);
+        });
+
+        sourceDiv.innerHTML = "";
+
+        Array.prototype.slice.call(trgChildren).forEach(function(child){
+            sourceDiv.appendChild(child);
+        });
+
+        targetDiv.innerHTML = "";
+
+        Array.prototype.slice.call(div.children).forEach(function(child){
+            targetDiv.appendChild(child);
+        });
+
+        this.classList.remove('over');
+    }
+    
+    return false;
+}
+
+function handleDragEnd(e) {
+    this.style.opacity = '1';
+}
+
+//---------------------UI AUX FUNCTIONS----------------------//
 
 function showNoConfigMessageOnGeneral(){
     var message = document.getElementById("no-data-message");

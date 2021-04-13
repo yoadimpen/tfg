@@ -526,13 +526,25 @@ input:checked + .slider:before {
 	padding-bottom: 8px;
 }
 
-#sum-col {
+#sum-row {
+	position: relative;
+	z-index: 1;
+	--auto-grid-min-size: 20rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
+	grid-gap: 1rem;
+	list-style-type:none;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.sum-col {
 	border-radius: 5px;
 	position: relative;
 	border: 0px;
-	margin: 10px;
-	width: 30%;
 	z-index: 1;
+	padding: 10px;
+	cursor: grab;
 }
 
 #total-reports {
@@ -738,8 +750,8 @@ input:checked + .slider:before {
 		width: 80%;
 	}
 
-	#sum-col {
-		width: 100%;
+	#sum-row {
+		--auto-grid-min-size: 16rem;
 	}
 	#total-reports {
 		margin-top: 15px;
@@ -805,9 +817,6 @@ input:checked + .slider:before {
 		width: 40%;
 	}
 
-	#sum-col {
-		width: 100%;
-	}
 	#total-reports {
 		margin-top: 15px;
 	}
@@ -852,9 +861,6 @@ input:checked + .slider:before {
 		width: 90%;
 	}
 
-	#sum-col {
-		width: 40%;
-	}
 	#total-reports {
 		margin-top: 15px;
 	}
@@ -892,6 +898,10 @@ input:checked + .slider:before {
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) and (max-width: 1200px){
+	#total-reports {
+		margin-top: 15px;
+	}
+
 	#config-method {
 		display: flex;
 	}
@@ -925,6 +935,10 @@ input:checked + .slider:before {
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+	#total-reports {
+		margin-top: 15px;
+	}
+
 	#config-method {
 		display: flex;
 	}
