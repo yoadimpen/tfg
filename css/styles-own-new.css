@@ -547,9 +547,18 @@ input:checked + .slider:before {
 	cursor: grab;
 }
 
+#summary-additional {
+	display: flex;
+}
+
 #total-reports {
 	position: relative;
 	z-index: 1;
+}
+
+#btn-new-graph {
+	display: flex;
+	margin-top: 15px;
 }
 
 .tooltip-text {
@@ -599,6 +608,25 @@ input:checked + .slider:before {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+#new-graph-form {
+	display: none;
+	max-width: 800px;
+	padding: 20px;
+	z-index: 1;
+	position: fixed;
+  	top: 50%;
+  	left: 50%;
+  	-ms-transform: translateX(-50%) translateY(-50%);
+  	-webkit-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+
+	border-radius: 5px;
+	background-color: #ffffff;
+	box-shadow:
+	0px 10px 20px rgba(0, 0, 0, 0.10),
+	0px -2px 20px rgba(0, 0, 0, 0.15);
 }
 
 /*-------------------------CONFIG-----------------------*/

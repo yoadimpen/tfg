@@ -546,7 +546,7 @@ function makeTypeDiv(array){
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
     description.classList.add("widget-text-mode");
-    description.innerHTML = "Total of tests used: " + total;
+    description.innerHTML = "Total used tests: " + total;
 
     var divdesc = document.createElement("div");
     divdesc.setAttribute("id", "description");
@@ -686,7 +686,7 @@ function makeSeverityDiv(array){
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
     description.classList.add("widget-text-mode");
-    description.innerHTML = "Total of tests used: " + total;
+    description.innerHTML = "Total used tests: " + total;
 
     var divdesc = document.createElement("div");
     divdesc.setAttribute("id", "description");
@@ -841,7 +841,7 @@ function makeCategoryDiv(array){
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
     description.classList.add("widget-text-mode");
-    description.innerHTML = "Total of tests used: " + total;
+    description.innerHTML = "Total used tests: " + total;
 
     var divdesc = document.createElement("div");
     divdesc.setAttribute("id", "description");
@@ -889,7 +889,27 @@ function showTotalReports(n){
 
     var mode = localStorage.getItem("multiview-mode");
 
-    var div = document.getElementById("summary-info");
+    var div = document.getElementById("summary-additional");
+
+    var divTotal = document.createElement("div");
+    divTotal.setAttribute("class", "col-10");
+
+    var divBtnNew = document.createElement("div");
+    divBtnNew.setAttribute("id", "btn-new-graph");
+    divBtnNew.classList.add("col-2");
+    divBtnNew.classList.add("justify-content-end");
+
+    var divIcon = document.createElement("div");
+    divIcon.style.borderRadius = "5px";
+    divIcon.style.cursor = "pointer";
+    divIcon.classList.add("widget-mode");
+    divIcon.setAttribute("onclick", "showNewGraphForm()");
+
+    var icon = document.createElement("i");
+    icon.style.margin = "10px";
+    icon.classList.add("fas");
+    icon.classList.add("fa-plus");
+    icon.classList.add("widget-text-mode");
 
     var h4 = document.createElement("h4");
     h4.setAttribute("id", "total-reports");
@@ -906,7 +926,14 @@ function showTotalReports(n){
         h4.classList.add("widget-text-light");
     }
 
-    div.appendChild(h4);
+    divIcon.appendChild(icon);
+
+    divBtnNew.appendChild(divIcon);
+
+    divTotal.appendChild(h4);
+
+    div.appendChild(divTotal);
+    div.appendChild(divBtnNew);
 }
 
 //---------------------GRID WIDGETS SWAP----------------------//
@@ -993,4 +1020,10 @@ function showNoConfigMessageOnGeneral(){
  
     var dataDiv = document.getElementById("summary-data-div");
     dataDiv.style.display = "none";
+ }
+
+ //-------------------NEW GRAPH FUNCTIONS--------------------//
+
+ function showNewGraphForm(){
+     console.log("holo");
  }
