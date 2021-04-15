@@ -1024,6 +1024,181 @@ function showNoConfigMessageOnGeneral(){
 
  //-------------------NEW GRAPH FUNCTIONS--------------------//
 
- function showNewGraphForm(){
-     console.log("holo");
+ function showNewGraphForm() {
+    document.getElementById("new-graph-form").style.display = "inline";
  }
+
+function closeForm() {
+    document.getElementById("new-graph-form").style.display = "none";
+}
+
+function addNewRow() {
+    var rowsDiv = document.getElementById("new-graph-data");
+
+    var n = rowsDiv.children.length;
+
+    var div = document.createElement("div");
+    div.classList.add("row");
+
+    var labelDiv = document.createElement("div");
+    labelDiv.classList.add("col-4");
+
+    var innerLabelDiv = document.createElement("div");
+    innerLabelDiv.classList.add("input-group");
+    innerLabelDiv.classList.add("mb-3");
+
+    var labelSpan = document.createElement("span");
+    labelSpan.classList.add("input-group-text");
+    labelSpan.setAttribute("id", "basic-addon1");
+    labelSpan.appendChild(document.createTextNode("Label"));
+
+    var labelInput = document.createElement("input");
+    labelInput.setAttribute("type", "text");
+    labelInput.classList.add("form-control");
+    labelInput.classList.add("new-graph-labels");
+    labelInput.setAttribute("placeholder", "labeled tests");
+    labelInput.setAttribute("aria-label", "Label");
+    labelInput.setAttribute("aria-describedby", "basic-addon1");
+
+    innerLabelDiv.appendChild(labelSpan);
+    innerLabelDiv.appendChild(labelInput);
+
+    labelDiv.appendChild(innerLabelDiv);
+
+    var valueDiv = document.createElement("div");
+    valueDiv.classList.add("col-4");
+
+    var innerValueDiv = document.createElement("div");
+    innerValueDiv.classList.add("input-group");
+    innerValueDiv.classList.add("mb-3");
+
+    var valueSpan = document.createElement("span");
+    valueSpan.classList.add("input-group-text");
+    valueSpan.setAttribute("id", "basic-addon2");
+    valueSpan.appendChild(document.createTextNode("Value"));
+
+    var valueInput = document.createElement("input");
+    valueInput.setAttribute("type", "text");
+    valueInput.classList.add("form-control");
+    valueInput.classList.add("new-graph-values");
+    valueInput.setAttribute("placeholder", "20");
+    valueInput.setAttribute("aria-label", "Value");
+    valueInput.setAttribute("aria-describedby", "basic-addon2");
+
+    innerValueDiv.appendChild(valueSpan);
+    innerValueDiv.appendChild(valueInput);
+
+    valueDiv.appendChild(innerValueDiv);
+
+    var colorDiv = document.createElement("div");
+    colorDiv.classList.add("col-3");
+
+    var innerColorDiv = document.createElement("div");
+    innerColorDiv.classList.add("input-group");
+    innerColorDiv.classList.add("mb-3");
+
+    var colorSpan = document.createElement("span");
+    colorSpan.classList.add("input-group-text");
+    colorSpan.setAttribute("id", "basic-addon3");
+    colorSpan.appendChild(document.createTextNode("Color"));
+
+    var colorInput = document.createElement("input");
+    colorInput.setAttribute("type", "text");
+    colorInput.classList.add("form-control");
+    colorInput.classList.add("new-graph-colors");
+    colorInput.setAttribute("placeholder", "#b9ebfa");
+    colorInput.setAttribute("aria-label", "Color");
+    colorInput.setAttribute("aria-describedby", "basic-addon3");
+
+    innerColorDiv.appendChild(colorSpan);
+    innerColorDiv.appendChild(colorInput);
+
+    colorDiv.appendChild(innerColorDiv);
+
+    var deleteDiv = document.createElement("div");
+    deleteDiv.classList.add("col-1");
+
+    var deleteIcon = document.createElement("i");
+    deleteIcon.classList.add("fas");
+    deleteIcon.classList.add("fa-times");
+    deleteIcon.setAttribute("onclick", "deleteFormRow(" + n+ ")");
+
+    deleteDiv.appendChild(deleteIcon);
+
+    div.appendChild(labelDiv);
+    div.appendChild(valueDiv);
+    div.appendChild(colorDiv);
+    div.appendChild(deleteDiv);
+
+    rowsDiv.appendChild(div);
+}
+
+function deleteFormRow(n){
+    var dataDiv = document.getElementById("new-graph-data");
+
+    var children = dataDiv.children;
+
+    children[n].remove();
+
+    var i = 0;
+    Array.prototype.slice.call(children).forEach(function(child){
+        child.children[3].children[0].setAttribute("onclick", "deleteFormRow(" + i + ")");
+        i = i + 1;
+    })
+}
+
+function saveNewGraph(){
+    var name = document.getElementById("new-graph-name").value;
+    var type = document.getElementById("new-graph-type").value;
+
+    var labels = document.getElementsByClassName("new-graph-labels");
+    var values = document.getElementsByClassName("new-graph-values");
+    var colors = document.getElementsByClassName("new-graph-colors");
+
+    var i = 0;
+
+    var items = [];
+
+    Array.prototype.slice.call(labels).forEach(function(label){
+        var item = {
+            label: label.value,
+            value: parseInt(values[i].value),
+            color: colors[i].value
+        }
+        items.push(item);
+
+        i = i + 1;
+    })
+
+    var dataJSON = {
+        name: name,
+        items: items
+    }
+
+    console.log(dataJSON);
+
+    document.getElementById("new-graph-form").style.display = "none";
+
+    //localStorage.removeItem("custom-charts");
+
+    /*
+    var customCharts = localStorage.getItem("custom-charts");
+    console.log(JSON.stringify(customCharts));
+
+    if(customCharts != null){
+        customCharts.graphs.push(dataJSON);
+        localStorage.setItem("custom-charts", JSON.parse(customCharts));
+    } else {
+        var newCharts = {
+            graphs: []
+        };
+
+        newCharts.graphs.push(dataJSON);
+        localStorage.setItem("custom-charts", JSON.parse(newCharts));
+    }
+
+    console.log(JSON.parse(localStorage.getItem("custom-charts")));
+
+    loadSummaryFromConfig();
+    */
+}

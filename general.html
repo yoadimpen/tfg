@@ -118,84 +118,65 @@
                     </div>
                 </div>
             </div>
-            <div id="new-graph-form" class="container-sm">
+            <div id="new-graph-form" class="container-sm" style="display: none;">
                 <div class="row text-center">
-                    <h2>New Graph</h2>
+                    <h2 style="margin-bottom: 20px;">New Graph</h2>
+                    <h5 style="margin-bottom: 20px;">Settings</h5>
+                    <div class="col-5">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Name</span>
+                            <input type="text" class="form-control" placeholder="graph's name" aria-label="Name" aria-describedby="new-graph-name" id="new-graph-name">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="new-graph-type">Type</label>
+                            <select class="form-select" id="new-graph-type">
+                              <option value="doughnut">Doughnut</option>
+                              <option value="bar">Bar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-check">
+                            <input id="new-graph-legend" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                            Display legend
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
+                <div class="row text-center">
+                    <h5 style=" margin-top: 15px; margin-bottom: 20px;">Data</h5>
+                </div>
+                <div id="new-graph-data" class="row">
                     <div class="row">
                         <div class="col-4">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1">Label</span>
-                                <input type="text" class="form-control" placeholder="labeled tests" aria-label="Label" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control new-graph-labels" placeholder="labeled tests" aria-label="Label" aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon2">Value</span>
-                                <input type="text" class="form-control" placeholder="20" aria-label="Value" aria-describedby="basic-addon2">
+                                <input type="text" class="form-control new-graph-values" placeholder="20" aria-label="Value" aria-describedby="basic-addon2">
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon3">Color</span>
-                                <input type="text" class="form-control" placeholder="#b9ebfa" aria-label="Color" aria-describedby="basic-addon3">
+                                <input type="text" class="form-control new-graph-colors" placeholder="#b9ebfa" aria-label="Color" aria-describedby="basic-addon3">
                             </div>
                         </div>
                         <div class="col-1">
-                            <i class="fas fa-times"></i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">Label</span>
-                                <input type="text" class="form-control" placeholder="labeled tests" aria-label="Label" aria-describedby="basic-addon1">
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon2">Value</span>
-                                <input type="text" class="form-control" placeholder="20" aria-label="Value" aria-describedby="basic-addon2">
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon3">Color</span>
-                                <input type="text" class="form-control" placeholder="#b9ebfa" aria-label="Color" aria-describedby="basic-addon3">
-                            </div>
-                        </div>
-                        <div class="col-1">
-                            <i class="fas fa-times"></i>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">Label</span>
-                                <input type="text" class="form-control" placeholder="labeled tests" aria-label="Label" aria-describedby="basic-addon1">
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon2">Value</span>
-                                <input type="text" class="form-control" placeholder="20" aria-label="Value" aria-describedby="basic-addon2">
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon3">Color</span>
-                                <input type="text" class="form-control" placeholder="#b9ebfa" aria-label="Color" aria-describedby="basic-addon3">
-                            </div>
-                        </div>
-                        <div class="col-1">
-                            <i class="fas fa-times"></i>
+                            <i class="fas fa-times" onclick="deleteFormRow(0)"></i>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-3">
-                        <button type="button" class="btn btn-secondary">Add New Row</button>
+                        <button type="button" class="btn btn-secondary" onclick="addNewRow()">Add New Row</button>
                     </div>
                 </div>
                 <div class="row">
@@ -203,8 +184,8 @@
 
                     </div>
                     <div class="col-3">
-                        <button type="button" class="btn btn-danger">Cancel</button>
-                        <button type="button" class="btn btn-success">Generate</button>
+                        <button type="button" class="btn btn-danger" onclick="closeForm()">Cancel</button>
+                        <button type="button" class="btn btn-success" onclick="saveNewGraph()">Generate</button>
                     </div>
                 </div>
             </div>
