@@ -118,20 +118,20 @@
                     </div>
                 </div>
             </div>
-            <div id="new-graph-form" class="container-sm" style="display: none;">
+            <div id="new-graph-form" class="container-sm form-mode" style="display: none;">
                 <div class="row text-center">
-                    <h2 style="margin-bottom: 20px;">New Graph</h2>
-                    <h5 style="margin-bottom: 20px;">Settings</h5>
+                    <h2 style="margin-bottom: 20px;" class="widget-text-mode">New Graph</h2>
+                    <h5 style="margin-bottom: 20px;" class="widget-text-mode">Settings</h5>
                     <div class="col-5">
                         <div class="input-group mb-3">
-                            <span class="input-group-text">Name</span>
-                            <input type="text" class="form-control" placeholder="graph's name" aria-label="Name" aria-describedby="new-graph-name" id="new-graph-name">
+                            <span class="input-group-text input-mode">Name</span>
+                            <input type="text" class="form-control input-mode" placeholder="graph's name" aria-label="Name" aria-describedby="new-graph-name" id="new-graph-name">
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="input-group mb-3">
-                            <label class="input-group-text" for="new-graph-type">Type</label>
-                            <select class="form-select" id="new-graph-type">
+                            <label class="input-group-text input-mode" for="new-graph-type">Type</label>
+                            <select class="form-select input-mode" id="new-graph-type">
                               <option value="doughnut">Doughnut</option>
                               <option value="bar">Bar</option>
                             </select>
@@ -139,44 +139,71 @@
                     </div>
                     <div class="col-3">
                         <div class="form-check">
-                            <input id="new-graph-legend" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
+                            <input id="new-graph-legend" class="form-check-input radio-mode" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label widget-text-mode" for="flexCheckDefault">
                             Display legend
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="row text-center">
-                    <h5 style=" margin-top: 15px; margin-bottom: 20px;">Data</h5>
+                    <h5 style=" margin-top: 15px; margin-bottom: 20px;" class="widget-text-mode">Data</h5>
                 </div>
                 <div id="new-graph-data" class="row">
                     <div class="row">
                         <div class="col-4">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon1">Label</span>
-                                <input type="text" class="form-control new-graph-labels" placeholder="labeled tests" aria-label="Label" aria-describedby="basic-addon1">
+                                <span class="input-group-text input-mode" id="basic-addon1">Label</span>
+                                <input type="text" class="form-control new-graph-labels input-mode" placeholder="labeled tests" aria-label="Label" aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon2">Value</span>
-                                <input type="text" class="form-control new-graph-values" placeholder="20" aria-label="Value" aria-describedby="basic-addon2">
+                                <span class="input-group-text input-mode" id="basic-addon2">Value</span>
+                                <input type="text" class="form-control new-graph-values input-mode" placeholder="20" aria-label="Value" aria-describedby="basic-addon2">
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon3">Color</span>
-                                <input type="text" class="form-control new-graph-colors" placeholder="#b9ebfa" aria-label="Color" aria-describedby="basic-addon3">
+                                <span class="input-group-text input-mode" id="basic-addon3">Color</span>
+                                <input type="text" class="form-control new-graph-colors input-mode" placeholder="#b9ebfa" aria-label="Color" aria-describedby="basic-addon3">
                             </div>
                         </div>
                         <div class="col-1">
-                            <i class="fas fa-times" onclick="deleteFormRow(0)"></i>
+                            <i id="remove-row-form" class="fas fa-times fa-lg widget-text-mode" onclick="deleteFormRow(0)"></i>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-3">
-                        <button type="button" class="btn btn-secondary" onclick="addNewRow()">Add New Row</button>
+                        <button type="button" class="btn btn-mode" onclick="addNewRow()">Add New Row</button>
+                    </div>
+                </div>
+                <div id="new-graph-validation" class="row" style="margin-top: 15px; margin-bottom: 15px;">
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div id="new-graph-val-name" class="col-3" style="display: none;">
+                            <button type="button" class="btn btn-warning" style="width: 100%;" disabled>Name is missing!</button>
+                        </div>
+                        <div id="new-graph-val-label" class="col-3" style="display: none;">
+                            <button type="button" class="btn btn-warning" style="width: 100%;" disabled>A label is missing!</button>
+                        </div>
+                        <div id="new-graph-val-value" class="col-3" style="display: none;">
+                            <button type="button" class="btn btn-warning" style="width: 100%;" disabled>A value is missing!</button>
+                        </div>
+                        <div id="new-graph-val-color" class="col-3" style="display: none;">
+                            <button type="button" class="btn btn-warning" style="width: 100%;" disabled>A color is missing!</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="new-graph-val-taken" class="col-3" style="display: none;">
+                            <button type="button" class="btn btn-warning" style="width: 100%;" disabled>Name is taken!</button>
+                        </div>
+                        <div id="new-graph-val-numeric" class="col-4" style="display: none;">
+                            <button type="button" class="btn btn-warning" style="width: 100%;" disabled>A value is not numeric!</button>
+                        </div>
+                        <div id="new-graph-val-format" class="col-4" style="display: none;">
+                            <button type="button" class="btn btn-warning" style="width: 100%;" disabled>Incorrect color format!</button>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -185,7 +212,7 @@
                     </div>
                     <div class="col-3">
                         <button type="button" class="btn btn-danger" onclick="closeForm()">Cancel</button>
-                        <button type="button" class="btn btn-success" onclick="saveNewGraph()">Generate</button>
+                        <button type="button" class="btn btn-success" onclick="validateForm()">Generate</button>
                     </div>
                 </div>
             </div>

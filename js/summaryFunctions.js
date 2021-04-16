@@ -170,6 +170,18 @@ function fillLight(){
         el.classList.remove("widget-text-dark");
         el.classList.add("widget-text-light");
     })
+
+    var formElements = document.getElementsByClassName("form-mode");
+    Array.prototype.slice.call(formElements).forEach(function(el){
+        el.classList.remove("form-dark");
+        el.classList.add("form-light");
+    })
+
+    var radioElements = document.getElementsByClassName("radio-mode");
+    Array.prototype.slice.call(radioElements).forEach(function(el){
+        el.classList.remove("radio-dark");
+        el.classList.add("radio-light");
+    })
 }
 
 function fillDark(){
@@ -226,6 +238,18 @@ function fillDark(){
     Array.prototype.slice.call(widgetTextElements).forEach(function(el){
         el.classList.remove("widget-text-light");
         el.classList.add("widget-text-dark");
+    })
+
+    var formElements = document.getElementsByClassName("form-mode");
+    Array.prototype.slice.call(formElements).forEach(function(el){
+        el.classList.remove("form-light");
+        el.classList.add("form-dark");
+    })
+
+    var radioElements = document.getElementsByClassName("radio-mode");
+    Array.prototype.slice.call(radioElements).forEach(function(el){
+        el.classList.remove("radio-light");
+        el.classList.add("radio-dark");
     })
 }
 
@@ -293,7 +317,103 @@ function generateSummaryDivs(reportsPath){
     makeSeverityDiv(severity);
     makeCategoryDiv(category);
 
+    generateCustomChartDivs();
+
     showTotalReports(pathsArray.length);
+}
+
+function generateCustomChartDivs(){
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+
+    if(customCharts != null) {
+        customCharts.graphs.forEach(function(graph){
+            makeCustomDiv(graph);
+        })
+    }
+}
+
+function toTitleCase(str) {
+    return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+  }
+
+function makeCustomDiv(json){
+    var mode = localStorage.getItem("multiview-mode");
+
+    var resultsDiv = document.getElementById("sum-row");
+
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute("id", json.name.toLowerCase());
+    canvas.setAttribute("width", "75%");
+    canvas.setAttribute("height", "54%");
+    canvas.setAttribute("style", "margin-top:7%;margin-bottom:5%;");
+
+    var ctx = canvas.getContext('2d');
+
+    console.log(json.items);
+
+    var chart = getChart(ctx, json.type, json.sameColor, json, true);
+
+    var title = document.createElement("h2");
+    title.setAttribute("style", "margin: 10px;");
+    title.classList.add("widget-text-mode");
+    title.appendChild(document.createTextNode(toTitleCase(json.name)));
+
+    var titleRow = document.createElement("div");
+    titleRow.setAttribute("class", "row");
+
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "col");
+
+    titleDiv.appendChild(title);
+
+    titleRow.appendChild(titleDiv);
+    
+    var description = document.createElement("p");
+    description.setAttribute("style", "margin-left:10px;");
+    description.classList.add("widget-text-mode");
+    description.classList.add("custom-graph-remove");
+    description.setAttribute("onclick", "deleteCustomChart('" + json.name + "')");
+    description.innerHTML = "Remove";
+
+    var divdesc = document.createElement("div");
+    divdesc.setAttribute("id", "description");
+    divdesc.setAttribute("style", "cursor: pointer");
+    divdesc.appendChild(description);
+
+    var div = document.createElement("div");
+    div.setAttribute("id", json.name.toLowerCase() + "-widget");
+    div.classList.add("col");
+    div.classList.add("sum-col");
+    div.classList.add("widget-mode");
+    div.setAttribute("draggable", "true");
+    div.appendChild(titleRow);
+    div.appendChild(divdesc);
+    div.appendChild(canvas);
+
+    div.addEventListener('dragstart', handleDragStart, false);
+    div.addEventListener('dragenter', handleDragEnter, false);
+    div.addEventListener('dragover', handleDragOver, false);
+    div.addEventListener('dragleave', handleDragLeave, false);
+    div.addEventListener('drop', handleDrop, false);
+    div.addEventListener('dragend', handleDragEnd, false);
+
+    if(mode != null) {
+        if(mode === 'light'){
+            div.classList.add("widget-light");
+            title.classList.add("widget-text-light");
+            description.classList.add("widget-text-light");
+        } else if(mode === 'dark'){
+            div.classList.add("widget-dark");
+            title.classList.add("widget-text-dark");
+            description.classList.add("widget-text-dark");
+        }
+    } else {
+        div.classList.add("widget-light");
+        title.classList.add("widget-text-light");
+        description.classList.add("widget-text-light");
+    }
+
+    resultsDiv.appendChild(div);
 }
 
 function processResults(results){
@@ -497,7 +617,9 @@ function makeTypeDiv(array){
 
     var canvas = document.createElement("canvas");
     canvas.setAttribute("id", "myChart");
-    canvas.setAttribute("style", "margin-top:20%;");
+    canvas.setAttribute("width", "75%");
+    canvas.setAttribute("height", "54%");
+    canvas.setAttribute("style", "margin-top:7%;margin-bottom:5%;");
 
     var ctx = canvas.getContext('2d');
 
@@ -890,6 +1012,7 @@ function showTotalReports(n){
     var mode = localStorage.getItem("multiview-mode");
 
     var div = document.getElementById("summary-additional");
+    div.innerHTML = "";
 
     var divTotal = document.createElement("div");
     divTotal.setAttribute("class", "col-10");
@@ -1033,6 +1156,9 @@ function closeForm() {
 }
 
 function addNewRow() {
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var rowsDiv = document.getElementById("new-graph-data");
 
     var n = rowsDiv.children.length;
@@ -1049,6 +1175,7 @@ function addNewRow() {
 
     var labelSpan = document.createElement("span");
     labelSpan.classList.add("input-group-text");
+    labelSpan.classList.add("input-mode");
     labelSpan.setAttribute("id", "basic-addon1");
     labelSpan.appendChild(document.createTextNode("Label"));
 
@@ -1056,6 +1183,7 @@ function addNewRow() {
     labelInput.setAttribute("type", "text");
     labelInput.classList.add("form-control");
     labelInput.classList.add("new-graph-labels");
+    labelInput.classList.add("input-mode");
     labelInput.setAttribute("placeholder", "labeled tests");
     labelInput.setAttribute("aria-label", "Label");
     labelInput.setAttribute("aria-describedby", "basic-addon1");
@@ -1074,6 +1202,7 @@ function addNewRow() {
 
     var valueSpan = document.createElement("span");
     valueSpan.classList.add("input-group-text");
+    valueSpan.classList.add("input-mode");
     valueSpan.setAttribute("id", "basic-addon2");
     valueSpan.appendChild(document.createTextNode("Value"));
 
@@ -1081,6 +1210,7 @@ function addNewRow() {
     valueInput.setAttribute("type", "text");
     valueInput.classList.add("form-control");
     valueInput.classList.add("new-graph-values");
+    valueInput.classList.add("input-mode");
     valueInput.setAttribute("placeholder", "20");
     valueInput.setAttribute("aria-label", "Value");
     valueInput.setAttribute("aria-describedby", "basic-addon2");
@@ -1099,6 +1229,7 @@ function addNewRow() {
 
     var colorSpan = document.createElement("span");
     colorSpan.classList.add("input-group-text");
+    colorSpan.classList.add("input-mode");
     colorSpan.setAttribute("id", "basic-addon3");
     colorSpan.appendChild(document.createTextNode("Color"));
 
@@ -1106,6 +1237,7 @@ function addNewRow() {
     colorInput.setAttribute("type", "text");
     colorInput.classList.add("form-control");
     colorInput.classList.add("new-graph-colors");
+    colorInput.classList.add("input-mode");
     colorInput.setAttribute("placeholder", "#b9ebfa");
     colorInput.setAttribute("aria-label", "Color");
     colorInput.setAttribute("aria-describedby", "basic-addon3");
@@ -1119,9 +1251,12 @@ function addNewRow() {
     deleteDiv.classList.add("col-1");
 
     var deleteIcon = document.createElement("i");
+    deleteIcon.setAttribute("id", "remove-row-form");
     deleteIcon.classList.add("fas");
     deleteIcon.classList.add("fa-times");
-    deleteIcon.setAttribute("onclick", "deleteFormRow(" + n+ ")");
+    deleteIcon.classList.add("fa-lg");
+    deleteIcon.classList.add("widget-text-mode");
+    deleteIcon.setAttribute("onclick", "deleteFormRow(" + n + ")");
 
     deleteDiv.appendChild(deleteIcon);
 
@@ -1131,6 +1266,34 @@ function addNewRow() {
     div.appendChild(deleteDiv);
 
     rowsDiv.appendChild(div);
+
+    if(mode != null) {
+        if(mode === 'dark'){
+            labelSpan.classList.add("input-dark");
+            labelInput.classList.add("input-dark");
+            valueSpan.classList.add("input-dark");
+            valueInput.classList.add("input-dark");
+            colorSpan.classList.add("input-dark");
+            colorInput.classList.add("input-dark");
+            deleteIcon.classList.add("widget-text-dark");
+        } else if (mode === 'light') {
+            labelSpan.classList.add("input-light");
+            labelInput.classList.add("input-light");
+            valueSpan.classList.add("input-light");
+            valueInput.classList.add("input-light");
+            colorSpan.classList.add("input-light");
+            colorInput.classList.add("input-light");
+            deleteIcon.classList.add("widget-text-light");
+        }
+    } else {
+        labelSpan.classList.add("input-light");
+        labelInput.classList.add("input-light");
+        valueSpan.classList.add("input-light");
+        valueInput.classList.add("input-light");
+        colorSpan.classList.add("input-light");
+        colorInput.classList.add("input-light");
+        deleteIcon.classList.add("widget-text-light");
+    }
 }
 
 function deleteFormRow(n){
@@ -1147,13 +1310,115 @@ function deleteFormRow(n){
     })
 }
 
+function isFree(name){
+    var res = true;
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+
+    if(customCharts != null){
+        customCharts.graphs.forEach(function(graph){
+            res = res && (graph.name != name);
+        })
+    }
+
+    return res;
+}
+
+function validateForm(){
+
+    var name = document.getElementById("new-graph-name").value;
+    var nameCondition = true;
+    var takenCondition = isFree(name);
+
+    if(name == null || name.trim() === ""){
+        document.getElementById("new-graph-val-name").style.display = "inline";
+        nameCondition = false;
+    } else {
+        document.getElementById("new-graph-val-name").style.display = "none";
+    }
+
+    if(!takenCondition){
+        document.getElementById("new-graph-val-taken").style.display = "inline";
+    } else {
+        document.getElementById("new-graph-val-taken").style.display = "none";
+    }
+
+    var labels = document.getElementsByClassName("new-graph-labels");
+    var labelCondition = true;
+
+    Array.prototype.slice.call(labels).forEach(function(label){
+        if(labelCondition){
+            labelCondition = labelCondition && label.value.trim() != "";
+        }
+    })
+
+    if(!labelCondition){
+        document.getElementById("new-graph-val-label").style.display = "inline";
+    } else {
+        document.getElementById("new-graph-val-label").style.display = "none";
+    }
+
+    var values = document.getElementsByClassName("new-graph-values");
+    var valueCondition = true;
+    var numericCondition = true;
+
+    Array.prototype.slice.call(values).forEach(function(value){
+        if(valueCondition || numericCondition){
+            valueCondition = valueCondition && value.value.trim() != "";
+            numericCondition = numericCondition && !isNaN(value.value) && value.value.trim() != "";
+        }
+    })
+
+    if(!valueCondition){
+        document.getElementById("new-graph-val-value").style.display = "inline";
+    } else {
+        document.getElementById("new-graph-val-value").style.display = "none";
+    }
+
+    if(!numericCondition){
+        document.getElementById("new-graph-val-numeric").style.display = "inline";
+    } else {
+        document.getElementById("new-graph-val-numeric").style.display = "none";
+    }
+
+    var colors = document.getElementsByClassName("new-graph-colors");
+    var colorCondition = true;
+    var formatCondition = true;
+    var formatPattern = /^#(?:[0-9a-fA-F]{3}){1,2}$/;
+
+    Array.prototype.slice.call(colors).forEach(function(color){
+        if(colorCondition || formatCondition){
+            colorCondition = colorCondition && color.value.trim() != "";
+            formatCondition = formatCondition && formatPattern.test(color.value);
+        }
+    })
+
+    if(!colorCondition){
+        document.getElementById("new-graph-val-color").style.display = "inline";
+    } else {
+        document.getElementById("new-graph-val-color").style.display = "none";
+    }
+
+    if(!formatCondition){
+        document.getElementById("new-graph-val-format").style.display = "inline";
+    } else {
+        document.getElementById("new-graph-val-format").style.display = "none";
+    }
+
+    if(nameCondition && takenCondition && labelCondition && valueCondition && numericCondition && colorCondition && formatCondition){
+        saveNewGraph();
+    }
+}
+
 function saveNewGraph(){
     var name = document.getElementById("new-graph-name").value;
     var type = document.getElementById("new-graph-type").value;
+    var legendDisplay = document.getElementById("new-graph-legend").checked;
 
     var labels = document.getElementsByClassName("new-graph-labels");
     var values = document.getElementsByClassName("new-graph-values");
     var colors = document.getElementsByClassName("new-graph-colors");
+
+    var sameColor = Array.prototype.slice.call(colors).every( (val, i, arr) => val.value === arr[0].value);
 
     var i = 0;
 
@@ -1172,7 +1437,10 @@ function saveNewGraph(){
 
     var dataJSON = {
         name: name,
-        items: items
+        type: type,
+        items: items,
+        legendDisplay: legendDisplay,
+        sameColor: sameColor
     }
 
     console.log(dataJSON);
@@ -1180,25 +1448,49 @@ function saveNewGraph(){
     document.getElementById("new-graph-form").style.display = "none";
 
     //localStorage.removeItem("custom-charts");
-
-    /*
-    var customCharts = localStorage.getItem("custom-charts");
-    console.log(JSON.stringify(customCharts));
+    
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+    console.log(customCharts);
 
     if(customCharts != null){
         customCharts.graphs.push(dataJSON);
-        localStorage.setItem("custom-charts", JSON.parse(customCharts));
+        localStorage.setItem("custom-charts", JSON.stringify(customCharts));
     } else {
         var newCharts = {
             graphs: []
         };
 
         newCharts.graphs.push(dataJSON);
-        localStorage.setItem("custom-charts", JSON.parse(newCharts));
+        localStorage.setItem("custom-charts", JSON.stringify(newCharts));
     }
 
     console.log(JSON.parse(localStorage.getItem("custom-charts")));
 
+    var form = document.getElementById("new-graph-data");
+    form.innerHTML = "";
+
+    addNewRow();
+
+    document.getElementById("new-graph-name").value = "";
+    document.getElementById("new-graph-type").value = "Doughnut";
+    document.getElementById("new-graph-legend").checked = false;
+
     loadSummaryFromConfig();
-    */
+}
+
+function deleteCustomChart(name) {
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+
+    var i = 0;
+
+    customCharts.graphs.forEach(function(graph){
+        if(graph.name === name){
+            customCharts.graphs.splice(i, 1);
+        }
+        i = i + 1;
+    })
+
+    localStorage.setItem("custom-charts", JSON.stringify(customCharts));
+
+    loadSummaryFromConfig();
 }
