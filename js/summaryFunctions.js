@@ -349,9 +349,7 @@ function makeCustomDiv(json){
 
     var ctx = canvas.getContext('2d');
 
-    console.log(json.items);
-
-    var chart = getChart(ctx, json.type, json.sameColor, json, true);
+    var chart = getChart(ctx, json.type, json.sameColor, json, json.legendDisplay);
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px;");
@@ -1443,14 +1441,11 @@ function saveNewGraph(){
         sameColor: sameColor
     }
 
-    console.log(dataJSON);
-
     document.getElementById("new-graph-form").style.display = "none";
 
     //localStorage.removeItem("custom-charts");
     
     var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
-    console.log(customCharts);
 
     if(customCharts != null){
         customCharts.graphs.push(dataJSON);
@@ -1463,8 +1458,6 @@ function saveNewGraph(){
         newCharts.graphs.push(dataJSON);
         localStorage.setItem("custom-charts", JSON.stringify(newCharts));
     }
-
-    console.log(JSON.parse(localStorage.getItem("custom-charts")));
 
     var form = document.getElementById("new-graph-data");
     form.innerHTML = "";
