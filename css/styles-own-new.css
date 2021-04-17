@@ -323,7 +323,6 @@ input:checked + .slider:before {
     margin: 20px;
     margin-left: 20%;
     border-radius: 5px;
-	background-color: rgba(235, 235, 235, 0.3);
 	box-shadow:
 	0px 10px 20px rgba(0, 0, 0, 0.10),
 	0px -2px 20px rgba(0, 0, 0, 0.15);
@@ -611,15 +610,17 @@ input:checked + .slider:before {
 }
 
 #new-graph-form {
-	max-width: 800px;
+	overflow: auto;
+	max-height: 450px;
+	margin: 15px;
 	padding: 20px;
 	z-index: 1;
 	position: fixed;
   	top: 50%;
   	left: 50%;
-  	-ms-transform: translateX(-50%) translateY(-50%);
-  	-webkit-transform: translate(-50%,-50%);
-	transform: translate(-50%,-50%);
+  	-ms-transform: translateX(-52%) translateY(-50%);
+  	-webkit-transform: translate(-52%,-50%);
+	transform: translate(-52%,-50%);
 
 	border-radius: 5px;
 	box-shadow:
@@ -824,6 +825,27 @@ input:checked + .slider:before {
 	#total-reports {
 		margin-top: 15px;
 	}
+	#new-graph-form{
+		max-width: 250px;
+		transform: translate(-56%,-50%);
+	}
+	#form-new {
+		display: block;
+	}
+	.form-property-lv1, .form-property-lv2,
+	.form-property-lv3, .form-property-lv4,
+	.form-property-lv5 {
+		width: 100%;
+	}
+	#remove-row-form {
+		top:0%;
+		left:0%;
+		transform: translate(100%, -50%);
+	}
+	#new-graph-val-name, #new-graph-val-label, #new-graph-val-value,
+	#new-graph-val-taken, #new-graph-val-numeric {
+		margin-bottom: 10px;
+	}
 
 	#config-method {
 		display: inline;
@@ -888,6 +910,21 @@ input:checked + .slider:before {
 	#total-reports {
 		margin-top: 15px;
 	}
+	#new-graph-form{
+		max-width: 500px;
+		transform: translate(-53%,-50%);
+	}
+	.form-property-lv1, .form-property-lv2,
+	.form-property-lv4 {
+		width: 50%;
+	}
+	#new-graph-val-name, #new-graph-val-label, #new-graph-val-taken {
+		margin-bottom: 10px;
+	}
+
+	.form-property-lv3, .form-property-lv5 {
+		width: 100%;
+	}
 
 	#config-method {
 		display: flex;
@@ -932,6 +969,15 @@ input:checked + .slider:before {
 	#total-reports {
 		margin-top: 15px;
 	}
+	#new-graph-form{
+		max-width: 700px;
+	}
+	.form-property-lv2 {
+		width: 50%;
+	}
+	.form-property-lv5 {
+		width: 100%;
+	}
 
 	#config-method {
 		display: flex;
@@ -969,6 +1015,9 @@ input:checked + .slider:before {
 	#total-reports {
 		margin-top: 15px;
 	}
+	#new-graph-form{
+		max-width: 800px;
+	}
 
 	#config-method {
 		display: flex;
@@ -1005,6 +1054,9 @@ input:checked + .slider:before {
 @media only screen and (min-width: 1200px) {
 	#total-reports {
 		margin-top: 15px;
+	}
+	#new-graph-form{
+		max-width: 800px;
 	}
 
 	#config-method {

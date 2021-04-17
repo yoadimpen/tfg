@@ -1166,6 +1166,7 @@ function addNewRow() {
 
     var labelDiv = document.createElement("div");
     labelDiv.classList.add("col-4");
+    labelDiv.classList.add("form-property-lv2");
 
     var innerLabelDiv = document.createElement("div");
     innerLabelDiv.classList.add("input-group");
@@ -1193,6 +1194,7 @@ function addNewRow() {
 
     var valueDiv = document.createElement("div");
     valueDiv.classList.add("col-4");
+    valueDiv.classList.add("form-property-lv2");
 
     var innerValueDiv = document.createElement("div");
     innerValueDiv.classList.add("input-group");
@@ -1220,6 +1222,7 @@ function addNewRow() {
 
     var colorDiv = document.createElement("div");
     colorDiv.classList.add("col-3");
+    colorDiv.classList.add("form-property-lv2");
 
     var innerColorDiv = document.createElement("div");
     innerColorDiv.classList.add("input-group");
@@ -1247,6 +1250,7 @@ function addNewRow() {
 
     var deleteDiv = document.createElement("div");
     deleteDiv.classList.add("col-1");
+    deleteDiv.classList.add("form-property-lv2");
 
     var deleteIcon = document.createElement("i");
     deleteIcon.setAttribute("id", "remove-row-form");
