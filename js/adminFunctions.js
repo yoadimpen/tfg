@@ -1,6 +1,8 @@
 function loadConfig() {
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
+
+    var div = document.getElementById("config-data");
 
     var i1 = document.getElementById("directory-method-icon");
     var text1 = document.getElementById("directory-method-text");
@@ -56,7 +58,7 @@ function loadConfig() {
 
     var tbody = document.createElement("tbody");
 
-    var config = String(localStorage.getItem("config"));
+    var config = String(localStorage.getItem("config-heroku"));
 
     if(config != "null"){
         var configJSON = JSON.parse(config);
@@ -93,6 +95,36 @@ function loadConfig() {
 
             tbody.appendChild(row);
         })
+
+        if(links.length == 0){
+            var row = document.createElement("tr");
+
+            var td1 = document.createElement("td");
+            td1.setAttribute("scope", "row");
+            td1.classList.add("widget-text-mode");
+            td1.appendChild(document.createTextNode("-"));
+
+            var td2 = document.createElement("td");
+            td2.classList.add("widget-text-mode");
+            td2.appendChild(document.createTextNode("-"));
+
+            var td3 = document.createElement("td");
+            td3.classList.add("widget-text-mode");
+            td3.appendChild(document.createTextNode("-"));
+
+            var td4 = document.createElement("td");
+            td4.classList.add("widget-text-mode");
+            td4.appendChild(document.createTextNode("-"));
+
+            row.appendChild(td1);
+            row.appendChild(td2);
+            row.appendChild(td3);
+            row.appendChild(td4);
+
+            tbody.appendChild(row);
+
+            message.classList.add("message-no");
+        }
 
         if(mode != null) {
             if(mode === 'dark'){
@@ -144,6 +176,8 @@ function loadConfig() {
 
         message.classList.add("message-no");
     } else {
+        resetConfig();
+        div.innerHTML = "";
         var row = document.createElement("tr");
 
         var td1 = document.createElement("td");
@@ -178,7 +212,6 @@ function loadConfig() {
 
     tableDiv.appendChild(table);
 
-    var div = document.getElementById("config-data");
     div.appendChild(tableDiv);
 
     if(mode != null) {
@@ -190,14 +223,14 @@ function loadConfig() {
     }
 
     if (mode == null){
-        localStorage.setItem("multiview-mode", "light");
+        localStorage.setItem("multiview-mode-h", "light");
         fillLight();
     }
 
 }
 
 function changeMode(){
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var page = document.getElementsByClassName("page")[0];
     page.style.transition = "1s";
@@ -207,12 +240,12 @@ function changeMode(){
     }, 1000);
 
     if(mode === 'light'){
-        localStorage.setItem("multiview-mode", "dark");
-        mode = localStorage.getItem("multiview-mode");
+        localStorage.setItem("multiview-mode-h", "dark");
+        mode = localStorage.getItem("multiview-mode-h");
         fillDark();
     } else if(mode === 'dark') {
-        localStorage.setItem("multiview-mode", "light");
-        mode = localStorage.getItem("multiview-mode");
+        localStorage.setItem("multiview-mode-h", "light");
+        mode = localStorage.getItem("multiview-mode-h");
         fillLight();
     }
 }
@@ -365,7 +398,7 @@ function fillDark(){
 
 function turnActive(method){
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var i1 = document.getElementById("directory-method-icon");
     var text1 = document.getElementById("directory-method-text");
@@ -443,9 +476,7 @@ function turnActive(method){
 }
 
 function updatePreference(){
-    var config = String(localStorage.getItem("config"));
-
-    console.log(config);
+    var config = String(localStorage.getItem("config-heroku"));
 
     if(config != null){
         var configJSON = JSON.parse(config);
@@ -456,7 +487,7 @@ function updatePreference(){
         } else {
             configJSON.type = "specific_files";
         }
-        localStorage.setItem("config", JSON.stringify(configJSON));
+        localStorage.setItem("config-heroku", JSON.stringify(configJSON));
     }
 
     var dataDiv = document.getElementById("config-data");
@@ -477,7 +508,7 @@ function updatePreference(){
 function deleteRow(n) {
     document.getElementById("config-table").deleteRow(n);
 
-    var config = localStorage.getItem("config");
+    var config = localStorage.getItem("config-heroku");
 
     if(config != null) {
         var configJSON = JSON.parse(config);
@@ -490,7 +521,7 @@ function deleteRow(n) {
             i = i + 1;
         })
 
-        localStorage.setItem("config", JSON.stringify(configJSON));
+        localStorage.setItem("config-heroku", JSON.stringify(configJSON));
     }
 
     var dataDiv = document.getElementById("config-data");
@@ -538,13 +569,12 @@ function addNewPath(){
 
         var time = date + "/" + month + "/" + today.getFullYear() + " " + hours + ":" + minutes + ":" + seconds;
         
-        var config = localStorage.getItem("config");
+        var config = localStorage.getItem("config-heroku");
 
         if(config != null){
             var configJSON = JSON.parse(config);
             configJSON.links.push({"id":configJSON.links.length + 1, "path":path, "last_modified":time});
-            console.log(configJSON);
-            localStorage.setItem("config", JSON.stringify(configJSON));
+            localStorage.setItem("config-heroku", JSON.stringify(configJSON));
         }
 
         var dataDiv = document.getElementById("config-data");
@@ -573,14 +603,12 @@ function addNewPath(){
 }
 
 function resetConfig() {
-    localStorage.removeItem("config");
+    localStorage.removeItem("config-heroku");
 
     var json = '{"type": "directory", "links":[]}';
     configJSON = JSON.parse(json);
 
-    console.log(configJSON);
-
-    localStorage.setItem("config", JSON.stringify(configJSON));
+    localStorage.setItem("config-heroku", JSON.stringify(configJSON));
 
     var dataDiv = document.getElementById("config-data");
     dataDiv.innerHTML = "";

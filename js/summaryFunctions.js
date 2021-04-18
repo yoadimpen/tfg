@@ -1,4 +1,5 @@
 function loadDemoDataGeneral() {
+
     var divs = document.getElementById("sum-row");
     divs.innerHTML = "";
 
