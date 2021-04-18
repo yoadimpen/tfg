@@ -1,61 +1,16 @@
-function loadDataFromConfig(){
-
+function loadDemoDataIndex(){
     deleteWidgets();
 
-    var config = String(localStorage.getItem("config"));
+    var paths = ["./testData/report1/summary.json", "./testData/report2/summary.json",
+    "./testData/report3/summary.json", "./testData/report4/summary.json",
+    "./testData/report5/summary.json", "./testData/report6/summary.json",
+    "./testData/report7/summary.json"];
 
-    if(config != "null"){
-        var config_json = JSON.parse(config);
+    paths.forEach(function(path){
+        readJSON(path, "#");
+    })
 
-        if (config_json.links.length == 0) {
-            showNoConfigMessageOnIndividual();
-        } else {
-            if(config_json.type == "directory"){
-                var directories = config_json.links;
-                directories.forEach(function(directory){
-                    var request = new XMLHttpRequest();
-                    var data = "";
-
-                    request.withCredentials = true;
-                    
-                    request.open('GET', directory.path);
-
-                    request.overrideMimeType("application/json");
-                
-                    request.send();
-
-                    request.onreadystatechange = function() {
-                        if(this.readyState === 4) {
-                            data = request.responseText;
-                            
-                            var realDataArray = getPathsFromHTTPRequest(data);
-
-                            for(i=0;i<realDataArray.length;i++){
-                                realDataArray[i] = directory.path.concat("/".concat(realDataArray[i]));
-                            }
-
-                            realDataArray.forEach(function(realData){
-                                var fullPath = realData.concat("/widgets/summaryCopy.json");
-                                readJSON(fullPath, realData);
-                            })
-                        }
-                    };
-                })
-            } else {
-                var links = config_json.links;
-
-                links.forEach(function(link){
-                    link = link.path.trim();
-                    var fullPath = link.concat("/widgets/summaryCopy.json");
-                    readJSON(fullPath, link);
-                })
-            }
-        }
-    } else {
-        showNoConfigMessageOnIndividual();
-    }
-
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     if(mode != null) {
         if(mode === 'dark'){
@@ -72,7 +27,7 @@ function loadDataFromConfig(){
 }
 
 function changeMode(){
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var page = document.getElementsByClassName("page")[0];
     page.style.transition = "0.3s";
@@ -82,13 +37,13 @@ function changeMode(){
     }, 500);
 
     if(mode === 'light'){
-        localStorage.setItem("multiview-mode", "dark");
-        mode = localStorage.getItem("multiview-mode");
+        localStorage.setItem("multiview-mode-h", "dark");
+        mode = localStorage.getItem("multiview-mode-h");
 
         fillDark();
     } else if(mode === 'dark') {
-        localStorage.setItem("multiview-mode", "light");
-        mode = localStorage.getItem("multiview-mode");
+        localStorage.setItem("multiview-mode-h", "light");
+        mode = localStorage.getItem("multiview-mode-h");
 
         fillLight();
     }
@@ -208,19 +163,6 @@ function fillDark(){
     })
 }
 
-function getPathsFromHTTPRequest(response){
-    var res = [];
-
-    var firstSplit = response.split("201: ");
-
-    for(i=1;i<firstSplit.length;i++){
-        var secondSplit = firstSplit[i].split(" 4096");
-        res[i-1] = secondSplit[0];
-    }
-
-    return res;
-}
-
 function readJSON (JSONFile, folderPath) {
     
     var request = new XMLHttpRequest();
@@ -288,7 +230,7 @@ function getHiddenElement(id, text){
 
 function generateWidget(jobject, folderPath){
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
@@ -473,7 +415,6 @@ function generateWidget(jobject, folderPath){
     li.appendChild(divSummary);
 
     return ul.appendChild(li);
-
 }
 
 function deleteWidgets(){

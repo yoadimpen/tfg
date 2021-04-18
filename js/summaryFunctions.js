@@ -1,79 +1,15 @@
-function loadSummaryFromConfig(){
-
+function loadDemoDataGeneral() {
     var divs = document.getElementById("sum-row");
     divs.innerHTML = "";
 
-    var config = String(localStorage.getItem("config"));
+    var paths = "./testData/report1;./testData/report2;" +
+    "./testData/report3;./testData/report4;" +
+    "./testData/report5;./testData/report6;" +
+    "./testData/report7";
 
-    if(config != "null"){
-        //se obtiene el objeto JSON de la configuracion
-        var config_json = JSON.parse(config);
+    generateSummaryDivs(paths);
 
-        if (config_json.links.length == 0) {
-            showNoConfigMessageOnGeneral();
-        } else {
-            //si se han guardado directorios se hace lo siguiente
-            if(config_json.type == "directory"){
-                //se cogen todos los enlaces a los directorios guardados
-                var directories = config_json.links;
-                var request = [];
-
-                //para cada uno de los directorios se hace lo siguiente
-                for(k=0;k<directories.length;k++){
-                    (function(k){
-                        //se hace una peticion HTTP para hallar la ruta completa de los informes
-                        var allLinks = [];
-                        var data = "";
-
-                        request[k] = new XMLHttpRequest();
-                        request[k].withCredentials = true;
-                        request[k].open('GET', directories[k].path);
-                        request[k].overrideMimeType("application/json");
-                        request[k].send();
-                        request[k].onreadystatechange = function() {
-
-                            if(this.readyState === 4) {
-                                data = request[k].responseText;
-
-                                //se obtiene el nombre de las carpetas en las cuales hay un informe de Allure
-                                var realDataArray = getPathsFromHTTPRequest(data);
-
-                                //se forma la ruta completa = directorio + nombre de la carpeta del informe
-                                for(i=0;i<realDataArray.length;i++){
-                                    realDataArray[i] = directories[k].path.concat("/".concat(realDataArray[i]));
-                                }
-
-                                realDataArray.forEach(function(realData){
-                                    allLinks.push(realData);
-                                })
-
-                                //se actualiza la variable con las rutas nuevas
-                                actualizaTemp(allLinks, k);
-                            }
-                        };
-                    })(k);
-                }
-
-                var reportsPath = localStorage.getItem("links_temp");
-                generateSummaryDivs(reportsPath);
-            // en caso de que se hayan guardado rutas directas a los informes
-            } else {
-                var links = config_json.links;
-                var reportsPath = "";
-                reportsPath = links[0].path;
-
-                for(z=1;z<links.length;z++){
-                    reportsPath = reportsPath.concat(";").concat(links[z].path);
-                }
-                generateSummaryDivs(reportsPath);
-            }
-        }
-    //en caso de que no haya ninguna configuración añadida
-    } else {
-        showNoConfigMessageOnGeneral();
-    }
-
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     if(mode != null) {
         if(mode === 'dark'){
@@ -84,7 +20,7 @@ function loadSummaryFromConfig(){
     }
 
     if (mode == null){
-        localStorage.setItem("multiview-mode", "light");
+        localStorage.setItem("multiview-mode-h", "light");
         fillLight();
     }
 }
@@ -92,7 +28,7 @@ function loadSummaryFromConfig(){
 //------------------------DARK/LIGHT MODE--------------------------//
 
 function changeMode(){
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var page = document.getElementsByClassName("page")[0];
     page.style.transition = "1s";
@@ -102,13 +38,13 @@ function changeMode(){
     }, 1000);
 
     if(mode === 'light'){
-        localStorage.setItem("multiview-mode", "dark");
-        mode = localStorage.getItem("multiview-mode");
+        localStorage.setItem("multiview-mode-h", "dark");
+        mode = localStorage.getItem("multiview-mode-h");
 
         fillDark();
     } else if(mode === 'dark') {
-        localStorage.setItem("multiview-mode", "light");
-        mode = localStorage.getItem("multiview-mode");
+        localStorage.setItem("multiview-mode-h", "light");
+        mode = localStorage.getItem("multiview-mode-h");
 
         fillLight();
     }
@@ -253,41 +189,6 @@ function fillDark(){
     })
 }
 
-//---------------------LOADING AUX FUNCTIONS----------------------//
-
-function actualizaTemp(links, cont){
-    //reinicia el JSON para la nueva generación
-    if(cont == 0){
-        localStorage.removeItem("links_temp");
-    }
-
-    //se procede a iterar todos los enlaces de rutas del directorio actual
-    links.forEach(function(link){
-        //en caso de que sea el primer enlace
-        if(localStorage.getItem("links_temp") == null){
-            localStorage.setItem("links_temp", link);
-        //todos los demás enlaces se concatenan al existente
-        } else{
-            var links_temp = localStorage.getItem("links_temp").concat(";").concat(link);
-            localStorage.removeItem("links_temp");
-            localStorage.setItem("links_temp", links_temp);
-        }
-    })
-}
-
-function getPathsFromHTTPRequest(response){
-    //se utiliza para sacar el nombre de las carpetas que contienen los informes
-
-    var res = [];
-    var firstSplit = response.split("201: ");
-
-    for(i=1;i<firstSplit.length;i++){
-        var secondSplit = firstSplit[i].split(" 4096");
-        res[i-1] = secondSplit[0];
-    }
-    return res;
-}
-
 //---------------------SUMMARY GENERATION----------------------//
 
 function generateSummaryDivs(reportsPath){
@@ -305,13 +206,13 @@ function generateSummaryDivs(reportsPath){
         readJSONs(path, statusArray, severityArray, categoryArray, categoryNameArray, pathsArray.length);
     })
 
-    var status = processResults(localStorage.getItem("statusArray"));
-    var severity = processResults(localStorage.getItem("severityArray"));
-    var category = processResults(localStorage.getItem("categoryArray"));
+    var status = processResults(localStorage.getItem("statusArrayH"));
+    var severity = processResults(localStorage.getItem("severityArrayH"));
+    var category = processResults(localStorage.getItem("categoryArrayH"));
 
-    localStorage.removeItem("statusArray");
-    localStorage.removeItem("severityArray");
-    localStorage.removeItem("categoryArray");
+    localStorage.removeItem("statusArrayH");
+    localStorage.removeItem("severityArrayH");
+    localStorage.removeItem("categoryArrayH");
 
     makeTypeDiv(status);
     makeSeverityDiv(severity);
@@ -323,7 +224,7 @@ function generateSummaryDivs(reportsPath){
 }
 
 function generateCustomChartDivs(){
-    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts-h"));
 
     if(customCharts != null) {
         customCharts.graphs.forEach(function(graph){
@@ -337,7 +238,7 @@ function toTitleCase(str) {
   }
 
 function makeCustomDiv(json){
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
 
@@ -429,7 +330,7 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
 
     var request1 = new XMLHttpRequest();
     request1.withCredentials = true;
-    request1.open('GET', path.concat("/widgets/summaryCopy.json"));
+    request1.open('GET', path.concat("/summary.json"));
     request1.overrideMimeType("application/json");
     request1.send();
     request1.onreadystatechange = function() {
@@ -446,7 +347,7 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
     
     var request2 = new XMLHttpRequest();
     request2.withCredentials = true;
-    request2.open('GET', path.concat("/widgets/severity.json"));
+    request2.open('GET', path.concat("/severity.json"));
     request2.overrideMimeType("application/json");
     request2.send();
     request2.onreadystatechange = function() {
@@ -463,7 +364,7 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
 
     var request3 = new XMLHttpRequest();
     request3.withCredentials = true;
-    request3.open('GET', path.concat("/widgets/categories.json"));
+    request3.open('GET', path.concat("/categories.json"));
     request3.overrideMimeType("application/json");
     request3.send();
     request3.onreadystatechange = function() {
@@ -597,13 +498,13 @@ function getTypeResults(json, resultsArray){
     resultsArray[2] = resultsArray[2] + statistic.skipped;
     resultsArray[3] = resultsArray[3] + statistic.passed;
     resultsArray[4] = resultsArray[4] + statistic.unknown;
-    localStorage.setItem("statusArray", resultsArray);
+    localStorage.setItem("statusArrayH", resultsArray);
     return resultsArray;
 }
 
 function makeTypeDiv(array){
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
     resultsDiv.innerHTML = "";
@@ -737,14 +638,14 @@ function getSeverityLevelResults(jobject, array){
         }
     }
 
-    localStorage.setItem("severityArray", array);
+    localStorage.setItem("severityArrayH", array);
 
     return array;
 }
 
 function makeSeverityDiv(array){
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
 
@@ -872,13 +773,13 @@ function getCategoryResults(json, valuesArray, nameArray){
         res.push(name);
     })
 
-    localStorage.setItem("categoryArray", valuesArray);
+    localStorage.setItem("categoryArrayH", valuesArray);
     return res;
 }
 
 function makeCategoryDiv(array){
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
     var arrayN = array.slice(0,5);
@@ -931,32 +832,12 @@ function makeCategoryDiv(array){
     var titleDiv = document.createElement("div");
     titleDiv.setAttribute("class", "col");
 
-    /*
-    var legendDiv = document.createElement("div");
-    legendDiv.setAttribute("class", "col-2");
-    legendDiv.innerHTML = "<i class='far fa-question-circle widget-text-mode' style='font-size: 1.5rem; margin-top: 1.1rem;' aria-hidden='true';></i>" + 
-            "<span class='tooltip-text widget-mode'>" +
-                "<b>Help</b>" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#800026;' aria-hidden='true'></i> Product defects" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#d31121;' aria-hidden='true'></i> Test defects" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fa5c2e;' aria-hidden='true'></i> Outdated tests" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#feab4b;' aria-hidden='true'></i> Infrastructure problems" +
-                "<br>" +
-                "<i class='fas fa-circle' style='color:#fee087;' aria-hidden='true'></i> Ignored tests" +
-            "</span>";
-    */
-
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
 
     titleDiv.appendChild(title);
 
     titleRow.appendChild(titleDiv);
-    //titleRow.appendChild(legendDiv);
     
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
@@ -1007,7 +888,7 @@ function makeCategoryDiv(array){
 
 function showTotalReports(n){
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var div = document.getElementById("summary-additional");
     div.innerHTML = "";
@@ -1155,7 +1036,7 @@ function closeForm() {
 
 function addNewRow() {
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     var rowsDiv = document.getElementById("new-graph-data");
 
@@ -1314,7 +1195,7 @@ function deleteFormRow(n){
 
 function isFree(name){
     var res = true;
-    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts-h"));
 
     if(customCharts != null){
         customCharts.graphs.forEach(function(graph){
@@ -1446,21 +1327,19 @@ function saveNewGraph(){
     }
 
     document.getElementById("new-graph-form").style.display = "none";
-
-    //localStorage.removeItem("custom-charts");
     
-    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts-h"));
 
     if(customCharts != null){
         customCharts.graphs.push(dataJSON);
-        localStorage.setItem("custom-charts", JSON.stringify(customCharts));
+        localStorage.setItem("custom-charts-h", JSON.stringify(customCharts));
     } else {
         var newCharts = {
             graphs: []
         };
 
         newCharts.graphs.push(dataJSON);
-        localStorage.setItem("custom-charts", JSON.stringify(newCharts));
+        localStorage.setItem("custom-charts-h", JSON.stringify(newCharts));
     }
 
     var form = document.getElementById("new-graph-data");
@@ -1472,11 +1351,11 @@ function saveNewGraph(){
     document.getElementById("new-graph-type").value = "Doughnut";
     document.getElementById("new-graph-legend").checked = false;
 
-    loadSummaryFromConfig();
+    loadDemoDataGeneral();
 }
 
 function deleteCustomChart(name) {
-    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts-h"));
 
     var i = 0;
 
@@ -1487,7 +1366,7 @@ function deleteCustomChart(name) {
         i = i + 1;
     })
 
-    localStorage.setItem("custom-charts", JSON.stringify(customCharts));
+    localStorage.setItem("custom-charts-h", JSON.stringify(customCharts));
 
-    loadSummaryFromConfig();
+    loadDemoDataGeneral();
 }

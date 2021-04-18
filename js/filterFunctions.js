@@ -130,7 +130,7 @@ function addPagesAccessToHtml(nP){
 
     pagesAccess.innerHTML = "";
 
-    var mode = localStorage.getItem("multiview-mode");
+    var mode = localStorage.getItem("multiview-mode-h");
 
     for(i = 0; i < nP; i++){
         var buttonAccessToPage = document.createElement("button");

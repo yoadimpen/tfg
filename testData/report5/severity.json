@@ -1,0 +1,211 @@
+[ {
+  "uid" : "dafd4dbf9200fdc",
+  "name" : "Page loading test",
+  "time" : {
+    "start" : 1412949551164,
+    "stop" : 1412949556298,
+    "duration" : 5134
+  },
+  "status" : "failed",
+  "severity" : "normal"
+}, {
+  "uid" : "8dafe30f8d3cc592",
+  "name" : "failedSimpleTest",
+  "time" : {
+    "start" : 1412949558829,
+    "stop" : 1412949558830,
+    "duration" : 1
+  },
+  "status" : "failed",
+  "severity" : "normal"
+}, {
+  "uid" : "d503c787596ea121",
+  "name" : "BeforeClassFailTest",
+  "time" : {
+    "start" : 1412949539770,
+    "stop" : 1412949539779,
+    "duration" : 9
+  },
+  "status" : "broken",
+  "severity" : "blocker"
+}, {
+  "uid" : "8eeefd10cf619135",
+  "name" : "test_pass",
+  "time" : {
+    "start" : 1412949540562,
+    "stop" : 1412949540565,
+    "duration" : 3
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "636c42ece59a0cb1",
+  "name" : "testPassed",
+  "time" : {
+    "start" : 1412949529363,
+    "stop" : 1412949549730,
+    "duration" : 20367
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "7cb59e9f7d1bf6e9",
+  "name" : "skippedSimpleTest",
+  "time" : {
+    "start" : 1412949558831,
+    "stop" : 1412949558832,
+    "duration" : 1
+  },
+  "status" : "skipped",
+  "severity" : "normal"
+}, {
+  "uid" : "2bd28bf5b2a8aaf9",
+  "name" : "Test what do nothing and always passed right, but have a very long title, over 100 symbols, seriously",
+  "time" : {
+    "start" : 1412949953580,
+    "stop" : 1412949953780,
+    "duration" : 200
+  },
+  "status" : "skipped",
+  "severity" : "blocker"
+}, {
+  "uid" : "be58dfd1a555ee40",
+  "name" : "Usual search test",
+  "time" : {
+    "start" : 1412949551164,
+    "stop" : 1412949558826,
+    "duration" : 7662
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "364a2df005c8b4d5",
+  "name" : "test_raise_cyrilling (невероятный тест кодировки!)",
+  "time" : {
+    "start" : 1412949540562,
+    "stop" : 1412949540660,
+    "duration" : 98
+  },
+  "status" : "broken",
+  "severity" : "normal"
+}, {
+  "uid" : "fafc45c5bc64f463",
+  "name" : "Test what do nothing and always passed right, but have a very long title, over 100 symbols, seriously",
+  "time" : {
+    "start" : 1412949558829,
+    "stop" : 1412949558829,
+    "duration" : 0
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "e56ca4bcf89492d0",
+  "name" : "open widget page",
+  "time" : {
+    "start" : 1412949039950,
+    "stop" : 1412949051895,
+    "duration" : 11945
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "117e61ab81201175",
+  "name" : "testTwo",
+  "time" : {
+    "start" : 1412949539363,
+    "stop" : 1412949539372,
+    "duration" : 9
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "3ddbb43abb0aab05",
+  "name" : "<script>3443</script>",
+  "time" : {
+    "start" : 1412949539794,
+    "stop" : 1412949540559,
+    "duration" : 765
+  },
+  "status" : "failed",
+  "severity" : "critical"
+}, {
+  "uid" : "e26ef0e1a45cd3db",
+  "name" : "brokenSimpleTest",
+  "time" : {
+    "start" : 1412949558829,
+    "stop" : 1412949558832,
+    "duration" : 3
+  },
+  "status" : "broken",
+  "severity" : "normal"
+}, {
+  "uid" : "6884dfcd06109411",
+  "name" : "testOne",
+  "time" : {
+    "start" : 1412949539363,
+    "stop" : 1412949539715,
+    "duration" : 352
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "fd01b8524094a8b6",
+  "name" : "lotOfStepsTest",
+  "time" : {
+    "start" : 1412949539801,
+    "stop" : 1412949539862,
+    "duration" : 61
+  },
+  "status" : "broken",
+  "severity" : "blocker"
+}, {
+  "uid" : "af6b2c269e8c7517",
+  "name" : "Test with long assertion text",
+  "time" : {
+    "start" : 1412949539800,
+    "stop" : 1412949540461,
+    "duration" : 661
+  },
+  "status" : "failed",
+  "severity" : "normal"
+}, {
+  "uid" : "b7dd42a3fbd34f2e",
+  "name" : "Empty text search",
+  "time" : {
+    "start" : 1412949551164,
+    "stop" : 1412949558344,
+    "duration" : 7180
+  },
+  "status" : "passed",
+  "severity" : "trivial"
+}, {
+  "uid" : "9b9b4c56cec52cc",
+  "name" : "testFour",
+  "time" : {
+    "start" : 1412949539363,
+    "stop" : 1412949539730,
+    "duration" : 367
+  },
+  "status" : "unknown",
+  "severity" : "normal"
+}, {
+  "uid" : "9554292626f13480",
+  "name" : "Wildcard search test",
+  "time" : {
+    "start" : 1412949551164,
+    "stop" : 1412949558737,
+    "duration" : 7573
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "503a63e426d8ada1",
+  "name" : "testThree",
+  "time" : {
+    "start" : 1412949539364,
+    "stop" : 1412949539746,
+    "duration" : 382
+  },
+  "status" : "unknown",
+  "severity" : "normal"
+} ]
