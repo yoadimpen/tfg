@@ -94,15 +94,12 @@ function showOrderedWidgets(){
 
 //PAGINATION
 function doPagination(){
-    
     var pages = makePages();
     addPagesAccessToHtml(pages.length);
     goToPage(0);
-
 }
 
 function makePages(){
-
     var nElement = document.getElementById("page-input").value;
 
     var n = parseInt(nElement);
@@ -112,7 +109,6 @@ function makePages(){
     var arrayOfPages = [];
 
     var j = 0;
-
     for (i = 0; i < divs.length; i=i+n) {
         if(i+n < divs.length){
             arrayOfPages[j] = divs.slice(i, i+n);
@@ -157,7 +153,6 @@ function addPagesAccessToHtml(nP){
 
         pagesAccess.appendChild(buttonAccessToPage);
     }
-
 }
 
 function hideAllDivs(arrayOfDivs){
