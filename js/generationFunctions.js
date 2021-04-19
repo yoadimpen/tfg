@@ -35,7 +35,7 @@ function loadDataFromConfig(){
                             }
 
                             realDataArray.forEach(function(realData){
-                                var fullPath = realData.concat("/widgets/summaryCopy.json");
+                                var fullPath = realData.concat("/widgets/summary.json");
                                 readJSON(fullPath, realData);
                             })
                         }
@@ -46,7 +46,7 @@ function loadDataFromConfig(){
 
                 links.forEach(function(link){
                     link = link.path.trim();
-                    var fullPath = link.concat("/widgets/summaryCopy.json");
+                    var fullPath = link.concat("/widgets/summary.json");
                     readJSON(fullPath, link);
                 })
             }

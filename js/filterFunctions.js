@@ -135,15 +135,15 @@ function addPagesAccessToHtml(nP){
 
         if(mode != null) {
             if(mode === 'dark'){
-                buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
-                buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+                buttonAccessToPage.classList.remove("btn-own-light");
+                buttonAccessToPage.classList.add("btn-own-dark");
             } else if (mode === 'light') {
-                buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
-                buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+                buttonAccessToPage.classList.remove("btn-own-dark");
+                buttonAccessToPage.classList.add("btn-own-light");
             }
         } else {
-            buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
-            buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+            buttonAccessToPage.classList.remove("btn-own-dark");
+            buttonAccessToPage.classList.add("btn-own-light");
         }
 
         buttonAccessToPage.setAttribute("type", "button");

@@ -463,7 +463,7 @@ input:checked + .slider:before {
 #sum-row {
 	position: relative;
 	z-index: 1;
-	--auto-grid-min-size: 20rem;
+	--auto-grid-min-size: 27rem;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(var(--auto-grid-min-size), 1fr));
 	grid-gap: 1rem;
