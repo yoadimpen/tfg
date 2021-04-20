@@ -125,12 +125,68 @@ function getPathsFromHTTPRequest(response){
     return res;
 }
 
+//--------------------SUMMARY CHARTS RESULTS---------------------//
+
+function processResults(results){
+    var array = results.split(",");
+    for (i=0;i<array.length;i++){
+        array[i] = parseInt(array[i]);
+    }
+    return array;
+}
+
+function getTypeResults(json, resultsArray){
+    var statistic = json.statistic;
+    resultsArray[0] = resultsArray[0] + statistic.failed;
+    resultsArray[1] = resultsArray[1] + statistic.broken;
+    resultsArray[2] = resultsArray[2] + statistic.skipped;
+    resultsArray[3] = resultsArray[3] + statistic.passed;
+    resultsArray[4] = resultsArray[4] + statistic.unknown;
+    localStorage.setItem("statusArray", resultsArray);
+    return resultsArray;
+}
+
+function getSeverityLevelResults(json, dictionary){
+    var totalItems = Object.keys(json).length;
+
+    for(i=0;i<totalItems;i++){
+        var severity = json[i].severity;
+
+        if(dictionary.hasOwnProperty(severity)){
+            dictionary[severity] = dictionary[severity] + 1;
+        } else {
+            dictionary[severity] = 1;
+        }
+    }
+
+    localStorage.setItem("severityArray", JSON.stringify(dictionary));
+}
+
+function getCategoryResults(json, dictionary){
+    var items = json.items;
+    var totalItems = json.total;
+
+    for(i=0;i<totalItems;i++){
+        var statistic = items[i].statistic;
+        var total = statistic.total;
+        var name = items[i].name;
+
+        if(dictionary.hasOwnProperty(name)){
+            dictionary[name] = dictionary[name] + total;
+        } else {
+            dictionary[name] = total;
+        }
+    }
+
+    localStorage.setItem("categoryArray", JSON.stringify(dictionary));
+}
+
 //---------------------SUMMARY GENERATION----------------------//
 
 function generateSummaryDivs(reportsPath){
     var pathsArray = reportsPath.split(";");
 
-    //arrays de resultados que se van reutilizando
+    //variables de resultados que se van reutilizando
     var statusArray = [0,0,0,0,0];
     var severityDict = {
         "blocker": 0,
@@ -155,114 +211,14 @@ function generateSummaryDivs(reportsPath){
     localStorage.removeItem("severityArray");
     localStorage.removeItem("categoryArray");
 
-    makeTypeDiv(status);
-    makeSeverityDiv(severity);
-    makeCategoryDiv(category);
+    generateDefaultChartDivs(status, severity, category);
 
     generateCustomChartDivs();
 
     showTotalReports(pathsArray.length);
 }
 
-function generateCustomChartDivs(){
-    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
-
-    if(customCharts != null) {
-        customCharts.graphs.forEach(function(graph){
-            makeCustomDiv(graph);
-        })
-    }
-}
-
-function toTitleCase(str) {
-    return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
-  }
-
-function makeCustomDiv(json){
-    var mode = localStorage.getItem("multiview-mode");
-
-    var resultsDiv = document.getElementById("sum-row");
-
-    var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", json.name.toLowerCase());
-    canvas.setAttribute("width", "75%");
-    canvas.setAttribute("height", "54%");
-    canvas.setAttribute("style", "margin-top:7%;margin-bottom:5%;");
-
-    var ctx = canvas.getContext('2d');
-
-    var chart = getChart(ctx, json.type, json.sameColor, json, json.legendDisplay);
-
-    var title = document.createElement("h2");
-    title.setAttribute("style", "margin: 10px;");
-    title.classList.add("widget-text-mode");
-    title.appendChild(document.createTextNode(toTitleCase(json.name)));
-
-    var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col");
-
-    titleDiv.appendChild(title);
-
-    titleRow.appendChild(titleDiv);
-    
-    var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px;");
-    description.classList.add("widget-text-mode");
-    description.classList.add("custom-graph-remove");
-    description.setAttribute("onclick", "deleteCustomChart('" + json.name + "')");
-    description.innerHTML = "Remove";
-
-    var divdesc = document.createElement("div");
-    divdesc.setAttribute("id", "description");
-    divdesc.setAttribute("style", "cursor: pointer");
-    divdesc.appendChild(description);
-
-    var div = document.createElement("div");
-    div.setAttribute("id", json.name.toLowerCase() + "-widget");
-    div.classList.add("col");
-    div.classList.add("sum-col");
-    div.classList.add("widget-mode");
-    div.setAttribute("draggable", "true");
-    div.appendChild(titleRow);
-    div.appendChild(divdesc);
-    div.appendChild(canvas);
-
-    div.addEventListener('dragstart', handleDragStart, false);
-    div.addEventListener('dragenter', handleDragEnter, false);
-    div.addEventListener('dragover', handleDragOver, false);
-    div.addEventListener('dragleave', handleDragLeave, false);
-    div.addEventListener('drop', handleDrop, false);
-    div.addEventListener('dragend', handleDragEnd, false);
-
-    if(mode != null) {
-        if(mode === 'light'){
-            div.classList.add("widget-light");
-            title.classList.add("widget-text-light");
-            description.classList.add("widget-text-light");
-        } else if(mode === 'dark'){
-            div.classList.add("widget-dark");
-            title.classList.add("widget-text-dark");
-            description.classList.add("widget-text-dark");
-        }
-    } else {
-        div.classList.add("widget-light");
-        title.classList.add("widget-text-light");
-        description.classList.add("widget-text-light");
-    }
-
-    resultsDiv.appendChild(div);
-}
-
-function processResults(results){
-    var array = results.split(",");
-    for (i=0;i<array.length;i++){
-        array[i] = parseInt(array[i]);
-    }
-    return array;
-}
+//---------------------READ PATHS FILES----------------------//
 
 function readJSONs (path, statusArray, severityDict, categoryDict, nReports){
     //lectura del JSON summary.json
@@ -318,7 +274,7 @@ function readJSONs (path, statusArray, severityDict, categoryDict, nReports){
 
 }
 
-//---------------------GRAPH TEMPLATES----------------------//
+//---------------------CHART TEMPLATES----------------------//
 
 function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
     var widgetType;
@@ -374,7 +330,8 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                 legend: {
                     display: legendDisplay,
                     labels: {
-                        boxWidth: 15
+                        boxWidth: 15,
+                        fontColor: '#999'
                     },
                     position: 'bottom'
                 }
@@ -388,7 +345,13 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                 scales:{
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontColor: '#999'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#999'
                         }
                     }]
                 }
@@ -399,7 +362,8 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                 legend: {
                     display: legendDisplay,
                     labels: {
-                        boxWidth: 15
+                        boxWidth: 15,
+                        fontColor: '#999'
                     },
                     position: 'bottom'
                 },
@@ -411,7 +375,8 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                     }],
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontColor: '#999'
                         }
                     }]
                 }
@@ -430,183 +395,122 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
     return chart;
 }
 
-//---------------------TYPE SUMMARY WIDGET----------------------//
+//---------------------DEFAULT SUMMARY----------------------//
 
-function getTypeResults(json, resultsArray){
-    var statistic = json.statistic;
-    resultsArray[0] = resultsArray[0] + statistic.failed;
-    resultsArray[1] = resultsArray[1] + statistic.broken;
-    resultsArray[2] = resultsArray[2] + statistic.skipped;
-    resultsArray[3] = resultsArray[3] + statistic.passed;
-    resultsArray[4] = resultsArray[4] + statistic.unknown;
-    localStorage.setItem("statusArray", resultsArray);
-    return resultsArray;
-}
+function generateDefaultChartDivs(status, severity, category){
 
-function makeTypeDiv(array){
-
-    var mode = localStorage.getItem("multiview-mode");
-
-    var resultsDiv = document.getElementById("sum-row");
-    resultsDiv.innerHTML = "";
-
-    var total = 0;
-    for(var i in array) {
-        total += array[i];
-    }
-
-    var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", "myChart");
-    canvas.setAttribute("width", "75%");
-    canvas.setAttribute("height", "54%");
-    canvas.setAttribute("style", "margin-top:7%;margin-bottom:5%;");
-
-    var ctx = canvas.getContext('2d');
-
-    var dataJSON = {
+    var dataJSONStatus = {
         name: "Status",
         items: [{
             label: "Failed",
-            value: array[0],
+            value: status[0],
             color: "#fd5a3e"
         },{
             label: "Broken",
-            value: array[1],
+            value: status[1],
             color: "#ffd050"
         },{
             label: "Skipped",
-            value: array[2],
+            value: status[2],
             color: "#aaaaaa"
         },{
             label: "Passed",
-            value: array[3],
+            value: status[3],
             color: "#97cc64"
         },{
             label: "Unknown",
-            value: array[4],
+            value: status[4],
             color: "#d35ebe"
-        }]
+        }],
+        legendDisplay: true,
+        sameColor: false,
+        type: 'doughnut'
     }
 
-    var chart = getChart(ctx, "doughnut", false, dataJSON, true);
+    makeDiv(status, dataJSONStatus, true);
 
-    var title = document.createElement("h2");
-    title.setAttribute("style", "margin: 10px");
-    title.classList.add("widget-text-mode");
-    title.appendChild(document.createTextNode("Status"));
+    var dataJSONSeverity = {
+        name: "Severity",
+        items: [],
+        legendDisplay: false,
+        sameColor: true,
+        type: 'bar'
+    }
 
-    var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col");
-
-    titleDiv.appendChild(title);
-
-    titleRow.appendChild(titleDiv);
-
-    var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px;");
-    description.classList.add("widget-text-mode");
-    description.innerHTML = "Total used tests: " + total;
-
-    var divdesc = document.createElement("div");
-    divdesc.setAttribute("id", "description");
-    divdesc.appendChild(description);
-
-    var div = document.createElement("div");
-    div.setAttribute("id", "type-widget");
-    div.classList.add("col");
-    div.classList.add("sum-col");
-    div.classList.add("widget-mode");
-    div.setAttribute("draggable", "true");
-    div.appendChild(titleRow);
-    div.appendChild(divdesc);
-    div.appendChild(canvas);
-
-    div.addEventListener('dragstart', handleDragStart, false);
-    div.addEventListener('dragenter', handleDragEnter, false);
-    div.addEventListener('dragover', handleDragOver, false);
-    div.addEventListener('dragleave', handleDragLeave, false);
-    div.addEventListener('drop', handleDrop, false);
-    div.addEventListener('dragend', handleDragEnd, false);
-
-    if(mode != null) {
-        if(mode === 'light'){
-            div.classList.add("widget-light");
-            title.classList.add("widget-text-light");
-            description.classList.add("widget-text-light");
-        } else if(mode === 'dark'){
-            div.classList.add("widget-dark");
-            title.classList.add("widget-text-dark");
-            description.classList.add("widget-text-dark");
+    for(i=0; i<Object.keys(severity).length; i++){
+        var item = {
+            label: Object.keys(severity)[i],
+            value: severity[Object.keys(severity)[i]],
+            color: "#6dd6cd"
         }
-    } else {
-        div.classList.add("widget-light");
-        title.classList.add("widget-text-light");
-        description.classList.add("widget-text-light");
+        dataJSONSeverity.items.push(item);
     }
 
-    resultsDiv.appendChild(div);
+    makeDiv(severity, dataJSONSeverity, true);
+
+    var dataJSONCategory = {
+        name: "Category",
+        items: [],
+        legendDisplay: true,
+        sameColor: false,
+        type: 'bar'
+    }
+
+    var colors = interpolateColors("rgb(128, 0, 38)", "rgb(254, 224, 135)", Object.keys(category).length);
+
+    for(i=0; i<Object.keys(category).length; i++){
+        var color = "rgb(" + colors[i] + ")";
+        var item = {
+            label: Object.keys(category)[i],
+            value: category[Object.keys(category)[i]],
+            color: color
+        }
+        dataJSONCategory.items.push(item);
+    }
+
+    makeDiv(category, dataJSONCategory, true);
 }
 
-//---------------------SEVERITY SUMMARY WIDGET----------------------//
+//---------------------EXTENSIONS----------------------//
 
-function getSeverityLevelResults(json, dictionary){
-    var totalItems = Object.keys(json).length;
+//Takes every new summary widget information from JSON in memory
+function generateCustomChartDivs(){
+    var customCharts = JSON.parse(localStorage.getItem("custom-charts"));
+    console.log(customCharts);
 
-    for(i=0;i<totalItems;i++){
-        var severity = json[i].severity;
-
-        if(dictionary.hasOwnProperty(severity)){
-            dictionary[severity] = dictionary[severity] + 1;
-        } else {
-            dictionary[severity] = 1;
-        }
+    if(customCharts != null) {
+        customCharts.graphs.forEach(function(graph){
+            makeDiv(null, graph, false);
+        })
     }
-
-    localStorage.setItem("severityArray", JSON.stringify(dictionary));
 }
 
-function makeSeverityDiv(dict){
+//Generates div for that custom summary widget
+
+function makeDiv(arrayForTotal, json, def){
     var mode = localStorage.getItem("multiview-mode");
 
     var resultsDiv = document.getElementById("sum-row");
 
     var total = 0;
-
-    for(var i in dict) {
-        total += dict[i];
+    for(var i in arrayForTotal) {
+        total += arrayForTotal[i];
     }
 
     var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", "severity");
+    canvas.setAttribute("id", json.name.toLowerCase());
     canvas.setAttribute("width", "75%");
     canvas.setAttribute("height", "54%");
     canvas.setAttribute("style", "margin-top:7%;margin-bottom:5%;");
 
     var ctx = canvas.getContext('2d');
 
-    var dataJSON = {
-        name: "Severity",
-        items: []
-    }
-
-    for(i=0; i<Object.keys(dict).length; i++){
-        var item = {
-            label: Object.keys(dict)[i],
-            value: dict[Object.keys(dict)[i]],
-            color: "#6dd6cd"
-        }
-        dataJSON.items.push(item);
-    }
-
-    var chart = getChart(ctx, "bar", true, dataJSON, null);
+    var chart = getChart(ctx, json.type, json.sameColor, json, json.legendDisplay);
 
     var title = document.createElement("h2");
     title.setAttribute("style", "margin: 10px;");
     title.classList.add("widget-text-mode");
-    title.appendChild(document.createTextNode("Severity"));
+    title.appendChild(document.createTextNode(toTitleCase(json.name)));
 
     var titleRow = document.createElement("div");
     titleRow.setAttribute("class", "row");
@@ -617,167 +521,32 @@ function makeSeverityDiv(dict){
     titleDiv.appendChild(title);
 
     titleRow.appendChild(titleDiv);
-    
+
     var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px;");
-    description.classList.add("widget-text-mode");
-    description.innerHTML = "Total used tests: " + total;
+        description.setAttribute("style", "margin-left:10px;");
+        description.classList.add("widget-text-mode");
 
-    var divdesc = document.createElement("div");
-    divdesc.setAttribute("id", "description");
-    divdesc.appendChild(description);
-
-    var div = document.createElement("div");
-    div.setAttribute("id", "severity-widget");
-    div.classList.add("col");
-    div.classList.add("sum-col");
-    div.classList.add("widget-mode");
-    div.setAttribute("draggable", "true");
-    div.appendChild(titleRow);
-    div.appendChild(divdesc);
-    div.appendChild(canvas);
-
-    div.addEventListener('dragstart', handleDragStart, false);
-    div.addEventListener('dragenter', handleDragEnter, false);
-    div.addEventListener('dragover', handleDragOver, false);
-    div.addEventListener('dragleave', handleDragLeave, false);
-    div.addEventListener('drop', handleDrop, false);
-    div.addEventListener('dragend', handleDragEnd, false);
-
-    if(mode != null) {
-        if(mode === 'light'){
-            div.classList.add("widget-light");
-            title.classList.add("widget-text-light");
-            description.classList.add("widget-text-light");
-        } else if(mode === 'dark'){
-            div.classList.add("widget-dark");
-            title.classList.add("widget-text-dark");
-            description.classList.add("widget-text-dark");
-        }
+    if(def == false) {
+        description.classList.add("custom-graph-remove");
+        description.setAttribute("onclick", "deleteCustomChart('" + json.name + "')");
+        description.innerHTML = "Remove";
     } else {
-        div.classList.add("widget-light");
-        title.classList.add("widget-text-light");
-        description.classList.add("widget-text-light");
+        description.innerHTML = "Total used tests: " + total;
     }
-
-    resultsDiv.appendChild(div);
-}
-
-//---------------------CATEGORY SUMMARY WIDGET----------------------//
-
-function getCategoryResults(json, dictionary){
-    var items = json.items;
-    var totalItems = json.total;
-
-    for(i=0;i<totalItems;i++){
-        var statistic = items[i].statistic;
-        var total = statistic.total;
-        var name = items[i].name;
-
-        if(dictionary.hasOwnProperty(name)){
-            dictionary[name] = dictionary[name] + total;
-        } else {
-            dictionary[name] = total;
-        }
-    }
-
-    localStorage.setItem("categoryArray", JSON.stringify(dictionary));
-}
-
-function interpolateColor(color1, color2, factor) {
-    if (arguments.length < 3) { 
-        factor = 0.5; 
-    }
-    var result = color1.slice();
-    for (var i = 0; i < 3; i++) {
-        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-    }
-    return result;
-};
-
-function interpolateColors(color1, color2, steps) {
-    var stepFactor = 1 / (steps - 1),
-        interpolatedColorArray = [];
-
-    color1 = color1.match(/\d+/g).map(Number);
-    color2 = color2.match(/\d+/g).map(Number);
-
-    for(var i = 0; i < steps; i++) {
-        interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
-    }
-
-    return interpolatedColorArray;
-}
-
-function makeCategoryDiv(dict){
-
-    var mode = localStorage.getItem("multiview-mode");
-
-    var resultsDiv = document.getElementById("sum-row");
-    var total = 0;
-
-    for(var i in dict) {
-        total += dict[i];
-    }
-
-    var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", "category");
-    canvas.setAttribute("width", "75%");
-    canvas.setAttribute("height", "50%");
-    canvas.setAttribute("style", "margin-top:7%;");
-
-    var ctx = canvas.getContext('2d');
-
-    var dataJSON = {
-        name: "Category",
-        items: []
-    }
-
-    var colors = interpolateColors("rgb(128, 0, 38)", "rgb(254, 224, 135)", Object.keys(dict).length);
-
-    for(i=0; i<Object.keys(dict).length; i++){
-        var color = "rgb(" + colors[i] + ")";
-        var item = {
-            label: Object.keys(dict)[i],
-            value: dict[Object.keys(dict)[i]],
-            color: color
-        }
-        dataJSON.items.push(item);
-    }
-
-    var chart = getChart(ctx, "bar", false, dataJSON, true);
-
-    var title = document.createElement("h2");
-    title.setAttribute("style", "margin: 10px;");
-    title.classList.add("widget-text-mode");
-    title.appendChild(document.createTextNode("Category"));
-
-    var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col");
-
-    var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    titleDiv.appendChild(title);
-
-    titleRow.appendChild(titleDiv);
-    
-    var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px;");
-    description.classList.add("widget-text-mode");
-    description.innerHTML = "Total used tests: " + total;
 
     var divdesc = document.createElement("div");
     divdesc.setAttribute("id", "description");
+    if(def == false) {
+        divdesc.setAttribute("style", "cursor: pointer");
+    }
     divdesc.appendChild(description);
 
     var div = document.createElement("div");
-    div.setAttribute("id", "category-widget");
+    div.setAttribute("id", json.name.toLowerCase() + "-widget");
     div.classList.add("col");
     div.classList.add("sum-col");
     div.classList.add("widget-mode");
     div.setAttribute("draggable", "true");
-    //div.setAttribute("style", "grid-column-start: 1; grid-column-end: 3;");
     div.appendChild(titleRow);
     div.appendChild(divdesc);
     div.appendChild(canvas);
@@ -862,93 +631,7 @@ function showTotalReports(n){
     div.appendChild(divBtnNew);
 }
 
-//---------------------GRID WIDGETS SWAP----------------------//
-
-var dragSrcEl = null;
-
-function handleDragStart(e) {
-    this.style.opacity = '0.4';
-    
-    dragSrcEl = this;
-
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
-}
-
-function handleDragOver(e) {
-    if (e.preventDefault) {
-    e.preventDefault();
-    }
-
-    e.dataTransfer.dropEffect = 'move';
-    
-    return false;
-}
-
-function handleDragEnter(e) {
-    this.classList.add('over');
-}
-
-function handleDragLeave(e) {
-    this.classList.remove('over');
-}
-
-function handleDrop(e) {
-    if (e.stopPropagation) {
-        e.stopPropagation(); // stops the browser from redirecting.
-    }
-    
-    if (dragSrcEl != this) {
-        var sourceID = dragSrcEl.id;
-        var targetID = this.id;
-        var sourceDiv = document.getElementById(sourceID);
-        var targetDiv = document.getElementById(targetID);
-        var sourceChildren = sourceDiv.children;
-        var targetChildren = targetDiv.children;
-
-        var srcChildren = sourceChildren;
-        var trgChildren = targetChildren;
-
-        var div = document.createElement("div");
-
-        Array.prototype.slice.call(srcChildren).forEach(function(child){
-            div.appendChild(child);
-        });
-
-        sourceDiv.innerHTML = "";
-
-        Array.prototype.slice.call(trgChildren).forEach(function(child){
-            sourceDiv.appendChild(child);
-        });
-
-        targetDiv.innerHTML = "";
-
-        Array.prototype.slice.call(div.children).forEach(function(child){
-            targetDiv.appendChild(child);
-        });
-
-        this.classList.remove('over');
-    }
-    
-    return false;
-}
-
-function handleDragEnd(e) {
-    this.style.opacity = '1';
-}
-
-//---------------------UI AUX FUNCTIONS----------------------//
-
-function showNoConfigMessageOnGeneral(){
-    var message = document.getElementById("no-data-message");
-    message.style.display = "inline";
-    message.style.marginTop = "20px";
- 
-    var dataDiv = document.getElementById("summary-data-div");
-    dataDiv.style.display = "none";
- }
-
- //-------------------NEW GRAPH FUNCTIONS--------------------//
+ //-------------------EXTENSION IN GUI EXAMPLE--------------------//
 
  function showNewGraphForm() {
     document.getElementById("new-graph-form").style.display = "inline";
@@ -1292,4 +975,124 @@ function deleteCustomChart(name) {
     localStorage.setItem("custom-charts", JSON.stringify(customCharts));
 
     loadSummaryFromConfig();
+}
+
+//---------------------UI AUX FUNCTIONS----------------------//
+
+function showNoConfigMessageOnGeneral(){
+    var message = document.getElementById("no-data-message");
+    message.style.display = "inline";
+    message.style.marginTop = "20px";
+ 
+    var dataDiv = document.getElementById("summary-data-div");
+    dataDiv.style.display = "none";
+}
+
+function toTitleCase(str) {
+    return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+}
+
+function interpolateColor(color1, color2, factor) {
+     if (arguments.length < 3) { 
+        factor = 0.5; 
+     }
+     var result = color1.slice();
+     for (var i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+        if(i == 0){
+            result[i] = result[i] + 15;
+        } else if(i == 2) {
+            result[i] = result[i] - 50;
+        }
+    }
+     return result;
+};
+ 
+function interpolateColors(color1, color2, steps) {
+     var stepFactor = 1 / (steps - 1),
+         interpolatedColorArray = [];
+ 
+     color1 = color1.match(/\d+/g).map(Number);
+     color2 = color2.match(/\d+/g).map(Number);
+ 
+     for(var i = 0; i < steps; i++) {
+         interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
+     }
+ 
+     return interpolatedColorArray;
+}
+
+ //---------------------GRID WIDGETS SWAP----------------------//
+
+var dragSrcEl = null;
+
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    
+    dragSrcEl = this;
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+    e.preventDefault();
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+    
+    return false;
+}
+
+function handleDragEnter(e) {
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('over');
+}
+
+function handleDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from redirecting.
+    }
+    
+    if (dragSrcEl != this) {
+        var sourceID = dragSrcEl.id;
+        var targetID = this.id;
+        var sourceDiv = document.getElementById(sourceID);
+        var targetDiv = document.getElementById(targetID);
+        var sourceChildren = sourceDiv.children;
+        var targetChildren = targetDiv.children;
+
+        var srcChildren = sourceChildren;
+        var trgChildren = targetChildren;
+
+        var div = document.createElement("div");
+
+        Array.prototype.slice.call(srcChildren).forEach(function(child){
+            div.appendChild(child);
+        });
+
+        sourceDiv.innerHTML = "";
+
+        Array.prototype.slice.call(trgChildren).forEach(function(child){
+            sourceDiv.appendChild(child);
+        });
+
+        targetDiv.innerHTML = "";
+
+        Array.prototype.slice.call(div.children).forEach(function(child){
+            targetDiv.appendChild(child);
+        });
+
+        this.classList.remove('over');
+    }
+    
+    return false;
+}
+
+function handleDragEnd(e) {
+    this.style.opacity = '1';
 }
