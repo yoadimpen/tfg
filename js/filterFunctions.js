@@ -94,25 +94,18 @@ function showOrderedWidgets(){
 
 //PAGINATION
 function doPagination(){
-    
     var pages = makePages();
     addPagesAccessToHtml(pages.length);
     goToPage(0);
-
 }
 
 function makePages(){
-
     var nElement = document.getElementById("page-input").value;
-
     var n = parseInt(nElement);
-
     var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
-
     var arrayOfPages = [];
 
     var j = 0;
-
     for (i = 0; i < divs.length; i=i+n) {
         if(i+n < divs.length){
             arrayOfPages[j] = divs.slice(i, i+n);
@@ -121,15 +114,12 @@ function makePages(){
         }
         j = j + 1;
     }
-
     return arrayOfPages;
 }
 
 function addPagesAccessToHtml(nP){
     var pagesAccess = document.getElementById("pages-access");
-
     pagesAccess.innerHTML = "";
-
     var mode = localStorage.getItem("multiview-mode-h");
 
     for(i = 0; i < nP; i++){
@@ -139,15 +129,15 @@ function addPagesAccessToHtml(nP){
 
         if(mode != null) {
             if(mode === 'dark'){
-                buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(97, 253, 217, 0.6)'");
-                buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+                buttonAccessToPage.classList.remove("btn-own-light");
+                buttonAccessToPage.classList.add("btn-own-dark");
             } else if (mode === 'light') {
-                buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
-                buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+                buttonAccessToPage.classList.remove("btn-own-dark");
+                buttonAccessToPage.classList.add("btn-own-light");
             }
         } else {
-            buttonAccessToPage.setAttribute("onmouseover", "this.style.backgroundColor = 'rgba(116, 44, 145, 0.6)'");
-            buttonAccessToPage.setAttribute("onmouseout", "this.style.backgroundColor = 'rgba(235, 235, 235, 0.3)'");
+            buttonAccessToPage.classList.remove("btn-own-dark");
+            buttonAccessToPage.classList.add("btn-own-light");
         }
 
         buttonAccessToPage.setAttribute("type", "button");
@@ -168,13 +158,10 @@ function hideAllDivs(arrayOfDivs){
 
 function goToPage(i){
     var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
-
     hideAllDivs(divs);
 
     var pages = makePages();
-
     var desiredPage = Array.prototype.slice.call(pages[i]);
-
     desiredPage.forEach(function(divForDisplay){
         divForDisplay.style.display = "";
     })
@@ -190,5 +177,5 @@ function deleteFilters(){
     var pageInput = document.getElementById("page-input");
     pageInput.value = "5";
 
-    loadDataFromConfig();
+    loadDemoDataIndex();
 }

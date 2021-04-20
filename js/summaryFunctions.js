@@ -26,170 +26,6 @@ function loadDemoDataGeneral() {
     }
 }
 
-//------------------------DARK/LIGHT MODE--------------------------//
-
-function changeMode(){
-    var mode = localStorage.getItem("multiview-mode-h");
-
-    var page = document.getElementsByClassName("page")[0];
-    page.style.transition = "1s";
-
-    setTimeout(function(){
-        page.removeAttribute("style");
-    }, 1000);
-
-    if(mode === 'light'){
-        localStorage.setItem("multiview-mode-h", "dark");
-        mode = localStorage.getItem("multiview-mode-h");
-
-        fillDark();
-    } else if(mode === 'dark') {
-        localStorage.setItem("multiview-mode-h", "light");
-        mode = localStorage.getItem("multiview-mode-h");
-
-        fillLight();
-    }
-}
-
-function fillLight(){
-
-    var page = document.getElementsByClassName("page")[0];
-    page.classList.remove("background-dark");
-    page.classList.add("background-light");
-
-    var header = document.getElementById("header");
-    header.classList.remove("background-div-dark");
-    header.classList.add("background-div-light");
-
-    var slider = document.getElementById("slider-mode");
-    slider.checked = false;
-
-    var sliderLittle = document.getElementById("slider-little-mode");
-    sliderLittle.checked = false;
-
-    var navElements = document.getElementsByClassName("nav-mode");
-    Array.prototype.slice.call(navElements).forEach(function(el){
-        if(el.id.includes("active")){
-            el.classList.remove("nav-dark-active");
-            el.classList.add("nav-light-active");
-        } else {
-            el.classList.remove("nav-dark");
-            el.classList.add("nav-light");
-        }
-    })
-
-    var inputElements = document.getElementsByClassName("input-mode");
-    Array.prototype.slice.call(inputElements).forEach(function(el){
-        el.classList.remove("input-dark");
-        el.classList.add("input-light");
-    })
-
-    var btnElements = document.getElementsByClassName("btn-mode");
-    Array.prototype.slice.call(btnElements).forEach(function(el){
-        el.classList.remove("btn-own-dark");
-        el.classList.add("btn-own-light");
-    })
-
-    var sliderElements = document.getElementsByClassName("slider");
-    Array.prototype.slice.call(sliderElements).forEach(function(el){
-        el.classList.remove("slider-dark");
-        el.classList.add("slider-light");
-    })
-
-    var widgetElements = document.getElementsByClassName("widget-mode");
-    Array.prototype.slice.call(widgetElements).forEach(function(el){
-        el.classList.remove("widget-dark");
-        el.classList.add("widget-light");
-    })
-
-    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
-    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
-        el.classList.remove("widget-text-dark");
-        el.classList.add("widget-text-light");
-    })
-
-    var formElements = document.getElementsByClassName("form-mode");
-    Array.prototype.slice.call(formElements).forEach(function(el){
-        el.classList.remove("form-dark");
-        el.classList.add("form-light");
-    })
-
-    var radioElements = document.getElementsByClassName("radio-mode");
-    Array.prototype.slice.call(radioElements).forEach(function(el){
-        el.classList.remove("radio-dark");
-        el.classList.add("radio-light");
-    })
-}
-
-function fillDark(){
-    var page = document.getElementsByClassName("page")[0];
-    page.classList.remove("background-light");
-    page.classList.add("background-dark");
-
-    var header = document.getElementById("header");
-    header.classList.remove("background-div-light");
-    header.classList.add("background-div-dark");
-
-    var slider = document.getElementById("slider-mode");
-    slider.checked = true;
-
-    var sliderLittle = document.getElementById("slider-little-mode");
-    sliderLittle.checked = true;
-
-    var navElements = document.getElementsByClassName("nav-mode");
-    Array.prototype.slice.call(navElements).forEach(function(el){
-        if(el.id.includes("active")){
-            el.classList.remove("nav-light-active");
-            el.classList.add("nav-dark-active");
-        } else {
-            el.classList.remove("nav-light");
-            el.classList.add("nav-dark");
-        }
-    })
-
-    var inputElements = document.getElementsByClassName("input-mode");
-    Array.prototype.slice.call(inputElements).forEach(function(el){
-        el.classList.remove("input-light");
-        el.classList.add("input-dark");
-    })
-
-    var btnElements = document.getElementsByClassName("btn-mode");
-    Array.prototype.slice.call(btnElements).forEach(function(el){
-        el.classList.remove("btn-own-light");
-        el.classList.add("btn-own-dark");
-    })
-
-    var sliderElements = document.getElementsByClassName("slider");
-    Array.prototype.slice.call(sliderElements).forEach(function(el){
-        el.classList.remove("slider-light");
-        el.classList.add("slider-dark");
-    })
-
-    var widgetElements = document.getElementsByClassName("widget-mode");
-    Array.prototype.slice.call(widgetElements).forEach(function(el){
-        el.classList.remove("widget-light");
-        el.classList.add("widget-dark");
-    })
-
-    var widgetTextElements = document.getElementsByClassName("widget-text-mode");
-    Array.prototype.slice.call(widgetTextElements).forEach(function(el){
-        el.classList.remove("widget-text-light");
-        el.classList.add("widget-text-dark");
-    })
-
-    var formElements = document.getElementsByClassName("form-mode");
-    Array.prototype.slice.call(formElements).forEach(function(el){
-        el.classList.remove("form-light");
-        el.classList.add("form-dark");
-    })
-
-    var radioElements = document.getElementsByClassName("radio-mode");
-    Array.prototype.slice.call(radioElements).forEach(function(el){
-        el.classList.remove("radio-light");
-        el.classList.add("radio-dark");
-    })
-}
-
 //---------------------SUMMARY GENERATION----------------------//
 
 function generateSummaryDivs(reportsPath){
@@ -197,19 +33,24 @@ function generateSummaryDivs(reportsPath){
 
     //arrays de resultados que se van reutilizando
     var statusArray = [0,0,0,0,0];
-    var severityArray = [0,0,0,0,0];
-    var categoryArray = [0,0,0,0,0];
-    var categoryNameArray = ["", "", "", "", ""];
+    var severityDict = {
+        "blocker": 0,
+        "critical": 0,
+        "normal": 0,
+        "minor": 0,
+        "trivial": 0
+    };
+    var categoryDict = {};
 
     pathsArray.forEach(function(path){
         path = path.trim();
         //se procede a leer los JSON summary.json, severity.json y categories.json
-        readJSONs(path, statusArray, severityArray, categoryArray, categoryNameArray, pathsArray.length);
+        readJSONs(path, statusArray, severityDict, categoryDict, pathsArray.length);
     })
 
     var status = processResults(localStorage.getItem("statusArrayH"));
-    var severity = processResults(localStorage.getItem("severityArrayH"));
-    var category = processResults(localStorage.getItem("categoryArrayH"));
+    var severity = JSON.parse(localStorage.getItem("severityArrayH"));
+    var category = JSON.parse(localStorage.getItem("categoryArrayH"));
 
     localStorage.removeItem("statusArrayH");
     localStorage.removeItem("severityArrayH");
@@ -324,7 +165,7 @@ function processResults(results){
     return array;
 }
 
-function readJSONs (path, statusArray, severityArray, categoryArray, categoryNameArray, nReports){
+function readJSONs (path, statusArray, severityDict, categoryDict, nReports){
     //lectura del JSON summary.json
     var data1 = "";
     var jobject1 = "";
@@ -355,7 +196,7 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
         if(this.readyState === 4) {
             data2 = request2.responseText;
             jobject2 = JSON.parse(data2);
-            var res2 = getSeverityLevelResults(jobject2, severityArray);
+            var res2 = getSeverityLevelResults(jobject2, severityDict);
         }
     };
 
@@ -372,7 +213,7 @@ function readJSONs (path, statusArray, severityArray, categoryArray, categoryNam
         if(this.readyState === 4) {
             data3 = request3.responseText;
             jobject3 = JSON.parse(data3);
-            var res3 = getCategoryResults(jobject3, categoryArray, categoryNameArray);
+            var res3 = getCategoryResults(jobject3, categoryDict);
         }
     };
 
@@ -434,7 +275,8 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                 legend: {
                     display: legendDisplay,
                     labels: {
-                        boxWidth: 15
+                        boxWidth: 15,
+                        fontColor: '#999'
                     },
                     position: 'bottom'
                 }
@@ -448,7 +290,13 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                 scales:{
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontColor: '#999'
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#999'
                         }
                     }]
                 }
@@ -459,7 +307,8 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                 legend: {
                     display: legendDisplay,
                     labels: {
-                        boxWidth: 15
+                        boxWidth: 15,
+                        fontColor: '#999'
                     },
                     position: 'bottom'
                 },
@@ -471,7 +320,8 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
                     }],
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontColor: '#999'
                         }
                     }]
                 }
@@ -504,7 +354,6 @@ function getTypeResults(json, resultsArray){
 }
 
 function makeTypeDiv(array){
-
     var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
@@ -612,47 +461,30 @@ function makeTypeDiv(array){
 
 //---------------------SEVERITY SUMMARY WIDGET----------------------//
 
-function getSeverityLevelResults(jobject, array){
-    var n = jobject.length;
+function getSeverityLevelResults(json, dictionary){
+    var totalItems = Object.keys(json).length;
 
-    for(i=0;i<n;i++){
-        var j = jobject[i];
-        var json = JSON.parse(JSON.stringify(j));
-        var severityLevel = json.severity;
+    for(i=0;i<totalItems;i++){
+        var severity = json[i].severity;
 
-        switch(severityLevel){
-            case "blocker":
-                array[0] = array[0] + 1;
-                break;
-            case "critical":
-                array[1] = array[1] + 1;
-                break;
-            case "normal":
-                array[2] = array[2] + 1;
-                break;
-            case "minor":
-                array[3] = array[3] + 1;
-                break;
-            case "trivial":
-                array[4] = array[4] + 1;
-                break;
+        if(dictionary.hasOwnProperty(severity)){
+            dictionary[severity] = dictionary[severity] + 1;
+        } else {
+            dictionary[severity] = 1;
         }
     }
 
-    localStorage.setItem("severityArrayH", array);
-
-    return array;
+    localStorage.setItem("severityArrayH", JSON.stringify(dictionary));
 }
 
-function makeSeverityDiv(array){
-
+function makeSeverityDiv(dict){
     var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
 
     var total = 0;
-    for(var i in array) {
-        total += array[i];
+    for(var i in dict) {
+        total += dict[i];
     }
 
     var canvas = document.createElement("canvas");
@@ -665,27 +497,16 @@ function makeSeverityDiv(array){
 
     var dataJSON = {
         name: "Severity",
-        items: [{
-            label: "blocker",
-            value: array[0],
+        items: []
+    }
+
+    for(i=0; i<Object.keys(dict).length; i++){
+        var item = {
+            label: Object.keys(dict)[i],
+            value: dict[Object.keys(dict)[i]],
             color: "#6dd6cd"
-        },{
-            label: "critical",
-            value: array[1],
-            color: "#6dd6cd"
-        },{
-            label: "normal",
-            value: array[2],
-            color: "#6dd6cd"
-        },{
-            label: "minor",
-            value: array[3],
-            color: "#6dd6cd"
-        },{
-            label: "trivial",
-            value: array[4],
-            color: "#6dd6cd"
-        }]
+        }
+        dataJSON.items.push(item);
     }
 
     var chart = getChart(ctx, "bar", true, dataJSON, null);
@@ -752,7 +573,7 @@ function makeSeverityDiv(array){
 
 //---------------------CATEGORY SUMMARY WIDGET----------------------//
 
-function getCategoryResults(json, valuesArray, nameArray){
+function getCategoryResults(json, dictionary){
     var items = json.items;
     var totalItems = json.total;
 
@@ -760,34 +581,54 @@ function getCategoryResults(json, valuesArray, nameArray){
         var statistic = items[i].statistic;
         var total = statistic.total;
         var name = items[i].name;
-        valuesArray[i] = valuesArray[i] + total;
-        nameArray[i] = name;
+
+        if(dictionary.hasOwnProperty(name)){
+            dictionary[name] = dictionary[name] + total;
+        } else {
+            dictionary[name] = total;
+        }
     }
-
-    var res = [];
-
-    valuesArray.forEach(function(value){
-        res.push(value);
-    })
-
-    nameArray.forEach(function(name){
-        res.push(name);
-    })
-
-    localStorage.setItem("categoryArrayH", valuesArray);
-    return res;
+    localStorage.setItem("categoryArrayH", JSON.stringify(dictionary));
 }
 
-function makeCategoryDiv(array){
+function interpolateColor(color1, color2, factor) {
+    if (arguments.length < 3) { 
+        factor = 0.5; 
+    }
+    var result = color1.slice();
+    for (var i = 0; i < 3; i++) {
+        result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+        if(i == 0){
+            result[i] = result[i] + 15;
+        } else if(i == 2) {
+            result[i] = result[i] - 50;
+        }
+    }
+    return result;
+};
 
+function interpolateColors(color1, color2, steps) {
+    var stepFactor = 1 / (steps - 1),
+    interpolatedColorArray = [];
+    color1 = color1.match(/\d+/g).map(Number);
+    color2 = color2.match(/\d+/g).map(Number);
+
+    for(var i = 0; i < steps; i++) {
+        interpolatedColorArray.push(interpolateColor(color1, color2, stepFactor * i));
+    }
+
+    return interpolatedColorArray;
+}
+
+function makeCategoryDiv(dict){
     var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
-    var arrayN = array.slice(0,5);
+
     var total = 0;
 
-    for(var i in arrayN) {
-        total += arrayN[i];
+    for(var i in dict) {
+        total += dict[i];
     }
 
     var canvas = document.createElement("canvas");
@@ -800,27 +641,19 @@ function makeCategoryDiv(array){
 
     var dataJSON = {
         name: "Category",
-        items: [{
-            label: "Product defects",
-            value: arrayN[0],
-            color: "#800026"
-        },{
-            label: "Test defects",
-            value: arrayN[1],
-            color: "#d31121"
-        },{
-            label: "Outdated tests",
-            value: arrayN[2],
-            color: "#fa5c2e"
-        },{
-            label: "Infrastructure problems",
-            value: arrayN[3],
-            color: "#feab4b"
-        },{
-            label: "Ignored tests",
-            value: arrayN[4],
-            color: "#fee087"
-        }]
+        items: []
+    }
+
+    var colors = interpolateColors("rgb(207, 6, 87)", "rgb(255, 251, 176)", Object.keys(dict).length);
+
+    for(i=0; i<Object.keys(dict).length; i++){
+        var color = "rgb(" + colors[i] + ")";
+        var item = {
+            label: Object.keys(dict)[i],
+            value: dict[Object.keys(dict)[i]],
+            color: color
+        }
+        dataJSON.items.push(item);
     }
 
     var chart = getChart(ctx, "bar", false, dataJSON, true);
@@ -888,7 +721,6 @@ function makeCategoryDiv(array){
 //---------------------TOTAL SUMMARY REPORTS----------------------//
 
 function showTotalReports(n){
-
     var mode = localStorage.getItem("multiview-mode-h");
 
     var div = document.getElementById("summary-additional");
@@ -1036,11 +868,8 @@ function closeForm() {
 }
 
 function addNewRow() {
-
     var mode = localStorage.getItem("multiview-mode-h");
-
     var rowsDiv = document.getElementById("new-graph-data");
-
     var n = rowsDiv.children.length;
 
     var div = document.createElement("div");
@@ -1200,7 +1029,7 @@ function isFree(name){
 
     if(customCharts != null){
         customCharts.graphs.forEach(function(graph){
-            res = res && (graph.name != name);
+            res = res && (toLowerCase(graph.name) != toLowerCase(name));
         })
     }
 
@@ -1208,7 +1037,6 @@ function isFree(name){
 }
 
 function validateForm(){
-
     var name = document.getElementById("new-graph-name").value;
     var nameCondition = true;
     var takenCondition = isFree(name);
