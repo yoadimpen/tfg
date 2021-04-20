@@ -1029,7 +1029,7 @@ function isFree(name){
 
     if(customCharts != null){
         customCharts.graphs.forEach(function(graph){
-            res = res && (toLowerCase(graph.name) != toLowerCase(name));
+            res = res && (graph.name.toLowerCase() != name.toLowerCase());
         })
     }
 
