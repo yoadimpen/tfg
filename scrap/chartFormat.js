@@ -124,3 +124,26 @@ var chart = new Chart(ctx, {
         }
     }
 });
+
+fileJSON = {
+    graphs: [
+        {
+            name: "Coverage",
+            type: "doughnut",
+            items: [
+                {
+                    label: "Covered",
+                    value: 74,
+                    color: "#97cc64"
+                },
+                {
+                    label: "Not covered",
+                    value: 26,
+                    color: "#fd5a3e"
+                }
+            ],
+            legendDisplay: true,
+            sameColor: false
+        }
+    ]
+}

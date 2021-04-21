@@ -429,25 +429,6 @@ function generateDefaultChartDivs(status, severity, category){
 
     makeDiv(status, dataJSONStatus, true);
 
-    var dataJSONSeverity = {
-        name: "Severity",
-        items: [],
-        legendDisplay: false,
-        sameColor: true,
-        type: 'bar'
-    }
-
-    for(i=0; i<Object.keys(severity).length; i++){
-        var item = {
-            label: Object.keys(severity)[i],
-            value: severity[Object.keys(severity)[i]],
-            color: "#6dd6cd"
-        }
-        dataJSONSeverity.items.push(item);
-    }
-
-    makeDiv(severity, dataJSONSeverity, true);
-
     var dataJSONCategory = {
         name: "Category",
         items: [],
@@ -469,6 +450,25 @@ function generateDefaultChartDivs(status, severity, category){
     }
 
     makeDiv(category, dataJSONCategory, true);
+
+    var dataJSONSeverity = {
+        name: "Severity",
+        items: [],
+        legendDisplay: false,
+        sameColor: true,
+        type: 'bar'
+    }
+
+    for(i=0; i<Object.keys(severity).length; i++){
+        var item = {
+            label: Object.keys(severity)[i],
+            value: severity[Object.keys(severity)[i]],
+            color: "#6dd6cd"
+        }
+        dataJSONSeverity.items.push(item);
+    }
+
+    makeDiv(severity, dataJSONSeverity, true);
 }
 
 //---------------------EXTENSIONS----------------------//
@@ -523,8 +523,8 @@ function makeDiv(arrayForTotal, json, def){
     titleRow.appendChild(titleDiv);
 
     var description = document.createElement("p");
-        description.setAttribute("style", "margin-left:10px;");
-        description.classList.add("widget-text-mode");
+    description.setAttribute("style", "margin-left:10px;");
+    description.classList.add("widget-text-mode");
 
     if(def == false) {
         description.classList.add("custom-graph-remove");
