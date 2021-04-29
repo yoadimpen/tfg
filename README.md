@@ -18,4 +18,9 @@ Puedes probar algunas de las funcionalidades de Multiview en https://tfg-multivi
 
 ## Instalación
 
-Apartado que se rellenará próximamente.
+Para utilizar Multiview de forma local, debes descargar el contenido de este repositorio con las siguientes observaciones:
+
+* Las funcionalidades de Multiview funcionan sin problema en el navegador Mozilla Firefox, no se ha probado y, por tanto, asegura el correcto funcionamiento en otros navegadores.
+* Al abrir el sistema en Firefox, debes cambiar el ajuste `security.fileuri.strict_origin_policy` a `false` en caso de que esté como `true`. Esta acción se realiza al entrar en `about:config`.
+
+Si en el proceso de instalación te has encontrado con algún problema o tienes cualquier otra consulta, puedes crear una issue que será atendida lo más pronto posible.
