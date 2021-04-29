@@ -1,13 +1,13 @@
 //SEARCH (FILTER THROUGH NAMES)
 function searchAPIs() {
     var input, filter, ul, li, p, i, txtValue;
-    input = document.getElementById('searchInput');
+    input = document.getElementById('search-input');
     filter = input.value.toUpperCase();
     ul = document.getElementById("widgets");
     li = ul.getElementsByTagName('li');
     
     for (i = 0; i < li.length; i++) {
-        p = li[i].querySelectorAll('#API_title, p')[0];
+        p = li[i].querySelectorAll('#name, p')[0];
         txtValue = p.textContent || p.innerText;
         if(txtValue.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
@@ -33,9 +33,9 @@ function getCorrectCriteria(arrayOfP, criteria){
 }
 
 function showOrderedWidgets(){
-    var criteria = document.getElementById("orderByInput").value;
+    var criteria = document.getElementById("order-by-input").value;
 
-    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
 
     function customSorter(a,b){
         var res = 0;
@@ -94,32 +94,26 @@ function showOrderedWidgets(){
 
 //PAGINATION
 function doPagination(){
-    
     var pages = makePages();
     addPagesAccessToHtml(pages.length);
     goToPage(0);
-
 }
 
 function makePages(){
-
-    var nElement = document.getElementById("pageInput").value;
+    var nElement = document.getElementById("page-input").value;
 
     var n = parseInt(nElement);
 
-    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
 
     var arrayOfPages = [];
 
     var j = 0;
-
     for (i = 0; i < divs.length; i=i+n) {
         if(i+n < divs.length){
             arrayOfPages[j] = divs.slice(i, i+n);
-            //console.log(arrayOfPages[j]);
         } else {
             arrayOfPages[j] = divs.slice(i, divs.length);
-            //console.log(arrayOfPages[j]);
         }
         j = j + 1;
     }
@@ -128,23 +122,30 @@ function makePages(){
 }
 
 function addPagesAccessToHtml(nP){
-    //var paginationDiv = document.getElementById("paginationDiv");
-    var pagesAccess = document.getElementById("pagesAccess");
-
-    /*if(document.getElementById("pages") == null){
-        pagesAccess = document.createElement("div");
-        pagesAccess.setAttribute("id", "pages");
-    } else {
-        pagesAccess = document.getElementById("pages")
-        document.getElementById("pages").innerHTML = "";
-    }*/
+    var pagesAccess = document.getElementById("pages-access");
 
     pagesAccess.innerHTML = "";
 
+    var mode = localStorage.getItem("multiview-mode");
+
     for(i = 0; i < nP; i++){
         var buttonAccessToPage = document.createElement("button");
-        //buttonAccessToPage.setAttribute("id", "btn-access-page");
-        buttonAccessToPage.setAttribute("class", "btn btn-secondary");
+        buttonAccessToPage.setAttribute("id", "btn-access-page");
+        buttonAccessToPage.setAttribute("class", "btn btn-mode");
+
+        if(mode != null) {
+            if(mode === 'dark'){
+                buttonAccessToPage.classList.remove("btn-own-light");
+                buttonAccessToPage.classList.add("btn-own-dark");
+            } else if (mode === 'light') {
+                buttonAccessToPage.classList.remove("btn-own-dark");
+                buttonAccessToPage.classList.add("btn-own-light");
+            }
+        } else {
+            buttonAccessToPage.classList.remove("btn-own-dark");
+            buttonAccessToPage.classList.add("btn-own-light");
+        }
+
         buttonAccessToPage.setAttribute("type", "button");
         buttonAccessToPage.setAttribute("value", i);
         buttonAccessToPage.setAttribute("onclick", "goToPage(" + i + ")");
@@ -152,9 +153,6 @@ function addPagesAccessToHtml(nP){
 
         pagesAccess.appendChild(buttonAccessToPage);
     }
-
-    //paginationDiv.appendChild(pagesAccess);
-
 }
 
 function hideAllDivs(arrayOfDivs){
@@ -164,7 +162,7 @@ function hideAllDivs(arrayOfDivs){
 }
 
 function goToPage(i){
-    var divs = Array.prototype.slice.call(document.getElementsByClassName("apiSummary"));
+    var divs = Array.prototype.slice.call(document.getElementsByClassName("api-summary"));
 
     hideAllDivs(divs);
 
@@ -175,4 +173,17 @@ function goToPage(i){
     desiredPage.forEach(function(divForDisplay){
         divForDisplay.style.display = "";
     })
+}
+
+function deleteFilters(){
+    var pagesAccess = document.getElementById("pages-access");
+    pagesAccess.innerHTML = "";
+
+    var orderInput = document.getElementById("order-by-input");
+    orderInput.value = "A-Z";
+
+    var pageInput = document.getElementById("page-input");
+    pageInput.value = "5";
+
+    loadDataFromConfig();
 }

@@ -1,196 +1,424 @@
-function showCurrentConfig(){
+function loadConfig() {
+
+    var mode = localStorage.getItem("multiview-mode");
+
+    var i1 = document.getElementById("directory-method-icon");
+    var text1 = document.getElementById("directory-method-text");
+    var input1 = document.getElementById("inlineRadio1");
+
+    var i2 = document.getElementById("files-method-icon");
+    var text2 = document.getElementById("files-method-text");
+    var input2 = document.getElementById("inlineRadio2");
+
+    var message = document.getElementById("message");
+
+    message.classList.remove("message");
+    message.classList.remove("message-no");
+
+    var tableDiv = document.createElement("div");
+    tableDiv.setAttribute("class", "table-responsive-xxl");
+
+    var table = document.createElement("table");
+    table.setAttribute("id", "config-table");
+    table.setAttribute("class", "table");
+
+    var thead = document.createElement("thead");
+
+    var headerRow = document.createElement("tr");
+    
+    var header1 = document.createElement("th");
+    header1.setAttribute("scope", "col");
+    header1.classList.add("widget-text-mode");
+    header1.appendChild(document.createTextNode("#"));
+
+    var header2 = document.createElement("th");
+    header2.setAttribute("scope", "col");
+    header2.setAttribute("class", "w-75");
+    header2.classList.add("widget-text-mode");
+    header2.appendChild(document.createTextNode("Path"));
+
+    var header3 = document.createElement("th");
+    header3.setAttribute("scope", "col");
+    header3.classList.add("widget-text-mode");
+    header3.appendChild(document.createTextNode("Last Modified"));
+
+    var header4 = document.createElement("th");
+    header4.setAttribute("scope", "col");
+    header4.classList.add("widget-text-mode");
+    header4.appendChild(document.createTextNode(""));
+
+    headerRow.appendChild(header1);
+    headerRow.appendChild(header2);
+    headerRow.appendChild(header3);
+    headerRow.appendChild(header4);
+
+    thead.appendChild(headerRow);
+
+    var tbody = document.createElement("tbody");
 
     var config = String(localStorage.getItem("config"));
 
-    if(config != null){
+    if(config != "null"){
+        var configJSON = JSON.parse(config);
+        var links = configJSON.links;
 
-        var config_json = JSON.parse(config);
-        var type = config_json.type;
+        links.forEach(function(link){
+            var row = document.createElement("tr");
 
-        if(type == "directory"){
-            var typeElement = document.getElementById("inlineRadio1");
-            typeElement.setAttribute("checked", "true");
-        } else {
-            var typeElement = document.getElementById("inlineRadio2");
-            typeElement.setAttribute("checked", "true");
-        }
+            var td1 = document.createElement("td");
+            td1.setAttribute("scope", "row");
+            td1.classList.add("widget-text-mode");
+            td1.appendChild(document.createTextNode(link.id));
 
-        var inputs = document.getElementById("inputs");
+            var td2 = document.createElement("td");
+            td2.classList.add("widget-text-mode");
+            td2.appendChild(document.createTextNode(link.path));
 
-        var links = config_json.links;
-        for(i=0;i<links.length;i++){
-            var input = document.createElement("input");
-            input.setAttribute("id", "input".concat(i));
-            input.setAttribute("type", "text");
-            input.setAttribute("class", "form-control");
-            input.setAttribute("placeholder", "file:///X:/Path/To/Report");
-            input.setAttribute("onkeyup", "addSubstractNewInput(".concat(i).concat(")"));
-            input.setAttribute("value", links[i]);
-            input.setAttribute("aria-describedby", "basic-addon1");
-            input.setAttribute("style", "margin-bottom:1.5%;");
+            var td3 = document.createElement("td");
+            td3.classList.add("widget-text-mode");
+            td3.appendChild(document.createTextNode(link.last_modified));
 
-            inputs.appendChild(input);
-        }
-    } else {
-        showEmptyInput();
-    }
-}
+            var td4 = document.createElement("td");
+            var i = document.createElement("i");
+            i.setAttribute("class", "fas fa-times");
+            i.classList.add("widget-text-mode");
+            i.setAttribute("id", "delete-icon");
+            i.setAttribute("onclick", "deleteRow(" + link.id + ")");
+            td4.appendChild(i);
 
-function showEmptyInput(){
-    var div = document.getElementById("settings");
+            row.appendChild(td1);
+            row.appendChild(td2);
+            row.appendChild(td3);
+            row.appendChild(td4);
 
-    var inputsDiv = document.getElementById("inputs");
-    inputsDiv.innerHTML = "";
+            tbody.appendChild(row);
+        })
 
-    var firstInput = document.createElement("input");
-    firstInput.setAttribute("id", "input0");
-    firstInput.setAttribute("type", "text");
-    firstInput.setAttribute("class", "form-control");
-    firstInput.setAttribute("placeholder", "file:///X:/Path/To/Report");
-    firstInput.setAttribute("onkeyup", "addSubstractNewInput(0)");
-    firstInput.setAttribute("aria-label", "New Path");
-    firstInput.setAttribute("aria-describedby", "basic-addon1");
-    firstInput.setAttribute("style", "margin-bottom:1.5%;");
-
-    inputsDiv.appendChild(firstInput);
-
-    div.appendChild(inputsDiv);
-}
-
-function addSubstractNewInput(n){
-
-    if(n<9){
-        var currentId = "input".concat(n);
-        var currentInput = document.getElementById(currentId);
-
-        if(currentInput.value.trim() == ""){
-            var id = "input".concat(n+1);
-            var posInput = document.getElementById(id);
-
-            var id2 = "input".concat(n+2);
-            var posInput2 = document.getElementById(id2);
-
-            if((typeof(posInput) != 'undefined' || posInput != null) && ((typeof(posInput2) === 'undefined' || posInput2 === null)) || posInput2.value != "" || posInput2.style.display == "none"){
-                posInput.style.display = "none";
-            }
-        } else {
-
-            var id = "input".concat(n+1);
-
-            var posInput = document.getElementById(id);
-
-            if(typeof(posInput) === 'undefined' || posInput === null){
-                console.log("entra");
-                var newInput = document.createElement("input");
-                newInput.setAttribute("id", id);
-                newInput.setAttribute("type", "text");
-                newInput.setAttribute("class", "form-control");
-                newInput.setAttribute("placeholder", "file:///X:/Path/To/Report");
-                newInput.setAttribute("onkeyup", "addSubstractNewInput(" + parseInt(n+1) + ")");
-                newInput.setAttribute("aria-label", "New Path");
-                newInput.setAttribute("aria-describedby", "basic-addon1");
-                newInput.setAttribute("style", "margin-bottom:1.5%;");
-
-                var inputsDiv = document.getElementById("inputs");
-                inputsDiv.appendChild(newInput);
-            } else {
-                posInput.style.display = "";
+        if(mode != null) {
+            if(mode === 'dark'){
+                if(configJSON.type == "directory"){
+                    i1.classList.add("method-dark-active");
+                    text1.classList.add("method-dark-active");
+                    i2.classList.add("method-dark");
+                    text2.classList.add("method-dark");
+                    input1.checked = true;
+                } else {
+                    i2.classList.add("method-dark-active");
+                    text2.classList.add("method-dark-active");
+                    i1.classList.add("method-dark");
+                    text1.classList.add("method-dark");
+                    input2.checked = true;
+                }
+            } else if (mode === 'light') {
+                if(configJSON.type == "directory"){
+                    i1.classList.add("method-light-active");
+                    text1.classList.add("method-light-active");
+                    i2.classList.add("method-light");
+                    text2.classList.add("method-light");
+                    input1.checked = true;
+                } else {
+                    i2.classList.add("method-light-active");
+                    text2.classList.add("method-light-active");
+                    i1.classList.add("method-light");
+                    text1.classList.add("method-light");
+                    input2.checked = true;
+                }
             }
         }
-    }
-}
-
-function saveSettings(){
-
-    var type;
-    var links = ["", "", "", "", "", "", "", "", "", ""];
-
-    var typeInput = document.getElementById("inlineRadio1");
     
-    if (typeInput.checked) {
-        type = "directory";
+        if (mode == null){
+            if(configJSON.type == "directory"){
+                i1.classList.add("method-light-active");
+                text1.classList.add("method-light-active");
+                i2.classList.add("method-light");
+                text2.classList.add("method-light");
+                input1.checked = true;
+            } else {
+                i2.classList.add("method-light-active");
+                text2.classList.add("method-light-active");
+                i1.classList.add("method-light");
+                text1.classList.add("method-light");
+                input2.checked = true;
+            }
+        }
+
+        message.classList.add("message-no");
     } else {
-        type = "specific_files";
+        var row = document.createElement("tr");
+
+        var td1 = document.createElement("td");
+        td1.setAttribute("scope", "row");
+        td1.classList.add("widget-text-mode");
+        td1.appendChild(document.createTextNode("-"));
+
+        var td2 = document.createElement("td");
+        td2.classList.add("widget-text-mode");
+        td2.appendChild(document.createTextNode("-"));
+
+        var td3 = document.createElement("td");
+        td3.classList.add("widget-text-mode");
+        td3.appendChild(document.createTextNode("-"));
+
+        var td4 = document.createElement("td");
+        td4.classList.add("widget-text-mode");
+        td4.appendChild(document.createTextNode("-"));
+
+        row.appendChild(td1);
+        row.appendChild(td2);
+        row.appendChild(td3);
+        row.appendChild(td4);
+
+        tbody.appendChild(row);
+
+        message.classList.add("message-no");
     }
 
-    for(i=0;i<10;i++){
-        var id = "input".concat(i);
+    table.appendChild(thead);
+    table.appendChild(tbody);
 
-        var posInput = document.getElementById(id);
+    tableDiv.appendChild(table);
 
-        if(typeof(posInput) != 'undefined' && posInput != null){
-            links[i] = posInput.value.trim();
+    var div = document.getElementById("config-data");
+    div.appendChild(tableDiv);
+
+    if(mode != null) {
+        if(mode === 'dark'){
+            fillDark();
+        } else if (mode === 'light') {
+            fillLight();
         }
     }
 
-    console.log(links);
-
-    var json_links = '\"links\": [\"' + links[0];
-
-    for(j=1;j<10;j++){
-        if(links[j].trim() != ""){
-            json_links = json_links.concat('\", \"' + links[j]);
-        }
+    if (mode == null){
+        localStorage.setItem("multiview-mode", "light");
+        fillLight();
     }
 
-    json_links = json_links.concat('\"]' + ' }');
-
-    var json = '{ ' + '\"type\": ' + '\"' + type + '\", ' + json_links;
-
-    localStorage.setItem("config", json);
-
-    var settingsDiv = document.getElementById("btns-settings");
-
-    var newBtnDiv = document.getElementById("successMsg");
-
-    if(typeof(newBtnDiv) != 'undefined' && newBtnDiv != null){
-        newBtnDiv.innerHTML = "";
-    } else {
-        newBtnDiv = document.createElement("div");
-        newBtnDiv.setAttribute("class", "col-4");
-        newBtnDiv.setAttribute("id", "successMsg");
-        newBtnDiv.setAttribute("style", "margin-top: 3%;");
-    }
-
-    var successButton = document.createElement("button");
-    successButton.setAttribute("class", "btn btn-success");
-    successButton.setAttribute("disabled", "true");
-    successButton.setAttribute("type", "button");
-    successButton.setAttribute("id", "button-addon2");
-    successButton.appendChild(document.createTextNode("Your configuration has been saved successfully!"));
-
-    newBtnDiv.appendChild(successButton);
-
-    settingsDiv.appendChild(newBtnDiv);
 }
 
-function deleteSettings(){
-    if(localStorage.getItem("config")!=null){
-        localStorage.removeItem("config");
-    }
-    showEmptyInput();
+function turnActive(method){
 
-    var settingsDiv = document.getElementById("btns-settings");
+    var mode = localStorage.getItem("multiview-mode");
 
-    var newBtnDiv = document.getElementById("successMsg");
+    var i1 = document.getElementById("directory-method-icon");
+    var text1 = document.getElementById("directory-method-text");
 
-    if(typeof(newBtnDiv) != 'undefined' && newBtnDiv != null){
-        newBtnDiv.innerHTML = "";
+    var i2 = document.getElementById("files-method-icon");
+    var text2 = document.getElementById("files-method-text");
+    
+    if(method == "directory-method"){
+        if(mode != null) {
+            if(mode === 'dark'){
+                i1.classList.remove("method-dark");
+                text1.classList.remove("method-dark");
+                i1.classList.add("method-dark-active");
+                text1.classList.add("method-dark-active");
+                i2.classList.remove("method-dark-active");
+                text2.classList.remove("method-dark-active");
+                i2.classList.add("method-dark");
+                text2.classList.add("method-dark");
+            } else if (mode === 'light') {
+                i1.classList.remove("method-light");
+                text1.classList.remove("method-light");
+                i1.classList.add("method-light-active");
+                text1.classList.add("method-light-active");
+                i2.classList.remove("method-light-active");
+                text2.classList.remove("method-light-active");
+                i2.classList.add("method-light");
+                text2.classList.add("method-light");
+            }
+        }
+        if (mode == null){
+            i1.classList.remove("method-light");
+                text1.classList.remove("method-light");
+                i1.classList.add("method-light-active");
+                text1.classList.add("method-light-active");
+                i2.classList.remove("method-light-active");
+                text2.classList.remove("method-light-active");
+                i2.classList.add("method-light");
+                text2.classList.add("method-light");
+        }
     } else {
-        newBtnDiv = document.createElement("div");
-        newBtnDiv.setAttribute("class", "col-8");
-        newBtnDiv.setAttribute("id", "successMsg");
-        newBtnDiv.setAttribute("style", "margin-top: 3%;");
+        if(mode != null) {
+            if(mode === 'dark'){
+                i2.classList.remove("method-dark");
+                text2.classList.remove("method-dark");
+                i2.classList.add("method-dark-active");
+                text2.classList.add("method-dark-active");
+                i1.classList.remove("method-dark-active");
+                text1.classList.remove("method-dark-active");
+                i1.classList.add("method-dark");
+                text1.classList.add("method-dark");
+            } else if (mode === 'light') {
+                i2.classList.remove("method-light");
+                text2.classList.remove("method-light");
+                i2.classList.add("method-light-active");
+                text2.classList.add("method-light-active");
+                i1.classList.remove("method-light-active");
+                text1.classList.remove("method-light-active");
+                i1.classList.add("method-light");
+                text1.classList.add("method-light");
+            }
+        }
+        if (mode == null){
+            i2.classList.remove("method-light");
+            text2.classList.remove("method-light");
+            i2.classList.add("method-light-active");
+            text2.classList.add("method-light-active");
+            i1.classList.remove("method-light-active");
+            text1.classList.remove("method-light-active");
+            i1.classList.add("method-light");
+            text1.classList.add("method-light");
+        }
+    }
+}
+
+function updatePreference(){
+    var config = String(localStorage.getItem("config"));
+
+    if(config != null){
+        var configJSON = JSON.parse(config);
+
+        var optionInput = document.getElementById("inlineRadio1");
+        if(optionInput.checked){
+            configJSON.type = "directory";
+        } else {
+            configJSON.type = "specific_files";
+        }
+        localStorage.setItem("config", JSON.stringify(configJSON));
     }
 
-    var successButton = document.createElement("button");
-    successButton.setAttribute("class", "btn btn-success");
-    successButton.setAttribute("disabled", "true");
-    successButton.setAttribute("type", "button");
-    successButton.setAttribute("id", "button-addon2");
-    successButton.appendChild(document.createTextNode("Your configuration has been deleted successfully! You're free to enter some new values."));
+    var dataDiv = document.getElementById("config-data");
+    dataDiv.innerHTML = "";
 
-    newBtnDiv.appendChild(successButton);
+    loadConfig();
 
-    settingsDiv.appendChild(newBtnDiv);
+    var message = document.getElementById("message");
+    message.classList.remove("message-no");
+    message.classList.add("message");
+
+    setTimeout(function(){
+        message.classList.remove("message");
+        message.classList.add("message-no");
+    }, 5500);
+}
+
+function deleteRow(n) {
+    document.getElementById("config-table").deleteRow(n);
+
+    var config = localStorage.getItem("config");
+
+    if(config != null) {
+        var configJSON = JSON.parse(config);
+        configJSON.links.splice(n-1, 1);
+
+        var i = 1;
+
+        configJSON.links.forEach(function(element){
+            element.id = i;
+            i = i + 1;
+        })
+
+        localStorage.setItem("config", JSON.stringify(configJSON));
+    }
+
+    var dataDiv = document.getElementById("config-data");
+    dataDiv.innerHTML = "";
+
+    loadConfig();
+
+    var message = document.getElementById("message");
+    message.classList.remove("message-no");
+    message.classList.add("message");
+
+    setTimeout(function(){
+        message.classList.remove("message");
+        message.classList.add("message-no");
+    }, 5500);
+}
+
+function addNewPath(){
+    var path = document.getElementById("config-path-input").value;
+
+    if(path.trim() != "" && path.trim().startsWith("file:///")){
+        var today = new Date();
+
+        var date = today.getDate();
+        var month = today.getMonth()+1;
+        var hours = today.getHours();
+        var minutes = today.getMinutes();
+        var seconds = today.getSeconds();
+
+        if (date < 10) {
+            date = "0"+date;
+        }
+        if (month < 10) {
+            month = "0"+month;
+        }
+        if (hours < 10) {
+            hours = "0"+hours;
+        }
+        if (minutes < 10) {
+            minutes = "0"+minutes;
+        }
+        if (seconds < 10) {
+            seconds = "0"+seconds;
+        }
+
+        var time = date + "/" + month + "/" + today.getFullYear() + " " + hours + ":" + minutes + ":" + seconds;
+        
+        var config = localStorage.getItem("config");
+
+        if(config != null){
+            var configJSON = JSON.parse(config);
+            configJSON.links.push({"id":configJSON.links.length + 1, "path":path, "last_modified":time});
+            localStorage.setItem("config", JSON.stringify(configJSON));
+        }
+
+        var dataDiv = document.getElementById("config-data");
+        dataDiv.innerHTML = "";
+
+        loadConfig();
+
+        var message = document.getElementById("message");
+        message.classList.remove("message-no");
+        message.classList.add("message");
+
+        setTimeout(function(){
+            message.classList.remove("message");
+            message.classList.add("message-no");
+        }, 5500);
+    } else {
+        var negMessage = document.getElementById("neg-message");
+        negMessage.classList.remove("message-no");
+        negMessage.classList.add("message");
+
+        setTimeout(function(){
+            negMessage.classList.remove("message");
+            negMessage.classList.add("message-no");
+        }, 5500);
+    }
+}
+
+function resetConfig() {
+    localStorage.removeItem("config");
+
+    var json = '{"type": "directory", "links":[]}';
+    configJSON = JSON.parse(json);
+
+    localStorage.setItem("config", JSON.stringify(configJSON));
+
+    var dataDiv = document.getElementById("config-data");
+    dataDiv.innerHTML = "";
+
+    loadConfig();
+
+    var resetMessage = document.getElementById("reset-message");
+    resetMessage.classList.remove("message-no");
+    resetMessage.classList.add("message");
+
+    setTimeout(function(){
+        resetMessage.classList.remove("message");
+        resetMessage.classList.add("message-no");
+    }, 5500);
 }

@@ -4,50 +4,72 @@ function loadDataFromConfig(){
 
     var config = String(localStorage.getItem("config"));
 
+    //localStorage.removeItem("config");
+
     if(config != "null"){
         var config_json = JSON.parse(config);
-        if(config_json.type == "directory"){
-            var directories = config_json.links;
-            directories.forEach(function(directory){
-                var request = new XMLHttpRequest();
-                var data = "";
 
-                request.withCredentials = true;
-                
-                request.open('GET', directory);
-
-                request.overrideMimeType("application/json");
-            
-                request.send();
-
-                request.onreadystatechange = function() {
-                    if(this.readyState === 4) {
-                        data = request.responseText;
-                        
-                        var realDataArray = getPathsFromHTTPRequest(data);
-
-                        for(i=0;i<realDataArray.length;i++){
-                            realDataArray[i] = directory.concat("/".concat(realDataArray[i]));
-                        }
-
-                        realDataArray.forEach(function(realData){
-                            var fullPath = realData.concat("/widgets/summaryCopy.json");
-                            readJSON(fullPath, realData);
-                        })
-                    }
-                };
-            })
+        if (config_json.links.length == 0) {
+            showNoConfigMessageOnIndividual();
         } else {
-            var links = config_json.links;
+            if(config_json.type == "directory"){
+                var directories = config_json.links;
+                directories.forEach(function(directory){
+                    var request = new XMLHttpRequest();
+                    var data = "";
 
-            links.forEach(function(link){
-                link = link.trim();
-                var fullPath = link.concat("/widgets/summaryCopy.json");
-                readJSON(fullPath, link);
-            })
+                    request.withCredentials = true;
+                    
+                    request.open('GET', directory.path);
+
+                    request.overrideMimeType("application/json");
+                
+                    request.send();
+
+                    request.onreadystatechange = function() {
+                        if(this.readyState === 4) {
+                            data = request.responseText;
+                            
+                            var realDataArray = getPathsFromHTTPRequest(data);
+
+                            for(i=0;i<realDataArray.length;i++){
+                                realDataArray[i] = directory.path.concat("/".concat(realDataArray[i]));
+                            }
+
+                            realDataArray.forEach(function(realData){
+                                var fullPath = realData.concat("/widgets/summary.json");
+                                readJSON(fullPath, realData);
+                            })
+                        }
+                    };
+                })
+            } else {
+                var links = config_json.links;
+
+                links.forEach(function(link){
+                    link = link.path.trim();
+                    var fullPath = link.concat("/widgets/summary.json");
+                    readJSON(fullPath, link);
+                })
+            }
         }
     } else {
         showNoConfigMessageOnIndividual();
+    }
+
+    var mode = localStorage.getItem("multiview-mode");
+
+    if(mode != null) {
+        if(mode === 'dark'){
+            fillDark();
+        } else if (mode === 'light') {
+            fillLight();
+        }
+    }
+
+    if (mode == null){
+        localStorage.setItem("multiview-mode", "light");
+        fillLight();
     }
 }
 
@@ -130,6 +152,9 @@ function getHiddenElement(id, text){
 }
 
 function generateWidget(jobject, folderPath){
+
+    var mode = localStorage.getItem("multiview-mode");
+
     var statistic = jobject.statistic;
     var reportName = jobject.reportName;
     var time = jobject.time;
@@ -139,11 +164,15 @@ function generateWidget(jobject, folderPath){
 
     var day = getDayName(launchDate.getUTCDay());
     var date = launchDate.getUTCDate();
+    date = ("0" + date).slice(-2);
     var month = getMonthName(launchDate.getUTCMonth());
     var year = launchDate.getUTCFullYear();
     var hours = launchDate.getUTCHours();
+    hours = ("0" + hours).slice(-2);
     var minutes = launchDate.getUTCMinutes();
+    minutes = ("0" + minutes).slice(-2);
     var seconds = launchDate.getUTCSeconds();
+    seconds = ("0" + seconds).slice(-2);
 
     var date = String(day).concat(" ").concat(String(date)).concat(" ").concat(String(month)).concat(" ").concat(String(year)).concat("\n\r").concat(String(hours)).concat(":").concat(String(minutes)).concat(":").concat(String(seconds)).concat(" UTC");
 
@@ -191,13 +220,15 @@ function generateWidget(jobject, folderPath){
     var text1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text1.setAttribute("x", "50%");
     text1.setAttribute("y", "50%");
-    text1.setAttribute("class", "chart-number")
+    text1.classList.add("chart-number");
+    text1.classList.add("widget-text-mode");
     text1.appendChild(document.createTextNode(total));
 
     var text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text2.setAttribute("x", "50%");
     text2.setAttribute("y", "50%");
-    text2.setAttribute("class", "chart-label")
+    text2.classList.add("chart-label");
+    text2.classList.add("widget-text-mode");
     text2.appendChild(document.createTextNode("tests"));
 
     var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -210,8 +241,7 @@ function generateWidget(jobject, folderPath){
     circleHole.setAttribute("cx", "21");
     circleHole.setAttribute("cy", "21");
     circleHole.setAttribute("r", "15.91549430918954");
-    circleHole.setAttribute("fill", "#fff");
-
+    circleHole.setAttribute("fill", "rgba(255,255,255,0)");
 
     var circleRing = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circleRing.setAttribute("class", "donut-ring");
@@ -247,15 +277,17 @@ function generateWidget(jobject, folderPath){
     divWidget.appendChild(svg);
 
     var p1 = document.createElement("p");
-    p1.setAttribute("id", "API_title");
+    p1.setAttribute("id", "name");
+    p1.classList.add("widget-text-mode");
     p1.appendChild(document.createTextNode(reportName));
 
     var p2 = document.createElement("p");
-    p2.setAttribute("id", "API_description");
+    p2.setAttribute("id", "launch-date");
+    p2.setAttribute("class", "widget-text-mode");
     p2.appendChild(document.createTextNode(date));
 
     var divDescription = document.createElement("div");
-    divDescription.setAttribute("class", "description");
+    divDescription.setAttribute("class", "data");
     divDescription.appendChild(p1);
     divDescription.appendChild(p2);
 
@@ -266,7 +298,30 @@ function generateWidget(jobject, folderPath){
     var hiddenUnknown = getHiddenElement("hiddenUnknown", statistic.unknown);
 
     var divSummary = document.createElement("div");
-    divSummary.setAttribute("class", "widget_summary");
+    divSummary.setAttribute("class", "widget-summary");
+
+    if(mode != null) {
+        if(mode === 'light'){
+            divSummary.classList.add("widget-light");
+            p1.classList.add("widget-text-light");
+            p2.classList.add("widget-text-light");
+            text1.classList.add("widget-text-light");
+            text2.classList.add("widget-text-light");
+        } else if(mode === 'dark'){
+            divSummary.classList.add("widget-dark");
+            p1.classList.add("widget-text-dark");
+            p2.classList.add("widget-text-dark");
+            text1.classList.add("widget-text-dark");
+            text2.classList.add("widget-text-dark");
+        }
+    } else {
+        divSummary.classList.add("widget-light");
+        p1.classList.add("widget-text-light");
+        p2.classList.add("widget-text-light");
+        text1.classList.add("widget-text-light");
+        text2.classList.add("widget-text-light");
+    }
+
     divSummary.appendChild(divDescription);
     divSummary.appendChild(divWidget);
 
@@ -277,7 +332,7 @@ function generateWidget(jobject, folderPath){
     divSummary.appendChild(hiddenUnknown);
 
     var li = document.createElement("li");
-    li.setAttribute("class", "apiSummary");
+    li.setAttribute("class", "api-summary");
     var pathToIndex = folderPath.concat("/index.html");
     li.setAttribute("onclick", "location.href = " + "'" + pathToIndex + "';");
     li.appendChild(divSummary);
@@ -291,21 +346,6 @@ function deleteWidgets(){
 }
 
 function showNoConfigMessageOnIndividual(){
-    div = document.getElementById("filters");
-
-    rowDiv = document.createElement("div");
-    rowDiv.setAttribute("class", "row justify-content-center");
-
-    btnDiv = document.createElement("div");
-    btnDiv.setAttribute("class", "col-5");
-
-    btn = document.createElement("button");
-    btn.setAttribute("type", "button");
-    btn.setAttribute("class", "btn btn-warning btn-lg disabled");
-    btn.setAttribute("disabled", "true");
-    btn.appendChild(document.createTextNode("There are no current configuration settings saved. Maybe head to the admin options :)"));
-
-    btnDiv.appendChild(btn);
-    rowDiv.appendChild(btnDiv);
-    div.appendChild(rowDiv);
+    var message = document.getElementById("no-data-message");
+    message.style.display = "inline";
 }
