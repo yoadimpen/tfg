@@ -4,6 +4,8 @@ function loadDataFromConfig(){
 
     var config = String(localStorage.getItem("config"));
 
+    //localStorage.removeItem("config");
+
     if(config != "null"){
         var config_json = JSON.parse(config);
 

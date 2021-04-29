@@ -147,3 +147,13 @@ fileJSON = {
         }
     ]
 }
+
+function fib(n){
+    var res;
+        if(n > 1) {
+            res = fib(n-1) + fib(n-2);
+        } else {
+            res = 1
+        }
+    return res;
+}
