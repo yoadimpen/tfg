@@ -374,7 +374,7 @@ function deleteRow(n) {
 function addNewPath(){
     var path = document.getElementById("config-path-input").value;
 
-    if(path.trim() != ""){
+    if(path.trim() != "" && path.trim().startsWith("file:///")){
         var today = new Date();
 
         var date = today.getDate();

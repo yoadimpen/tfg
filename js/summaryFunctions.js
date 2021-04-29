@@ -26,6 +26,61 @@ function loadDemoDataGeneral() {
     }
 }
 
+//---------------------SUMMARY CHARTS RESULTS----------------------//
+
+function processResults(results){
+    var array = results.split(",");
+    for (i=0;i<array.length;i++){
+        array[i] = parseInt(array[i]);
+    }
+    return array;
+}
+
+function getTypeResults(json, resultsArray){
+    var statistic = json.statistic;
+    resultsArray[0] = resultsArray[0] + statistic.failed;
+    resultsArray[1] = resultsArray[1] + statistic.broken;
+    resultsArray[2] = resultsArray[2] + statistic.skipped;
+    resultsArray[3] = resultsArray[3] + statistic.passed;
+    resultsArray[4] = resultsArray[4] + statistic.unknown;
+    localStorage.setItem("statusArrayH", resultsArray);
+    return resultsArray;
+}
+
+function getSeverityLevelResults(json, dictionary){
+    var totalItems = Object.keys(json).length;
+
+    for(i=0;i<totalItems;i++){
+        var severity = json[i].severity;
+
+        if(dictionary.hasOwnProperty(severity)){
+            dictionary[severity] = dictionary[severity] + 1;
+        } else {
+            dictionary[severity] = 1;
+        }
+    }
+
+    localStorage.setItem("severityArrayH", JSON.stringify(dictionary));
+}
+
+function getCategoryResults(json, dictionary){
+    var items = json.items;
+    var totalItems = json.total;
+
+    for(i=0;i<totalItems;i++){
+        var statistic = items[i].statistic;
+        var total = statistic.total;
+        var name = items[i].name;
+
+        if(dictionary.hasOwnProperty(name)){
+            dictionary[name] = dictionary[name] + total;
+        } else {
+            dictionary[name] = total;
+        }
+    }
+    localStorage.setItem("categoryArrayH", JSON.stringify(dictionary));
+}
+
 //---------------------SUMMARY GENERATION----------------------//
 
 function generateSummaryDivs(reportsPath){
@@ -56,13 +111,85 @@ function generateSummaryDivs(reportsPath){
     localStorage.removeItem("severityArrayH");
     localStorage.removeItem("categoryArrayH");
 
-    makeTypeDiv(status);
-    makeSeverityDiv(severity);
-    makeCategoryDiv(category);
+    generateDefaultChartDivs(status, severity, category);
 
     generateCustomChartDivs();
 
     showTotalReports(pathsArray.length);
+}
+
+function generateDefaultChartDivs(status, severity, category){
+
+    var dataJSONStatus = {
+        name: "Status",
+        items: [{
+            label: "Failed",
+            value: status[0],
+            color: "#fd5a3e"
+        },{
+            label: "Broken",
+            value: status[1],
+            color: "#ffd050"
+        },{
+            label: "Skipped",
+            value: status[2],
+            color: "#aaaaaa"
+        },{
+            label: "Passed",
+            value: status[3],
+            color: "#97cc64"
+        },{
+            label: "Unknown",
+            value: status[4],
+            color: "#d35ebe"
+        }],
+        legendDisplay: true,
+        sameColor: false,
+        type: 'doughnut'
+    }
+
+    makeDiv(status, dataJSONStatus, true);
+
+    var dataJSONCategory = {
+        name: "Category",
+        items: [],
+        legendDisplay: true,
+        sameColor: false,
+        type: 'bar'
+    }
+
+    var colors = interpolateColors("rgb(128, 0, 38)", "rgb(254, 224, 135)", Object.keys(category).length);
+
+    for(i=0; i<Object.keys(category).length; i++){
+        var color = "rgb(" + colors[i] + ")";
+        var item = {
+            label: Object.keys(category)[i],
+            value: category[Object.keys(category)[i]],
+            color: color
+        }
+        dataJSONCategory.items.push(item);
+    }
+
+    makeDiv(category, dataJSONCategory, true);
+
+    var dataJSONSeverity = {
+        name: "Severity",
+        items: [],
+        legendDisplay: false,
+        sameColor: true,
+        type: 'bar'
+    }
+
+    for(i=0; i<Object.keys(severity).length; i++){
+        var item = {
+            label: Object.keys(severity)[i],
+            value: severity[Object.keys(severity)[i]],
+            color: "#6dd6cd"
+        }
+        dataJSONSeverity.items.push(item);
+    }
+
+    makeDiv(severity, dataJSONSeverity, true);
 }
 
 function generateCustomChartDivs(){
@@ -70,7 +197,7 @@ function generateCustomChartDivs(){
 
     if(customCharts != null) {
         customCharts.graphs.forEach(function(graph){
-            makeCustomDiv(graph);
+            makeDiv(graph);
         })
     }
 }
@@ -79,10 +206,15 @@ function toTitleCase(str) {
     return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
   }
 
-function makeCustomDiv(json){
+function makeDiv(arrayForTotal, json, def){
     var mode = localStorage.getItem("multiview-mode-h");
 
     var resultsDiv = document.getElementById("sum-row");
+
+    var total = 0;
+    for(var i in arrayForTotal) {
+        total += arrayForTotal[i];
+    }
 
     var canvas = document.createElement("canvas");
     canvas.setAttribute("id", json.name.toLowerCase());
@@ -108,17 +240,24 @@ function makeCustomDiv(json){
     titleDiv.appendChild(title);
 
     titleRow.appendChild(titleDiv);
-    
+
     var description = document.createElement("p");
     description.setAttribute("style", "margin-left:10px;");
     description.classList.add("widget-text-mode");
-    description.classList.add("custom-graph-remove");
-    description.setAttribute("onclick", "deleteCustomChart('" + json.name + "')");
-    description.innerHTML = "Remove";
+
+    if(def == false) {
+        description.classList.add("custom-graph-remove");
+        description.setAttribute("onclick", "deleteCustomChart('" + json.name + "')");
+        description.innerHTML = "Remove";
+    } else {
+        description.innerHTML = "Total used tests: " + total;
+    }
 
     var divdesc = document.createElement("div");
     divdesc.setAttribute("id", "description");
-    divdesc.setAttribute("style", "cursor: pointer");
+    if(def == false) {
+        divdesc.setAttribute("style", "cursor: pointer");
+    }
     divdesc.appendChild(description);
 
     var div = document.createElement("div");
@@ -155,14 +294,6 @@ function makeCustomDiv(json){
     }
 
     resultsDiv.appendChild(div);
-}
-
-function processResults(results){
-    var array = results.split(",");
-    for (i=0;i<array.length;i++){
-        array[i] = parseInt(array[i]);
-    }
-    return array;
 }
 
 function readJSONs (path, statusArray, severityDict, categoryDict, nReports){
@@ -340,257 +471,6 @@ function getChart(ctx, chartType, sameColor, dataJSON, legendDisplay){
     return chart;
 }
 
-//---------------------TYPE SUMMARY WIDGET----------------------//
-
-function getTypeResults(json, resultsArray){
-    var statistic = json.statistic;
-    resultsArray[0] = resultsArray[0] + statistic.failed;
-    resultsArray[1] = resultsArray[1] + statistic.broken;
-    resultsArray[2] = resultsArray[2] + statistic.skipped;
-    resultsArray[3] = resultsArray[3] + statistic.passed;
-    resultsArray[4] = resultsArray[4] + statistic.unknown;
-    localStorage.setItem("statusArrayH", resultsArray);
-    return resultsArray;
-}
-
-function makeTypeDiv(array){
-    var mode = localStorage.getItem("multiview-mode-h");
-
-    var resultsDiv = document.getElementById("sum-row");
-    resultsDiv.innerHTML = "";
-
-    var total = 0;
-    for(var i in array) {
-        total += array[i];
-    }
-
-    var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", "myChart");
-    canvas.setAttribute("width", "75%");
-    canvas.setAttribute("height", "54%");
-    canvas.setAttribute("style", "margin-top:7%;margin-bottom:5%;");
-
-    var ctx = canvas.getContext('2d');
-
-    var dataJSON = {
-        name: "Status",
-        items: [{
-            label: "Failed",
-            value: array[0],
-            color: "#fd5a3e"
-        },{
-            label: "Broken",
-            value: array[1],
-            color: "#ffd050"
-        },{
-            label: "Skipped",
-            value: array[2],
-            color: "#aaaaaa"
-        },{
-            label: "Passed",
-            value: array[3],
-            color: "#97cc64"
-        },{
-            label: "Unknown",
-            value: array[4],
-            color: "#d35ebe"
-        }]
-    }
-
-    var chart = getChart(ctx, "doughnut", false, dataJSON, true);
-
-    var title = document.createElement("h2");
-    title.setAttribute("style", "margin: 10px");
-    title.classList.add("widget-text-mode");
-    title.appendChild(document.createTextNode("Status"));
-
-    var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col");
-
-    titleDiv.appendChild(title);
-
-    titleRow.appendChild(titleDiv);
-
-    var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px;");
-    description.classList.add("widget-text-mode");
-    description.innerHTML = "Total used tests: " + total;
-
-    var divdesc = document.createElement("div");
-    divdesc.setAttribute("id", "description");
-    divdesc.appendChild(description);
-
-    var div = document.createElement("div");
-    div.setAttribute("id", "type-widget");
-    div.classList.add("col");
-    div.classList.add("sum-col");
-    div.classList.add("widget-mode");
-    div.setAttribute("draggable", "true");
-    div.appendChild(titleRow);
-    div.appendChild(divdesc);
-    div.appendChild(canvas);
-
-    div.addEventListener('dragstart', handleDragStart, false);
-    div.addEventListener('dragenter', handleDragEnter, false);
-    div.addEventListener('dragover', handleDragOver, false);
-    div.addEventListener('dragleave', handleDragLeave, false);
-    div.addEventListener('drop', handleDrop, false);
-    div.addEventListener('dragend', handleDragEnd, false);
-
-    if(mode != null) {
-        if(mode === 'light'){
-            div.classList.add("widget-light");
-            title.classList.add("widget-text-light");
-            description.classList.add("widget-text-light");
-        } else if(mode === 'dark'){
-            div.classList.add("widget-dark");
-            title.classList.add("widget-text-dark");
-            description.classList.add("widget-text-dark");
-        }
-    } else {
-        div.classList.add("widget-light");
-        title.classList.add("widget-text-light");
-        description.classList.add("widget-text-light");
-    }
-
-    resultsDiv.appendChild(div);
-}
-
-//---------------------SEVERITY SUMMARY WIDGET----------------------//
-
-function getSeverityLevelResults(json, dictionary){
-    var totalItems = Object.keys(json).length;
-
-    for(i=0;i<totalItems;i++){
-        var severity = json[i].severity;
-
-        if(dictionary.hasOwnProperty(severity)){
-            dictionary[severity] = dictionary[severity] + 1;
-        } else {
-            dictionary[severity] = 1;
-        }
-    }
-
-    localStorage.setItem("severityArrayH", JSON.stringify(dictionary));
-}
-
-function makeSeverityDiv(dict){
-    var mode = localStorage.getItem("multiview-mode-h");
-
-    var resultsDiv = document.getElementById("sum-row");
-
-    var total = 0;
-    for(var i in dict) {
-        total += dict[i];
-    }
-
-    var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", "severity");
-    canvas.setAttribute("width", "75%");
-    canvas.setAttribute("height", "54%");
-    canvas.setAttribute("style", "margin-top:7%;margin-bottom:5%;");
-
-    var ctx = canvas.getContext('2d');
-
-    var dataJSON = {
-        name: "Severity",
-        items: []
-    }
-
-    for(i=0; i<Object.keys(dict).length; i++){
-        var item = {
-            label: Object.keys(dict)[i],
-            value: dict[Object.keys(dict)[i]],
-            color: "#6dd6cd"
-        }
-        dataJSON.items.push(item);
-    }
-
-    var chart = getChart(ctx, "bar", true, dataJSON, null);
-
-    var title = document.createElement("h2");
-    title.setAttribute("style", "margin: 10px;");
-    title.classList.add("widget-text-mode");
-    title.appendChild(document.createTextNode("Severity"));
-
-    var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col");
-
-    titleDiv.appendChild(title);
-
-    titleRow.appendChild(titleDiv);
-    
-    var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px;");
-    description.classList.add("widget-text-mode");
-    description.innerHTML = "Total used tests: " + total;
-
-    var divdesc = document.createElement("div");
-    divdesc.setAttribute("id", "description");
-    divdesc.appendChild(description);
-
-    var div = document.createElement("div");
-    div.setAttribute("id", "severity-widget");
-    div.classList.add("col");
-    div.classList.add("sum-col");
-    div.classList.add("widget-mode");
-    div.setAttribute("draggable", "true");
-    div.appendChild(titleRow);
-    div.appendChild(divdesc);
-    div.appendChild(canvas);
-
-    div.addEventListener('dragstart', handleDragStart, false);
-    div.addEventListener('dragenter', handleDragEnter, false);
-    div.addEventListener('dragover', handleDragOver, false);
-    div.addEventListener('dragleave', handleDragLeave, false);
-    div.addEventListener('drop', handleDrop, false);
-    div.addEventListener('dragend', handleDragEnd, false);
-
-    if(mode != null) {
-        if(mode === 'light'){
-            div.classList.add("widget-light");
-            title.classList.add("widget-text-light");
-            description.classList.add("widget-text-light");
-        } else if(mode === 'dark'){
-            div.classList.add("widget-dark");
-            title.classList.add("widget-text-dark");
-            description.classList.add("widget-text-dark");
-        }
-    } else {
-        div.classList.add("widget-light");
-        title.classList.add("widget-text-light");
-        description.classList.add("widget-text-light");
-    }
-
-    resultsDiv.appendChild(div);
-}
-
-//---------------------CATEGORY SUMMARY WIDGET----------------------//
-
-function getCategoryResults(json, dictionary){
-    var items = json.items;
-    var totalItems = json.total;
-
-    for(i=0;i<totalItems;i++){
-        var statistic = items[i].statistic;
-        var total = statistic.total;
-        var name = items[i].name;
-
-        if(dictionary.hasOwnProperty(name)){
-            dictionary[name] = dictionary[name] + total;
-        } else {
-            dictionary[name] = total;
-        }
-    }
-    localStorage.setItem("categoryArrayH", JSON.stringify(dictionary));
-}
-
 function interpolateColor(color1, color2, factor) {
     if (arguments.length < 3) { 
         factor = 0.5; 
@@ -618,104 +498,6 @@ function interpolateColors(color1, color2, steps) {
     }
 
     return interpolatedColorArray;
-}
-
-function makeCategoryDiv(dict){
-    var mode = localStorage.getItem("multiview-mode-h");
-
-    var resultsDiv = document.getElementById("sum-row");
-
-    var total = 0;
-
-    for(var i in dict) {
-        total += dict[i];
-    }
-
-    var canvas = document.createElement("canvas");
-    canvas.setAttribute("id", "category");
-    canvas.setAttribute("width", "75%");
-    canvas.setAttribute("height", "50%");
-    canvas.setAttribute("style", "margin-top:7%;");
-
-    var ctx = canvas.getContext('2d');
-
-    var dataJSON = {
-        name: "Category",
-        items: []
-    }
-
-    var colors = interpolateColors("rgb(207, 6, 87)", "rgb(255, 251, 176)", Object.keys(dict).length);
-
-    for(i=0; i<Object.keys(dict).length; i++){
-        var color = "rgb(" + colors[i] + ")";
-        var item = {
-            label: Object.keys(dict)[i],
-            value: dict[Object.keys(dict)[i]],
-            color: color
-        }
-        dataJSON.items.push(item);
-    }
-
-    var chart = getChart(ctx, "bar", false, dataJSON, true);
-
-    var title = document.createElement("h2");
-    title.setAttribute("style", "margin: 10px;");
-    title.classList.add("widget-text-mode");
-    title.appendChild(document.createTextNode("Category"));
-
-    var titleDiv = document.createElement("div");
-    titleDiv.setAttribute("class", "col");
-
-    var titleRow = document.createElement("div");
-    titleRow.setAttribute("class", "row");
-
-    titleDiv.appendChild(title);
-
-    titleRow.appendChild(titleDiv);
-    
-    var description = document.createElement("p");
-    description.setAttribute("style", "margin-left:10px;");
-    description.classList.add("widget-text-mode");
-    description.innerHTML = "Total used tests: " + total;
-
-    var divdesc = document.createElement("div");
-    divdesc.setAttribute("id", "description");
-    divdesc.appendChild(description);
-
-    var div = document.createElement("div");
-    div.setAttribute("id", "category-widget");
-    div.classList.add("col");
-    div.classList.add("sum-col");
-    div.classList.add("widget-mode");
-    div.setAttribute("draggable", "true");
-    div.appendChild(titleRow);
-    div.appendChild(divdesc);
-    div.appendChild(canvas);
-
-    div.addEventListener('dragstart', handleDragStart, false);
-    div.addEventListener('dragenter', handleDragEnter, false);
-    div.addEventListener('dragover', handleDragOver, false);
-    div.addEventListener('dragleave', handleDragLeave, false);
-    div.addEventListener('drop', handleDrop, false);
-    div.addEventListener('dragend', handleDragEnd, false);
-
-    if(mode != null) {
-        if(mode === 'light'){
-            div.classList.add("widget-light");
-            title.classList.add("widget-text-light");
-            description.classList.add("widget-text-light");
-        } else if(mode === 'dark'){
-            div.classList.add("widget-dark");
-            title.classList.add("widget-text-dark");
-            description.classList.add("widget-text-dark");
-        }
-    } else {
-        div.classList.add("widget-light");
-        title.classList.add("widget-text-light");
-        description.classList.add("widget-text-light");
-    }
-
-    resultsDiv.appendChild(div);
 }
 
 //---------------------TOTAL SUMMARY REPORTS----------------------//
