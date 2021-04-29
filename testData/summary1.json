@@ -1,0 +1,13 @@
+{
+  "reportName" : "Datum",
+  "testRuns" : [ ],
+  "statistic" : {
+    "failed" : 4,
+    "broken" : 5,
+    "skipped" : 3,
+    "passed" : 9,
+    "unknown" : 5,
+    "total" : 26
+  },
+  "time" : { }
+}
