@@ -79,7 +79,7 @@ function getPathsFromHTTPRequest(response){
     var firstSplit = response.split("201: ");
 
     for(i=1;i<firstSplit.length;i++){
-        var secondSplit = firstSplit[i].split(" 4096");
+        var secondSplit = firstSplit[i].split(" ");
         res[i-1] = secondSplit[0];
     }
 
